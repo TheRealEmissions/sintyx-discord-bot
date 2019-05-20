@@ -13,21 +13,32 @@ module.exports = (client) => {
             body = JSON.parse(body);
             if (body.online) {
                 if (body.players.now >= body.players.max) {
-                    client.user.setActivity(`the max amount of players! ${body.players.now}/${body.players.max}`, {
-                        type: 'WATCHING'
-                    }).then(presence => console.log(`- Activity: ${presence.activity.name}`)).catch(err => console.error(err));
+                    client.user.setPresence({
+                            status: 'online',
+                            activity: {
+                                name: `the max amount of players! ${body.players.now}/${body.players.max}`,
+                                type: 'WATCHING'
+                            }
+                        })
+                        .catch(err => console.error(err));
                 } else {
                     if (body.players.now < 1) {
                         client.user.setPresence({
                             status: 'idle',
                             activity: {
-                                name: `${body.players.now} players on ${ip}!`
+                                name: `${body.players.now} players on ${ip}!`,
+                                type: 'WATCHING'
                             }
-                        }).then(presence => console.log(`- Activity: ${presence.activity.name} + IDLE`)).catch(err => console.error(err));
+                        }).catch(err => console.error(err));
                     } else {
-                        client.user.setActivity(`${body.players.now} players on ${ip}!`, {
-                            type: 'WATCHING'
-                        }).then(presence => console.log(`- Activity: ${presence.activity.name}`)).catch(err => console.error(err));
+                        client.user.setPresence({
+                                status: 'online',
+                                activity: {
+                                    name: `${body.players.now} players on ${ip}!`,
+                                    type: 'WATCHING'
+                                }
+                            })
+                            .catch(err => console.error(err));
                     }
                 }
             } else {
@@ -36,7 +47,7 @@ module.exports = (client) => {
                     activity: {
                         name: `The server currently isn't online!`
                     }
-                }).then(presence => console.log(`- Activity: ${presence.activity.name}`)).catch(err => console.error(err));
+                }).catch(err => console.error(err));
             }
         });
     }
