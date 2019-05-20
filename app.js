@@ -4,7 +4,7 @@ const modules = {
     mongoose: require(`mongoose`),
     ms: require(`ms`),
     random_string: require(`crypto-random-string`),
-    request: require(`request`)
+    request: require(`request`),
 };
 const client = new modules.Discord.Client({
     disableEveryone: false,
