@@ -15,6 +15,7 @@ module.exports = class stats {
         client.guilds.forEach(guild => {
             userAmount = userAmount + guild.memberCount;
         });
+
         function bytesToSize(bytes) {
             var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
             if (bytes == 0) return 'N/A';
@@ -40,7 +41,7 @@ module.exports = class stats {
             time = `${seconds}s`
         }
         let embed = new client.modules.Discord.MessageEmbed()
-            .setTitle(`**${client.user.username} Statistics**`)
+            .setTitle(`**${client.user.username} Bot Statistics**`)
             .setColor(embedColor)
             .addField(`Channels`, channelAmount, true)
             .addField(`Users`, userAmount, true)
@@ -48,6 +49,29 @@ module.exports = class stats {
             .addField(`Memory Usage`, memoryUsage, true)
             .addField(`Latency`, Math.round(client.ws.ping) + "ms", true)
             .addField(`Bot Uptime`, time, true)
-        message.channel.send(embed);
+        /*
+
+        */
+
+        let sbIP = `unitedrealm.co.uk`;
+        let sbPort = `25565`;
+        let url = `http://mcapi.us/server/status?ip=` + sbIP + `&port=` + sbPort;
+        let status;
+        client.modules.request(url, (err, response, body) => {
+            if (err) console.error(err);
+            body = JSON.parse(body);
+            if (body.online) {
+                status = `**Online** :white_check_mark:\n${body.players.now}/${body.players.max} players`
+            } else {
+                status = '**Offline** :x:'
+            }
+            let embed2 = new client.modules.Discord.MessageEmbed()
+                .setTitle(`**${client.user.username} Server Statistics** - ${sbIP}`)
+                .setColor(embedColor)
+                .addField(`Skyblock`, status)
+                .setTimestamp()
+            message.channel.send(embed);
+            message.channel.send(embed2);
+        });
     }
 }
