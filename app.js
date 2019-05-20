@@ -18,3 +18,20 @@ const client = new modules.Discord.Client({
     restSweepInterval: 60,
     disabledEvents: ["TYPING_START"]
 });
+
+
+/*
+HANDLERS
+*/
+
+const { CommandHandler } = require(`djs-commands`);
+let cmdHandler = new CommandHandler({
+    folder: __dirname + `/commands/`,
+    prefix: ["-"]
+});
+
+/*
+LOGIN
+*/
+
+client.login("NDMyOTY1Mzg0Mzc5ODI2MTg2.XOLQKg.kitg0ymfGwV_VpedmlVHMUp1drA");
