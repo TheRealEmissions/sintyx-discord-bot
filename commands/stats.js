@@ -7,13 +7,13 @@ module.exports = class stats {
 
     async run(client, message, args) {
         let embedColor = message.guild.member(client.user).displayHexColor;
-        let channelAmount = 0;
+        let channelAmountGlobal = 0;
         client.guilds.forEach(guild => {
-            channelAmount = channelAmount + guild.channels.size;
+            channelAmountGlobal = channelAmountGlobal + guild.channels.size;
         });
-        let userAmount = 0;
+        let userAmountGlobal = 0;
         client.guilds.forEach(guild => {
-            userAmount = userAmount + guild.memberCount;
+            userAmountGlobal = userAmountGlobal + guild.memberCount;
         });
 
         function bytesToSize(bytes) {
@@ -43,9 +43,9 @@ module.exports = class stats {
         let embed = new client.modules.Discord.MessageEmbed()
             .setTitle(`**${client.user.username} Bot Statistics**`)
             .setColor(embedColor)
-            .addField(`Channels`, channelAmount, true)
-            .addField(`Users`, userAmount, true)
-            .addField(`Emojis`, client.emojis.array().length, true)
+            .addField(`Channels`, `${message.guild.channels.size} *(${channelAmountGlobal} global)*`, true)
+            .addField(`Users`, `${message.guild.memberCount} *(${userAmountGlobal} global)*`, true)
+            .addField(`Emojis`, `${message.guild.emojis.array().length} *(${client.emojis.array().length} global)*`, true)
             .addField(`Memory Usage`, memoryUsage, true)
             .addField(`Latency`, Math.round(client.ws.ping) + "ms", true)
             .addField(`Bot Uptime`, time, true)
