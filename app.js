@@ -48,7 +48,7 @@ BINDINGS
 */
 
 client.modules = modules;
-
+client.commandHandler = cmdHandler;
 /*
 LOGIN
 */
