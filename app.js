@@ -3,7 +3,8 @@ const modules = {
     fs: require(`fs`),
     mongoose: require(`mongoose`),
     ms: require(`ms`),
-    random_string: require(`crypto-random-string`)
+    random_string: require(`crypto-random-string`),
+    request: require(`request`)
 };
 const client = new modules.Discord.Client({
     disableEveryone: false,
@@ -24,6 +25,18 @@ const client = new modules.Discord.Client({
 HANDLERS
 */
 
+modules.fs.readdir(`./events/`, (err, files) => {
+    if (err) return console.error(err);
+    files.forEach(file => {
+        if (!file.endsWith(".js")) return;
+        let event = require(`./events/${file}`);
+        let eventName = file.split(".")[0];
+        client.on(eventName, event.bind(null, client));
+        delete require.cache[require.resolve(`./events/${file}`)];
+        console.log(`[LOG] Loaded event ${file}`);
+    });
+})
+
 const { CommandHandler } = require(`djs-commands`);
 let cmdHandler = new CommandHandler({
     folder: __dirname + `/commands/`,
@@ -31,7 +44,13 @@ let cmdHandler = new CommandHandler({
 });
 
 /*
+BINDINGS
+*/
+
+client.modules = modules;
+
+/*
 LOGIN
 */
 
-client.login("NDMyOTY1Mzg0Mzc5ODI2MTg2.XOLQKg.kitg0ymfGwV_VpedmlVHMUp1drA");
+client.login("NTY3NDQxOTUyNjQwMDczNzM4.XOLUag.93IVgEO8LTp1HcJk1M0vbmivQSM");
