@@ -40,10 +40,11 @@ module.exports = class stats {
             time = `${seconds}s`
         }
         let embed = new client.modules.Discord.MessageEmbed()
-            .setTitle(`[${client.user.username} Statistics]`)
+            .setTitle(`**${client.user.username} Statistics**`)
             .setColor(embedColor)
             .addField(`Channels`, channelAmount, true)
             .addField(`Users`, userAmount, true)
+            .addField(`Emojis`, client.emojis.array().length, true)
             .addField(`Memory Usage`, memoryUsage, true)
             .addField(`Latency`, Math.round(client.ws.ping) + "ms", true)
             .addField(`Bot Uptime`, time, true)
