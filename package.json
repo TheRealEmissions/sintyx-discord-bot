@@ -15,5 +15,12 @@
   "bugs": {
     "url": "https://gitlab.com/sintyx/discord-bot/issues"
   },
-  "homepage": "https://gitlab.com/sintyx/discord-bot#readme"
+  "homepage": "https://gitlab.com/sintyx/discord-bot#readme",
+  "dependencies": {
+    "crypto-random-string": "^3.0.0",
+    "discord.js": "github:discordjs/discord.js",
+    "fs": "0.0.1-security",
+    "mongoose": "^5.5.9",
+    "ms": "^2.1.1"
+  }
 }
