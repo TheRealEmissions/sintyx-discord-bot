@@ -1,8 +1,8 @@
 module.exports = class stats {
     constructor() {
         this.name = 'stats',
-            this.alias = ["botinfo", "info"],
-            this.usage = `=stats`
+            this.alias = ["botinfo", "info", "statistics", "status"],
+            this.usage = `-stats`
     }
 
     async run(client, message, args) {
