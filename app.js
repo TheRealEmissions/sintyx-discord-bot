@@ -5,6 +5,8 @@ const modules = {
     ms: require(`ms`),
     random_string: require(`crypto-random-string`),
     request: require(`request`),
+    querystring: require(`querystring`),
+    fetch: require(`node-fetch`)
 };
 const client = new modules.Discord.Client({
     disableEveryone: false,
@@ -21,7 +23,7 @@ const client = new modules.Discord.Client({
 });
 const storage = {
     emojiCharacters: require(`./storage/emojiCharacters.js`)
-}
+};
 
 
 /*

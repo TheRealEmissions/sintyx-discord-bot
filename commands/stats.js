@@ -9,11 +9,11 @@ module.exports = class stats {
         let embedColor = message.guild.member(client.user).displayHexColor;
         let channelAmountGlobal = 0;
         client.guilds.forEach(guild => {
-            channelAmountGlobal = channelAmountGlobal + guild.channels.size;
+            channelAmountGlobal += guild.channels.size;
         });
         let userAmountGlobal = 0;
         client.guilds.forEach(guild => {
-            userAmountGlobal = userAmountGlobal + guild.memberCount;
+            userAmountGlobal += guild.memberCount;
         });
 
         function bytesToSize(bytes) {
