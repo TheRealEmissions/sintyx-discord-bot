@@ -19,6 +19,9 @@ const client = new modules.Discord.Client({
     restSweepInterval: 60,
     disabledEvents: ["TYPING_START"]
 });
+const storage = {
+    emojiCharacters: require(`./storage/emojiCharacters.js`)
+}
 
 
 /*
@@ -49,6 +52,7 @@ BINDINGS
 
 client.modules = modules;
 client.commandHandler = cmdHandler;
+client.storage = storage;
 /*
 LOGIN
 */
