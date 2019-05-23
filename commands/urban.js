@@ -22,7 +22,6 @@ module.exports = class urban {
         let query = client.modules.querystring.stringify({
             term: word.join(' ')
         });
-        console.log(query);
         client.modules.request(`https://api.urbandictionary.com/v0/define?${query}`, (err, response, body) => {
             body = JSON.parse(body);
             let startTime = new Date().getTime();
@@ -45,10 +44,13 @@ module.exports = class urban {
                 } else {
                     let endTime = new Date().getTime();
                     let time = parseInt(endTime - startTime);
+                    function trim(str, max) {
+                        return ((str.length > max) ? `${str.slice(0, max - 3)}...` : str);
+                    }
                     let embed = new client.modules.Discord.MessageEmbed()
                         .setTitle(`**Urban Dictionary**`)
                         .setColor(message.guild.member(client.user).displayHexColor)
-                        .addField(`Definition of ${word}:`, `[${body.list[0].definition}](${body.list[0].permalink})`)
+                        .addField(`Definition of ${word.join(' ')}:`, `[${trim(body.list[0].definition, 1024)}](${body.list[0].permalink})`)
                         .addField(`Thumbs Up`, body.list[0].thumbs_up + " " + client.storage.emojiCharacters.thumbs_up, true)
                         .addField(`Thumbs Down`, body.list[0].thumbs_down + " " + client.storage.emojiCharacters.thumbs_down, true)
                         .setFooter(`Processed your result in ${time}ms`)

@@ -22,8 +22,9 @@ const client = new modules.Discord.Client({
     disabledEvents: ["TYPING_START"]
 });
 const storage = {
-    emojiCharacters: require(`./storage/emojiCharacters.js`)
-};
+    emojiCharacters: require(`./storage/emojiCharacters.js`),
+    errorCodes: require(`./storage/errorCodes.js`)
+}
 
 
 /*
