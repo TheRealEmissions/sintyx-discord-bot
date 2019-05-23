@@ -28,7 +28,7 @@ module.exports = class help {
                 .setColor(message.guild.member(client.user).displayHexColor)
                 .setDescription(`To view a detailed description for any given command, please type: ` + "`" + `-help info <command>` + "`")
                 .addField(`-help`, `You can use this command to view the base help menu`, true)
-                .addField(`-urban`, `Search a term or phrase on the Urban Dictionary!`, true)
+                .addField(`-urban <term/phrase>`, `Search a term or phrase on the Urban Dictionary!`, true)
                 .addField(`-stats`, `View statistics regarding the bot and the server`, true)
             message.channel.send(embed).then(msg => {
                 setTimeout(() => {
@@ -38,7 +38,17 @@ module.exports = class help {
             });
         } else
         if (args[1].toString() == "tickets") {
-            
+            let embed = new client.modules.Discord.MessageEmbed()
+                .setTitle(`**Help Menu** - Tickets`)
+                .setColor(message.guild.member(client.user).displayHexColor)
+                .setDescription(`To view a detailed description for any given command, please type: ` + "`" + `-help info <command>` + "`")
+                .addField(`-support (reason)`, `Open a support ticket with an optional reason`)
+            message.channel.send(embed).then(msg => {
+                setTimeout(() => {
+                    message.delete();
+                    msg.delete();
+                }, 30000);
+            });
         } else
         if (args[1].toString() == "moderation") {
 
@@ -48,7 +58,7 @@ module.exports = class help {
                 .setTitle(`**Help Menu** - Administration`)
                 .setColor(message.guild.member(client.user).displayHexColor)
                 .setDescription(`To view a detailed description for any given command, please type: ` + "`" + `-help info <command>` + "`")
-                .addField(`-errorcode`, `Look up an error code to view its meaning`, true)
+                .addField(`-errorcode <code>`, `Look up an error code to view its meaning`, true)
             message.channel.send(embed).then(msg => {
                 setTimeout(() => {
                     message.delete();
@@ -106,6 +116,20 @@ module.exports = class help {
                     .setDescription(`If, for any reason, a command or function within this bot errors or has a problem, you will be shown an error code. This error code can be shown to staff members who can fix the problem. This command is used to look up that specific error code to find the underlying issue. There are many variations of error codes that follow a format of letters then numbers.`)
                     .addField(`Example use:`, `-errorcode S001\n-errorcode ST001`, true)
                     .addField(`Aliases:`, `-error\n-errcode\n-errorcodes\n-err`, true)
+                message.channel.send(embed).then(msg => {
+                    setTimeout(() => {
+                        message.delete();
+                        msg.delete();
+                    }, 30000);
+                });
+            } else
+            if (args[2].toString() == "support") {
+                let embed = new client.modules.Discord.MessageEmbed()
+                    .setColor(message.guild.member(client.user).displayHexColor)
+                    .setTitle(`**Help Menu** - Info: Support`)
+                    .setDescription(`If, for any reason, you have an issue, please feel free to run this command to open a Support Ticket! These tickets can be used to discuss any problems you may have regarding ${client.user.username} such as in-game bugs or payment issues to say the least.`)
+                    .addField(`Example use:`, `-support The store won't accept my bank card\n-support Help me please`, true)
+                    .addField(`Aliases:`, `-supportticket`)
                 message.channel.send(embed).then(msg => {
                     setTimeout(() => {
                         message.delete();

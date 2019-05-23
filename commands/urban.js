@@ -45,7 +45,7 @@ module.exports = class urban {
                     let endTime = new Date().getTime();
                     let time = parseInt(endTime - startTime);
                     function trim(str, max) {
-                        return ((str.length > max) ? `${str.slice(0, max - 3)}...` : str);
+                        return ((str.length > max) ? `${str.slice(0, max - 15 - body.list[0].permalink.length)}...` : str);
                     }
                     let embed = new client.modules.Discord.MessageEmbed()
                         .setTitle(`**Urban Dictionary**`)
@@ -54,7 +54,16 @@ module.exports = class urban {
                         .addField(`Thumbs Up`, body.list[0].thumbs_up + " " + client.storage.emojiCharacters.thumbs_up, true)
                         .addField(`Thumbs Down`, body.list[0].thumbs_down + " " + client.storage.emojiCharacters.thumbs_down, true)
                         .setFooter(`Processed your result in ${time}ms`)
-                    msg.edit(embed);
+                    msg.edit(embed).catch(err => {
+                        console.error(err);
+                        let embed2 = new client.modules.Discord.MessageEmbed()
+                            .setTitle(`**Urban Dictionary** - Error`)
+                            .setColor(message.guild.member(client.user).displayHexColor)
+                            .setDescription(`An error has occurred. Please display the error code to a staff member.`)
+                            .addField(`Error Code`, `U002`)
+                            .setTimestamp();
+                        msg.edit(embed2);
+                    });
                 }
             });
         });

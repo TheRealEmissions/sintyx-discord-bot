@@ -1,7 +1,7 @@
 module.exports = class support {
     constructor() {
         this.name = 'support',
-            this.alias = [],
+            this.alias = ["supportticket"],
             this.usage = `-support`
     }
 
