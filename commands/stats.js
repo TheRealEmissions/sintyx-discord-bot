@@ -64,7 +64,7 @@ module.exports = class stats {
                     .setTitle(`**${client.user.username} Server Statistics** - Error`)
                     .setColor(embedColor)
                     .setDescription(`Unfortuantely, an error has occurred! Please display this error code to a member of staff.`)
-                    .addField(`Error Code`, `st001`)
+                    .addField(`Error Code`, `ST001`)
                 message.channel.send(embed2);
             } else {
             body = JSON.parse(body);

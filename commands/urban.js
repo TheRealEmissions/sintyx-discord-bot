@@ -34,7 +34,7 @@ module.exports = class urban {
                     let embed = new client.modules.Discord.MessageEmbed()
                         .setTitle(`**Urban Dictionary**`)
                         .setColor(message.guild.member(client.user).displayHexColor)
-                        .setDescription(`We found no results for the term/phrase ` + "`" + word + "`" + `...`)
+                        .setDescription(`We found no results for the term/phrase ` + "`" + word + "`" + `... *(Error U001)*`)
                     msg.edit(embed).then(msgg => {
                         setTimeout(() => {
                             message.delete();
