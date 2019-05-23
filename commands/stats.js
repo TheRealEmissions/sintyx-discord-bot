@@ -58,7 +58,15 @@ module.exports = class stats {
         let url = `http://mcapi.us/server/status?ip=` + sbIP + `&port=` + sbPort;
         let status;
         client.modules.request(url, (err, response, body) => {
-            if (err) console.error(err);
+            if (err) {
+                console.error(err);
+                let embed2 = new client.modules.Discord.MessageEmbed()
+                    .setTitle(`**${client.user.username} Server Statistics** - Error`)
+                    .setColor(embedColor)
+                    .setDescription(`Unfortuantely, an error has occurred! Please display this error code to a member of staff.`)
+                    .addField(`Error Code`, `st001`)
+                message.channel.send(embed2);
+            } else {
             body = JSON.parse(body);
             if (body.online) {
                 status = `**Online** :white_check_mark:\n${body.players.now}/${body.players.max} players`
@@ -72,6 +80,7 @@ module.exports = class stats {
                 .setTimestamp()
             message.channel.send(embed);
             message.channel.send(embed2);
+            }
         });
     }
 }
