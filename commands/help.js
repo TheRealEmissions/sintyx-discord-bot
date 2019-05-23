@@ -28,7 +28,6 @@ module.exports = class help {
                 .setColor(message.guild.member(client.user).displayHexColor)
                 .setDescription(`To view a detailed description for any given command, please type: ` + "`" + `-help info <command>` + "`")
                 .addField(`-help`, `You can use this command to view the base help menu`, true)
-                .addField(`-errorcode`, `If you have received an Error Code from the bot, you can check what it means using this command.`, true)
                 .addField(`-urban`, `Search a term or phrase on the Urban Dictionary!`, true)
                 .addField(`-stats`, `View statistics regarding the bot and the server`, true)
             message.channel.send(embed).then(msg => {
