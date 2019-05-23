@@ -1,5 +1,5 @@
-let function = function createSupportTicket() {
+let createSupportTicketFunction = function createSupportTicket() {
 
 }
 
-module.exports = function;
+module.exports = createSupportTicketFunction;
