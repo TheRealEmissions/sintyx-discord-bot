@@ -1,4 +1,4 @@
-let createSupportTicketFunction = function createSupportTicket(guild, author, member, channel, client) {
+let createSupportTicketFunction = function createSupportTicket(guild, author, member, origChannel, client) {
     let random_string = require(`crypto-random-string`);
     guild.createChannel(`support-${author.username}-${random_string({length: 10, type: 'base64'})}`).then(async(channel) => {
         let category = guild.channels.find(c => c.name == "Support Tickets" && c.type == "category");
@@ -9,7 +9,8 @@ let createSupportTicketFunction = function createSupportTicket(guild, author, me
                 .setDescription(`**Hey!** Unfortunately, we could not create your support ticket! Please display this error code to a member of staff.`)
                 .addField(`Error Code`, `s001`)
                 .setTimestamp();
-            channel.send(embed);
+            origChannel.send(embed);
+            channel.delete();
         } else {
             return;
         }
