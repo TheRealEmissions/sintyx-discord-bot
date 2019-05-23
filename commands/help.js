@@ -17,6 +17,7 @@ module.exports = class help {
                 .addField(`Administration`, `Contains the commands that are only available to administrators`, true)
             message.channel.send(embed).then(msg => {
                 setTimeout(() => {
+                    message.delete();
                     msg.delete();
                 }, 30000);
             });
@@ -32,6 +33,7 @@ module.exports = class help {
                 .addField(`-stats`, `View statistics regarding the bot and the server`, true)
             message.channel.send(embed).then(msg => {
                 setTimeout(() => {
+                    message.delete();
                     msg.delete();
                 }, 30000);
             });
@@ -41,6 +43,19 @@ module.exports = class help {
         } else
         if (args[1].toString() == "moderation") {
 
+        } else
+        if (args[1].toString() == "administration") {
+            let embed = new client.modules.Discord.MessageEmbed()
+                .setTitle(`**Help Menu** - Administration`)
+                .setColor(message.guild.member(client.user).displayHexColor)
+                .setDescription(`To view a detailed description for any given command, please type: ` + "`" + `-help info <command>` + "`")
+                .addField(`-errorcode`, `Look up an error code to view its meaning`, true)
+            message.channel.send(embed).then(msg => {
+                setTimeout(() => {
+                    message.delete();
+                    msg.delete();
+                }, 30000);
+            });
         } else
         if (args[1].toString() == "info") {
             if (args[2].toString() == "help") {
@@ -52,6 +67,7 @@ module.exports = class help {
                     .addField(`Aliases:`, `-guide\n-helpme\n-h`, true);
                 message.channel.send(embed).then(msg => {
                     setTimeout(() => {
+                        message.delete();
                         msg.delete();
                     }, 30000);
                 });
@@ -65,6 +81,7 @@ module.exports = class help {
                     .addField(`Aliases:`, `-statistics\n-info\n-botinfo\n-status`, true);
                 message.channel.send(embed).then(msg => {
                     setTimeout(() => {
+                        message.delete();
                         msg.delete();
                     }, 30000);
                 });
@@ -78,9 +95,24 @@ module.exports = class help {
                     .addField(`Aliases:`, `-urbandictionary`, true);
                 message.channel.send(embed).then(msg => {
                     setTimeout(() => {
+                        message.delete();
                         msg.delete();
                     }, 30000);
                 })
+            } else
+            if (args[2].toString() == "errorcode") {
+                let embed = new client.modules.Discord.MessageEmbed()
+                    .setColor(message.guild.member(client.user).displayHexColor)
+                    .setTitle(`**Help Menu** - Info: Error Codes`)
+                    .setDescription(`If, for any reason, a command or function within this bot errors or has a problem, you will be shown an error code. This error code can be shown to staff members who can fix the problem. This command is used to look up that specific error code to find the underlying issue. There are many variations of error codes that follow a format of letters then numbers.`)
+                    .addField(`Example use:`, `-errorcode S001\n-errorcode ST001`, true)
+                    .addField(`Aliases:`, `-error\n-errcode\n-errorcodes\n-err`, true)
+                message.channel.send(embed).then(msg => {
+                    setTimeout(() => {
+                        message.delete();
+                        msg.delete();
+                    }, 30000);
+                });
             }
         }
     }

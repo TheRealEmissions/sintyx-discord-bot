@@ -1,7 +1,7 @@
 module.exports = class errorcode {
     constructor() {
         this.name = 'errorcode',
-            this.alias = ["error", "errcode"],
+            this.alias = ["error", "errcode", "errorcodes", "err"],
             this.usage = `-errorcode`
     }
 
