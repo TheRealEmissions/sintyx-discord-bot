@@ -23,8 +23,9 @@ const client = new modules.Discord.Client({
 });
 const storage = {
     emojiCharacters: require(`./storage/emojiCharacters.js`),
-    errorCodes: require(`./storage/errorCodes.js`)
-}
+    errorCodes: require(`./storage/errorCodes.js`),
+    roles: require(`./storage/roles.js`)
+};
 
 
 /*
@@ -56,6 +57,7 @@ BINDINGS
 client.modules = modules;
 client.commandHandler = cmdHandler;
 client.storage = storage;
+
 /*
 LOGIN
 */
