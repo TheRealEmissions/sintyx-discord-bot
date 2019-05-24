@@ -67,75 +67,29 @@ module.exports = class help {
             });
         } else
         if (args[1].toString() == "info") {
-            if (args[2].toString() == "help") {
+            if (!args[2]) {
+                return;
+            }
+            let info = client.storage.helpInfo[`${args[2].toString()}`];
+            if (!info) {
                 let embed = new client.modules.Discord.MessageEmbed()
+                    .setTitle(`**Help Menu** - Info: ${args[2].toString()}`)
                     .setColor(message.guild.member(client.user).displayHexColor)
-                    .setTitle(`**Help Menu** - Info: Help`)
-                    .setDescription(`This command relays to the user all the available commands a user has access to. It can be used to find out what the functions of commands are and how they act and respond to a user running them.`)
-                    .addField(`Example use:`, `-help\n-help help\n-help stats`, true)
-                    .addField(`Aliases:`, `-guide\n-helpme\n-h`, true);
+                    .setDescription(`This command doesn't exist and therefore I cannot show you any information about it! *(Error H001)*`)
                 message.channel.send(embed).then(msg => {
                     setTimeout(() => {
                         message.delete();
                         msg.delete();
                     }, 30000);
                 });
-            } else
-            if (args[2].toString() == "stats") {
+            } else {
                 let embed = new client.modules.Discord.MessageEmbed()
+                    .setTitle(`**Help Menu** - Info: ${args[2].toString()}`)
                     .setColor(message.guild.member(client.user).displayHexColor)
-                    .setTitle(`**Help Menu** - Info: Stats`)
-                    .setDescription(`This command displays all the information regarding the bot and the server. It can be useful to run this command if you believe the bot or the server is running slow.`)
-                    .addField(`Example use:`, `-stats`, true)
-                    .addField(`Aliases:`, `-statistics\n-info\n-botinfo\n-status`, true);
-                message.channel.send(embed).then(msg => {
-                    setTimeout(() => {
-                        message.delete();
-                        msg.delete();
-                    }, 30000);
-                });
-            } else
-            if (args[2].toString() == "urban") {
-                let embed = new client.modules.Discord.MessageEmbed()
-                    .setColor(message.guild.member(client.user).displayHexColor)
-                    .setTitle(`**Help Menu** - Info: Urban`)
-                    .setDescription(`This command will research the Urban Dictionary directly the term or phrase you input into the command! It will display the first definition shown on the Urban Dictionary website and will, furthermore, display the up and down-votes on that particular definition. You can view the page itself by clicking on the defintion displayed.`)
-                    .addField(`Example use:`, `-urban guy\n-urban White House\n-urban The President`, true)
-                    .addField(`Aliases:`, `-urbandictionary`, true);
-                message.channel.send(embed).then(msg => {
-                    setTimeout(() => {
-                        message.delete();
-                        msg.delete();
-                    }, 30000);
-                })
-            } else
-            if (args[2].toString() == "errorcode") {
-                let embed = new client.modules.Discord.MessageEmbed()
-                    .setColor(message.guild.member(client.user).displayHexColor)
-                    .setTitle(`**Help Menu** - Info: Error Codes`)
-                    .setDescription(`If, for any reason, a command or function within this bot errors or has a problem, you will be shown an error code. This error code can be shown to staff members who can fix the problem. This command is used to look up that specific error code to find the underlying issue. There are many variations of error codes that follow a format of letters then numbers.`)
-                    .addField(`Example use:`, `-errorcode S001\n-errorcode ST001`, true)
-                    .addField(`Aliases:`, `-error\n-errcode\n-errorcodes\n-err`, true)
-                message.channel.send(embed).then(msg => {
-                    setTimeout(() => {
-                        message.delete();
-                        msg.delete();
-                    }, 30000);
-                });
-            } else
-            if (args[2].toString() == "support") {
-                let embed = new client.modules.Discord.MessageEmbed()
-                    .setColor(message.guild.member(client.user).displayHexColor)
-                    .setTitle(`**Help Menu** - Info: Support`)
-                    .setDescription(`If, for any reason, you have an issue, please feel free to run this command to open a Support Ticket! These tickets can be used to discuss any problems you may have regarding ${client.user.username} such as in-game bugs or payment issues to say the least.`)
-                    .addField(`Example use:`, `-support The store won't accept my bank card\n-support Help me please`, true)
-                    .addField(`Aliases:`, `-supportticket`)
-                message.channel.send(embed).then(msg => {
-                    setTimeout(() => {
-                        message.delete();
-                        msg.delete();
-                    }, 30000);
-                });
+                    .setDescription(client.storage.helpInfo[`${args[2].toString()}`].description)
+                    .addField(`Example use:`, client.storage.helpInfo[`${args[2].toString()}`].exampleUse)
+                    .addField(`Aliases:`, client.storage.helpInfo[`${args[2].toString()}`].aliases)
+                message.channel.send(embed);
             }
         }
     }

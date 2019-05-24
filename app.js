@@ -24,7 +24,8 @@ const client = new modules.Discord.Client({
 const storage = {
     emojiCharacters: require(`./storage/emojiCharacters.js`),
     errorCodes: require(`./storage/errorCodes.js`),
-    roles: require(`./storage/roles.js`)
+    roles: require(`./storage/roles.js`),
+    helpInfo: require(`./storage/helpInfo.js`)
 };
 
 
