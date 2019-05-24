@@ -27,6 +27,10 @@ const storage = {
     roles: require(`./storage/roles.js`),
     helpInfo: require(`./storage/helpInfo.js`)
 };
+const functions = {
+    trim: require(`./functions/trim.js`),
+    logError: require(`./functions/logError.js`)
+}
 
 
 /*
@@ -58,6 +62,7 @@ BINDINGS
 client.modules = modules;
 client.commandHandler = cmdHandler;
 client.storage = storage;
+client.functions = functions;
 
 /*
 LOGIN
