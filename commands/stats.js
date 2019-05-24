@@ -30,16 +30,6 @@ module.exports = class stats {
         totalSeconds %= 3600;
         let minutes = Math.round(Math.floor(totalSeconds / 60) * 100) / 100;
         let seconds = Math.round(totalSeconds % 60 * 100) / 100;
-        let time;
-        if (days !== 0) {
-            time = `${days}d ${hours}h ${minutes}m ${seconds}s`
-        } else if (hours !== 0) {
-            time = `${hours}h ${minutes}m ${seconds}s`
-        } else if (minutes !== 0) {
-            time = `${minutes}m ${seconds}s`
-        } else if (seconds !== 0) {
-            time = `${seconds}s`
-        }
         let embed = new client.modules.Discord.MessageEmbed()
             .setTitle(`**${client.user.username} Bot Statistics**`)
             .setColor(embedColor)
@@ -48,7 +38,7 @@ module.exports = class stats {
             .addField(`Emojis`, `${message.guild.emojis.array().length} *(${client.emojis.array().length} global)*`, true)
             .addField(`Memory Usage`, memoryUsage, true)
             .addField(`Latency`, Math.round(client.ws.ping) + "ms", true)
-            .addField(`Bot Uptime`, time, true)
+            .addField(`Bot Uptime`, days !== 0 ? `${days}d ${hours}h ${minutes}m ${seconds}s` : (hours !== 0 ? `${hours}h ${minutes}m ${seconds}s` : (minutes !== 0 ? `${minutes}m ${seconds}s` : (seconds !== 0 ? `${seconds}s` : `0s`))), true)
         /*
 
         */
@@ -56,7 +46,6 @@ module.exports = class stats {
         let sbIP = `unitedrealm.co.uk`;
         let sbPort = `25565`;
         let url = `http://mcapi.us/server/status?ip=` + sbIP + `&port=` + sbPort;
-        let status;
         client.modules.request(url, (err, response, body) => {
             if (err) {
                 console.error(err);
@@ -68,15 +57,10 @@ module.exports = class stats {
                 message.channel.send(embed2);
             } else {
             body = JSON.parse(body);
-            if (body.online) {
-                status = `**Online** :white_check_mark:\n${body.players.now}/${body.players.max} players`
-            } else {
-                status = '**Offline** :x:'
-            }
             let embed2 = new client.modules.Discord.MessageEmbed()
                 .setTitle(`**${client.user.username} Server Statistics** - ${sbIP}`)
                 .setColor(embedColor)
-                .addField(`Skyblock`, status)
+                .addField(`Skyblock`, Boolean(body.online) ? `**Online** ${client.storage.emojiCharacters['white_check_mark']}\n${body.players.now}/${body.players.max} Players` : `**Offline** ${client.storage.emojiCharacters['x']}`)
                 .setTimestamp()
             message.channel.send(embed);
             message.channel.send(embed2);
