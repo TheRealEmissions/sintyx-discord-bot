@@ -54,7 +54,7 @@ module.exports = class urban {
                     });
                 } else {
                     let endTime = new Date().getTime();
-                    let time = parseInt(endTime - startTime);
+                    let time = parseInt(endTime - startTim);
                     let embed = new client.modules.Discord.MessageEmbed()
                         .setTitle(`**Urban Dictionary**`)
                         .setColor(message.guild.member(client.user).displayHexColor)
