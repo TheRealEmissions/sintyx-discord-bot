@@ -43,6 +43,7 @@ module.exports = class help {
                 .setColor(message.guild.member(client.user).displayHexColor)
                 .setDescription(`To view a detailed description for any given command, please type: ` + "`" + `-help info <command>` + "`")
                 .addField(`-support (reason)`, `Open a support ticket with an optional reason`)
+                .addField(`-close (reason)`, `Close a support ticket with an optional reason`)
             message.channel.send(embed).then(msg => {
                 setTimeout(() => {
                     message.delete();
