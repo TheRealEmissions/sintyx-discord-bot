@@ -11,7 +11,7 @@ module.exports = function startReactionCache(client) {
     client.channels.find(x => x.id == client.storage.messageCache['usernameColor'].channel).messages.fetch(client.storage.messageCache['usernameColor'].id).then(msg => {
         let filter = (reaction, user) => ((reaction.emoji.name == ec['heart']) || (reaction.emoji.name == ec['yellow_heart']) || (reaction.emoji.name == ec['blue_heart']) || (reaction.emoji.name == ec['green_heart']) || (reaction.emoji.name == ec['purple_heart']) || (reaction.emoji.name == ec['black_heart'])) && user.id !== "567441952640073738";
         let collector = new client.modules.Discord.ReactionCollector(msg, filter, {});
-        collector.on('collect', async (reaction) => {
+        collector.on('collect', (reaction) => {
             reaction.users.remove(reaction.users.last());
             if (!msg.guild.roles.find(x => x.name == ("Red") || ("Yellow") || ("Green") || ("Blue") || ("Purple") || ("Black"))) {
                 return;
@@ -44,52 +44,128 @@ module.exports = function startReactionCache(client) {
                     }
                 }
 
+                let Discord = require(`discord.js`);
+
+                function removedRoleEmbed(member) {
+                    let embed = new Discord.MessageEmbed()
+                        .setDescription(`<@${member.id}> reset your username colour!`)
+                        .setColor(msg.guild.member(client.user).displayHexColor)
+                    return embed;
+                }
+
+                function addedRoleEmbed(member, role) {
+                    let embed = new Discord.MessageEmbed()
+                        .setDescription(`<@${member.id}> altered your username colour to ${role.name}!`)
+                        .setColor(msg.guild.member(client.user).displayHexColor)
+                    return embed;
+                }
+
                 if (reaction.emoji.name == ec['heart']) {
                     if (msg.guild.member(reaction.users.last()).roles.find(x => x.id == redRole.id)) {
                         checkRoles(msg, reaction);
+                        msg.channel.send(removedRoleEmbed(reaction.users.last())).then(msg => {
+                            setTimeout(() => {
+                                msg.delete();
+                            }, 5000);
+                        });
                     } else {
                         checkRoles(msg, reaction);
                         msg.guild.member(reaction.users.last()).roles.add(redRole.id);
+                        msg.channel.send(addedRoleEmbed(reaction.users.last(), redRole)).then(msg => {
+                            setTimeout(() => {
+                                msg.delete();
+                            }, 5000);
+                        });
                     }
                 } else
                 if (reaction.emoji.name == ec['yellow_heart']) {
                     if (msg.guild.member(reaction.users.last()).roles.find(x => x.id == yellowRole.id)) {
                         checkRoles(msg, reaction);
+                        msg.channel.send(removedRoleEmbed(reaction.users.last())).then(msg => {
+                            setTimeout(() => {
+                                msg.delete();
+                            }, 5000);
+                        });
                     } else {
                         checkRoles(msg, reaction);
                         msg.guild.member(reaction.users.last()).roles.add(yellowRole.id);
+                        msg.channel.send(addedRoleEmbed(reaction.users.last(), yellowRole)).then(msg => {
+                            setTimeout(() => {
+                                msg.delete();
+                            }, 5000);
+                        });
                     }
                 } else
                 if (reaction.emoji.name == ec['green_heart']) {
                     if (msg.guild.member(reaction.users.last()).roles.find(x => x.id == greenRole.id)) {
                         checkRoles(msg, reaction);
+                        msg.channel.send(removedRoleEmbed(reaction.users.last())).then(msg => {
+                            setTimeout(() => {
+                                msg.delete();
+                            }, 5000);
+                        });
                     } else {
                         checkRoles(msg, reaction);
                         msg.guild.member(reaction.users.last()).roles.add(greenRole.id);
+                        msg.channel.send(addedRoleEmbed(reaction.users.last(), greenRole)).then(msg => {
+                            setTimeout(() => {
+                                msg.delete();
+                            }, 5000);
+                        });
                     }
                 } else
                 if (reaction.emoji.name == ec['blue_heart']) {
                     if (msg.guild.member(reaction.users.last()).roles.find(x => x.id == blueRole.id)) {
                         checkRoles(msg, reaction);
+                        msg.channel.send(removedRoleEmbed(reaction.users.last())).then(msg => {
+                            setTimeout(() => {
+                                msg.delete();
+                            }, 5000);
+                        });
                     } else {
                         checkRoles(msg, reaction);
                         msg.guild.member(reaction.users.last()).roles.add(blueRole.id);
+                        msg.channel.send(addedRoleEmbed(reaction.users.last(), blueRole)).then(msg => {
+                            setTimeout(() => {
+                                msg.delete();
+                            }, 5000);
+                        });
                     }
                 } else
                 if (reaction.emoji.name == ec['purple_heart']) {
                     if (msg.guild.member(reaction.users.last()).roles.find(x => x.id == purpleRole.id)) {
                         checkRoles(msg, reaction);
+                        msg.channel.send(removedRoleEmbed(reaction.users.last())).then(msg => {
+                            setTimeout(() => {
+                                msg.delete();
+                            }, 5000);
+                        });
                     } else {
                         checkRoles(msg, reaction);
                         msg.guild.member(reaction.users.last()).roles.add(purpleRole.id);
+                        msg.channel.send(addedRoleEmbed(reaction.users.last(), purpleRole)).then(msg => {
+                            setTimeout(() => {
+                                msg.delete();
+                            }, 5000);
+                        });
                     }
                 } else
                 if (reaction.emoji.name == ec['black_heart']) {
                     if (msg.guild.member(reaction.users.last()).roles.find(x => x.id == blackRole.id)) {
                         checkRoles(msg, reaction);
+                        msg.channel.send(removedRoleEmbed(reaction.users.last())).then(msg => {
+                            setTimeout(() => {
+                                msg.delete();
+                            }, 5000);
+                        });
                     } else {
                         checkRoles(msg, reaction);
                         msg.guild.member(reaction.users.last()).roles.add(blackRole.id);
+                        msg.channel.send(addedRoleEmbed(reaction.users.last(), blackRole)).then(msg => {
+                            setTimeout(() => {
+                                msg.delete();
+                            }, 5000);
+                        });
                     }
                 }
             }
