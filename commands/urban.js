@@ -26,13 +26,7 @@ module.exports = class urban {
             if (err) {
                 console.error(err);
                 client.functions.logError(client, err, `U003`)
-                let embed = new client.modules.Discord.MessageEmbed()
-                    .setTitle(`**Urban Dictionary** - Error`)
-                    .setColor(message.guild.member(client.user).displayHexColor)
-                    .setDescription(`An error has occurred. Please display the error code to a staff member.`)
-                    .addField(`Error Code`, `U003`)
-                    .setTimestamp();
-                message.channel.send(embed);
+                message.channel.send(client.functions.errorEmbed(`Urban Dictionary`, `U003`, message.guild.member(client.user).displayHexColor));
             }
             body = JSON.parse(body);
             let startTime = new Date().getTime();
@@ -65,13 +59,7 @@ module.exports = class urban {
                     msg.edit(embed).catch(err => {
                         console.error(err);
                         client.functions.logError(client, err, `U002`);
-                        let embed2 = new client.modules.Discord.MessageEmbed()
-                            .setTitle(`**Urban Dictionary** - Error`)
-                            .setColor(message.guild.member(client.user).displayHexColor)
-                            .setDescription(`An error has occurred. Please display the error code to a staff member.`)
-                            .addField(`Error Code`, `U002`)
-                            .setTimestamp();
-                        msg.edit(embed2);
+                        msg.edit(client.functions.errorEmbed(`Urban Dictionary`, `U002`, message.guild.member(client.user).displayHexColor));
                     });
                 }
             });
