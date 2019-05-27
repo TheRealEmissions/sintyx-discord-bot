@@ -22,13 +22,7 @@ module.exports = class support {
                     channel.setParent(category);
                     let supportTicketManager = message.guild.roles.find(x => x.id == client.storage.roles['supportTicketManager']);
                     if (!supportTicketManager) {
-                        let embed = new client.modules.Discord.MessageEmbed()
-                            .setTitle(`**Support Ticket** - Error`)
-                            .setColor(message.guild.member(client.user).displayHexColor)
-                            .setDescription(`**Hey!** Unfortunately, we could not create your support ticket! Please display this error code to a member of staff.`)
-                            .addField(`Error Code`, `S002`)
-                            .setTimestamp();
-                        startMsg.edit(` `).then(() => startMsg.edit(embed));
+                        startMsg.edit(` `).then(() => startMsg.edit(client.functions.errorEmbed(`Support Ticket`, `S002`, message.guild.member(client.user).displayHexColor)));
                         channel.delete();
                     } else {
                         channel.send(`<@${message.author.id}> <@&${client.storage.roles['supportTicketManager']}>`).then(msg => {
