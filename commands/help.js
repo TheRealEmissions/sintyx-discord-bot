@@ -59,6 +59,7 @@ module.exports = class help {
                 .setColor(message.guild.member(client.user).displayHexColor)
                 .setDescription(`To view a detailed description for any given command, please type: ` + "`" + `-help info <command>` + "`")
                 .addField(`-errorcode <code>`, `Look up an error code to view its meaning`, true)
+                .addField(`-test`, `Command for Emissions`, true)
             message.channel.send(embed).then(msg => {
                 setTimeout(() => {
                     message.delete();
