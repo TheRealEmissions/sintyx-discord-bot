@@ -16,6 +16,7 @@ module.exports = class test {
             let ec = client.storage.emojiCharacters;
             let embed = new client.modules.Discord.MessageEmbed()
                 .setTitle(`**Username Colour**`)
+                .setColor(message.guild.member(client.user).displayHexColor)
                 .addField(`Red`, ec['heart'], true)
                 .addField(`Yellow`, ec['yellow_heart'], true)
                 .addField(`Blue`, ec['blue_heart'], true)
