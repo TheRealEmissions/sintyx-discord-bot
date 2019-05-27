@@ -26,11 +26,13 @@ const storage = {
     errorCodes: require(`./storage/errorCodes.js`),
     roles: require(`./storage/roles.js`),
     helpInfo: require(`./storage/helpInfo.js`),
+    messageCache: require(`./storage/messageCache.js`)
 };
 const functions = {
     trim: require(`./functions/trim.js`),
     logError: require(`./functions/logError.js`),
-    errorEmbed: require(`./functions/errorEmbed.js`)
+    errorEmbed: require(`./functions/errorEmbed.js`),
+    startReactionCache: require(`./functions/startReactionCache.js`)
 }
 
 

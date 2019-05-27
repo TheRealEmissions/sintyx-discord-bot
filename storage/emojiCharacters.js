@@ -12,5 +12,7 @@ module.exports = {
     '!': '❗', '?': '❓', 'check_mark': '✔',
     'x': '❌', 'eyes': '👀', 'white_check_mark': '✅',
     'thumbs_up': '👍', 'thumbs_down': '👎',
-    'timer': '⏲', 'heart': '❤'
+    'timer': '⏲', 'heart': '❤', 'yellow_heart': '💛',
+    'green_heart': '💚', 'blue_heart': '💙', 'purple_heart': '💜',
+    'black_heart': '🖤'
 }
