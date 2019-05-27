@@ -4,7 +4,7 @@ module.exports = function errorEmbed(title, error, embedColor) {
         .setTitle(`**${title}** - Error`)
         .setColor(embedColor)
         .setDescription(`Unfortunately, we could not process your command due to an error. Please display the error code to a staff member.`)
-        .addField(`Error Code`, `${error}`)
+        .addField(`Error Code`, `${error} `)
         .setTimestamp();
     return embed;
 }
