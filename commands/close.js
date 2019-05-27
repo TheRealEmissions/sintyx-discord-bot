@@ -1,7 +1,7 @@
 module.exports = class close {
     constructor() {
         this.name = 'close',
-            this.alias = [],
+            this.alias = ["delete", "cl"],
             this.usage = `-close`
     }
 
