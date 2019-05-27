@@ -26,7 +26,6 @@ const storage = {
     errorCodes: require(`./storage/errorCodes.js`),
     roles: require(`./storage/roles.js`),
     helpInfo: require(`./storage/helpInfo.js`),
-    test: require(`./storage/test.js`)
 };
 const functions = {
     trim: require(`./functions/trim.js`),
