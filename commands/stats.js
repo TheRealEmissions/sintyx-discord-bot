@@ -6,7 +6,6 @@ module.exports = class stats {
     }
 
     async run(client, message, args) {
-        let embedColor = message.guild.member(client.user).displayHexColor;
         let channelAmountGlobal = 0;
         client.guilds.forEach(guild => {
             channelAmountGlobal += guild.channels.size;
@@ -23,7 +22,6 @@ module.exports = class stats {
             if (i == 0) return bytes + ' ' + sizes[i];
             return (bytes / Math.pow(1024, i)).toFixed(1) + ' ' + sizes[i];
         };
-        let memoryUsage = bytesToSize(process.memoryUsage().heapTotal);
         let totalSeconds = (client.uptime / 1000);
         let days = Math.round(Math.floor(totalSeconds / 86400) * 100) / 100;
         let hours = Math.round(Math.floor(totalSeconds / 3600) * 100) / 100;
@@ -32,11 +30,11 @@ module.exports = class stats {
         let seconds = Math.round(totalSeconds % 60 * 100) / 100;
         let embed = new client.modules.Discord.MessageEmbed()
             .setTitle(`**${client.user.username} Bot Statistics**`)
-            .setColor(embedColor)
+            .setColor(message.guild.member(client.user).displayHexColor)
             .addField(`Channels`, `${message.guild.channels.size} *(${channelAmountGlobal} global)*`, true)
             .addField(`Users`, `${message.guild.memberCount} *(${userAmountGlobal} global)*`, true)
             .addField(`Emojis`, `${message.guild.emojis.array().length} *(${client.emojis.array().length} global)*`, true)
-            .addField(`Memory Usage`, memoryUsage, true)
+            .addField(`Memory Usage`, bytesToSize(process.memoryUsage().heapTotal), true)
             .addField(`Latency`, Math.round(client.ws.ping) + "ms", true)
             .addField(`Bot Uptime`, days !== 0 ? `${days}d ${hours}h ${minutes}m ${seconds}s` : (hours !== 0 ? `${hours}h ${minutes}m ${seconds}s` : (minutes !== 0 ? `${minutes}m ${seconds}s` : (seconds !== 0 ? `${seconds}s` : `0s`))), true)
         /*
@@ -52,7 +50,7 @@ module.exports = class stats {
                 client.functions.logError(client, err, `ST001`);
                 let embed2 = new client.modules.Discord.MessageEmbed()
                     .setTitle(`**${client.user.username} Server Statistics** - Error`)
-                    .setColor(embedColor)
+                    .setColor(message.guild.member(client.user).displayHexColor)
                     .setDescription(`Unfortuantely, an error has occurred! Please display this error code to a member of staff.`)
                     .addField(`Error Code`, `ST001`)
                 message.channel.send(embed2);
@@ -60,7 +58,7 @@ module.exports = class stats {
             body = JSON.parse(body);
             let embed2 = new client.modules.Discord.MessageEmbed()
                 .setTitle(`**${client.user.username} Server Statistics** - ${sbIP}`)
-                .setColor(embedColor)
+                .setColor(message.guild.member(client.user).displayHexColor)
                 .addField(`Skyblock`, Boolean(body.online) ? `**Online** ${client.storage.emojiCharacters['white_check_mark']}\n${body.players.now}/${body.players.max} Players` : `**Offline** ${client.storage.emojiCharacters['x']}`)
                 .setTimestamp()
             message.channel.send(embed);
