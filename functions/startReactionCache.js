@@ -7,6 +7,8 @@ module.exports = function startReactionCache(client) {
 
     */
 
+    // USERNAME COLOUR
+
     let ec = client.storage.emojiCharacters;
     client.channels.find(x => x.id == client.storage.messageCache['usernameColor'].channel).messages.fetch(client.storage.messageCache['usernameColor'].id).then(msg => {
         let filter = (reaction, user) => ((reaction.emoji.name == ec['heart']) || (reaction.emoji.name == ec['yellow_heart']) || (reaction.emoji.name == ec['blue_heart']) || (reaction.emoji.name == ec['green_heart']) || (reaction.emoji.name == ec['purple_heart']) || (reaction.emoji.name == ec['black_heart'])) && user.id !== "567441952640073738";
