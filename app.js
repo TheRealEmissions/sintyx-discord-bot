@@ -30,7 +30,8 @@ const storage = {
 };
 const functions = {
     trim: require(`./functions/trim.js`),
-    logError: require(`./functions/logError.js`)
+    logError: require(`./functions/logError.js`),
+    errorEmbed: require(`./functions/errorEmbed.js`)
 }
 
 

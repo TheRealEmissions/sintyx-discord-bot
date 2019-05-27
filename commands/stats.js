@@ -48,12 +48,7 @@ module.exports = class stats {
             if (err) {
                 console.error(err);
                 client.functions.logError(client, err, `ST001`);
-                let embed2 = new client.modules.Discord.MessageEmbed()
-                    .setTitle(`**${client.user.username} Server Statistics** - Error`)
-                    .setColor(message.guild.member(client.user).displayHexColor)
-                    .setDescription(`Unfortuantely, an error has occurred! Please display this error code to a member of staff.`)
-                    .addField(`Error Code`, `ST001`)
-                message.channel.send(embed2);
+                message.channel.send(client.functions.errorEmbed(`${client.user.username} Server Statistics`, `ST001`));
             } else {
             body = JSON.parse(body);
             let embed2 = new client.modules.Discord.MessageEmbed()
