@@ -16,13 +16,7 @@ module.exports = class support {
             message.guild.channels.create(`support-${message.author.username}-${randomString}`).then(async (channel) => {
                 let category = message.guild.channels.find(c => c.name == "Support Tickets" && c.type == "category");
                 if (!category) {
-                    let embed = new client.modules.Discord.MessageEmbed()
-                        .setTitle(`**Support Ticket** - Error`)
-                        .setColor(message.guild.member(client.user).displayHexColor)
-                        .setDescription(`**Hey!** Unfortunately, we could not create your support ticket! Please display this error code to a member of staff.`)
-                        .addField(`Error Code`, `S001`)
-                        .setTimestamp();
-                    startMsg.edit(` `).then(() => startMsg.edit(embed));
+                    startMsg.edit(` `).then(() => startMsg.edit(client.functions.errorEmbed(`Support Ticket`, `S001`, message.guild.member(client.user).displayHexColor)));
                     channel.delete();
                 } else {
                     channel.setParent(category);
