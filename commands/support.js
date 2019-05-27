@@ -32,7 +32,7 @@ module.exports = class support {
                         });
                         let reason = Boolean(args[1]) ? message.content.slice(args[0].length + 1) : `No reason provided`;
                         let embed = new client.modules.Discord.MessageEmbed()
-                            .setTitle(`**Support Ticket**`)
+                            .setTitle(`**Support Ticket** opened by *${message.author.tag}*`)
                             .setColor(message.guild.member(client.user).displayHexColor)
                             .setDescription(`Welcome to your Support Ticket. Please leave your issue in full detail and one of our staff members will assist you as soon as possible, thank you for your patience.`)
                             .addField(`Reference ID:`, randomString, true)
