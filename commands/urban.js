@@ -52,7 +52,7 @@ module.exports = class urban {
                     let embed = new client.modules.Discord.MessageEmbed()
                         .setTitle(`**Urban Dictionary**`)
                         .setColor(message.guild.member(client.user).displayHexColor)
-                        .addField(`Definition of ${word.join(' ')}:`, `[${client.functions.trim(body.list[0].definition, 1024)}](${body.list[0].permalink})`)
+                        .addField(`Definition of ${word.join(' ')}:`, `[${client.functions.trim(body.list[0].definition, (1000 - body.list[0].permalink.length - 1))}](${body.list[0].permalink})`)
                         .addField(`Thumbs Up`, body.list[0].thumbs_up + " " + client.storage.emojiCharacters.thumbs_up, true)
                         .addField(`Thumbs Down`, body.list[0].thumbs_down + " " + client.storage.emojiCharacters.thumbs_down, true)
                         .setFooter(`Processed your result in ${time}ms`)

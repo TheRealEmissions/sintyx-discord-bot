@@ -22,6 +22,7 @@ const client = new modules.Discord.Client({
     disabledEvents: ["TYPING_START"]
 });
 const storage = {
+    auth: require(`./storage/auth.js`),
     emojiCharacters: require(`./storage/emojiCharacters.js`),
     errorCodes: require(`./storage/errorCodes.js`),
     roles: require(`./storage/roles.js`),
@@ -33,7 +34,7 @@ const functions = {
     logError: require(`./functions/logError.js`),
     errorEmbed: require(`./functions/errorEmbed.js`),
     startReactionCache: require(`./functions/startReactionCache.js`)
-}
+};
 
 
 /*
@@ -71,4 +72,4 @@ client.functions = functions;
 LOGIN
 */
 
-client.login("NTY3NDQxOTUyNjQwMDczNzM4.XOLUag.93IVgEO8LTp1HcJk1M0vbmivQSM");
+client.login(storage.auth['token']);
