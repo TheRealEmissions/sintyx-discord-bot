@@ -8,5 +8,10 @@ module.exports = {
     'U002': `Attempted to set embed field more than 1024 in length.`,
     'H001': 'Could not find INFORMATION for COMMAND',
     'U003': 'Error while REQUESTING site for URBAN DICTIONARY.',
-    'B001': 'Could not find MENTIONED USER'
+    'B001': 'Could not find MENTIONED USER',
+    'B002': 'Could not SEND MESSAGE to CHANNEL',
+    'B003': 'Could not SEND MESSAGE to USER via DM',
+    'B004': 'Could not EDIT MESSAGE',
+    'B005': 'Could not REACT to MESSAGE',
+    'B006': 'Could not ADD ROLE to USER'
 }

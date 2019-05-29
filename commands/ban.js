@@ -52,9 +52,9 @@ module.exports = class ban {
                             let msgCollector2 = new client.modules.Discord.MessageCollector(message.channel, m => m.author.id == message.author.id, {
                                 max: 1
                             });
-                            filter = (reaction, user) => reaction.emoji.name == client.storage.emojiCharacters['!'] && user.id == message.author.id;
-                            reacCollector = new client.modules.Discord.ReactionCollector(wizardMsg, filter, {});
-                            duration;
+                            let filter = (reaction, user) => reaction.emoji.name == client.storage.emojiCharacters['!'] && user.id == message.author.id,
+                                reacCollector = new client.modules.Discord.ReactionCollector(wizardMsg, filter, {}),
+                                duration;
                             reacCollector.on('collect', reaction => {
                                 reacCollector.stop();
                                 msgCollector2.stop();
@@ -83,10 +83,10 @@ module.exports = class ban {
                                     wizardMsg.react(client.storage.emojiCharacters['?']);
                                     let msgCollector3 = new client.modules.Discord.MessageCollector(message.channel, m => m.author.id == message.author.id, {
                                         max: 1
-                                    });
-                                    filter2 = (reaction, user) => reaction.emoji.name == client.storage.emojiCharacters['?'] && user.id == message.author.id;
-                                    reacCollector2 = new client.modules.Discord.ReactionCollector(wizardMsg, filter2, {});
-                                    reason;
+                                    }),
+                                        filter2 = (reaction, user) => reaction.emoji.name == client.storage.emojiCharacters['?'] && user.id == message.author.id,
+                                        reacCollector2 = new client.modules.Discord.ReactionCollector(wizardMsg, filter2, {}),
+                                        reason;
                                     msgCollector3.on('collect', thirdMsg => {
                                         thirdMsg.delete();
                                         msgCollector3.stop();
@@ -177,7 +177,10 @@ module.exports = class ban {
                     .setColor(message.guild.member(client.user).displayHexColor)
                     .setDescription(`How long is the duration of this ban? *(${client.storage.emojiCharacters['!']} for permanent)*`)
                 message.channel.send(embed).then(msg => {
-                    msg.react(client.storage.emojiCharacters['!']);
+                    msg.react(client.storage.emojiCharacters['!']).catch(err => {
+                        console.error(err);
+                        message.channel.send(client.functions.errorEmbed(`Ban`, `B005`, message.guild.member(client.user).displayHexColor));
+                    })
                     let reason = Boolean(args[2]) ? message.content.slice(args[0].length + args[1].length + 2) : `No reason provided`,
                         blacklistedRole = message.guild.roles.find(x => x.name == "Blacklisted"),
                         user = message.mentions.members.first();
@@ -190,7 +193,10 @@ module.exports = class ban {
                         msgCollector.stop();
                         reacCollector.stop();
                         reaction.users.remove(reaction.users.first());
-                        user.roles.add([blacklistedRole.id]);
+                        user.roles.add([blacklistedRole.id]).catch(err => {
+                            console.error(err);
+                            message.channel.send(client.functions.errorEmbed(`Ban`, `B006`, message.guild.member(client.user).displayHexColor));
+                        })
                         let embed = new client.modules.Discord.MessageEmbed()
                             .setTitle(`**You were banned on ${message.guild}!**`)
                             .setColor(message.guild.member(client.user).displayHexColor)
@@ -199,7 +205,10 @@ module.exports = class ban {
                             .addField(`Duration`, `Permanent`, true)
                             .addField(`Reason`, "```" + reason + "```")
                             .setTimestamp();
-                        message.mentions.users.first().send(embed);
+                        message.mentions.users.first().send(embed).catch(err => {
+                            console.error(err);
+                            message.channel.send(client.functions.errorEmbed(`Ban`, `B003`, message.guild.member(client.user).displayHexColor));
+                        })
                         let embed2 = new client.modules.Discord.MessageEmbed()
                             .setTitle(`**Ban** - Wizard`)
                             .setColor(message.guild.member(client.user).displayHexColor)
@@ -207,7 +216,10 @@ module.exports = class ban {
                             .addField(`Duration`, `Permanent`, true)
                             .addField(`Reason`, "```" + reason + "```", true)
                             .setFooter(`${client.storage.emojiCharacters['white_check_mark']} Banned ${message.mentions.users.first().tag} at ${new Date()}`)
-                        msg.edit(embed2);
+                        msg.edit(embed2).catch(err => {
+                            console.error(err);
+                            message.channel.send(client.functions.errorEmbed(`Ban`, `B004`, message.guild.member(client.user).displayHexColor));
+                        })
                     });
                     msgCollector.on('collect', timeMsg => {
                         msgCollector.stop();
@@ -227,6 +239,9 @@ module.exports = class ban {
                                     return;
                                 }
                             }, client.modules.ms(timeMsg.toString()));
+                        }).catch(err => {
+                            console.error(err);
+                            message.channel.send(client.functions.errorEmbed(`Ban`, `B006`, message.guild.member(client.user).displayHexColor));
                         })
                         let embed = new client.modules.Discord.MessageEmbed()
                             .setTitle(`**Ban** - Wizard`)
@@ -235,7 +250,10 @@ module.exports = class ban {
                             .addField(`Duration`, timeMsg, true)
                             .addField(`Reason`, "```" + reason + "```", true)
                             .setFooter(`${client.storage.emojiCharacters['white_check_mark']} Banned ${message.mentions.users.first().tag} at ${new Date()}`)
-                        msg.edit(embed);
+                        msg.edit(embed).catch(err => {
+                            console.error(err);
+                            message.channel.send(client.functions.errorEmbed(`Ban`, `B004`, message.guild.member(client.user).displayHexColor));
+                        })
                         let embed2 = new client.modules.Discord.MessageEmbed()
                             .setTitle(`**You were banned on ${message.guild}!**`)
                             .setColor(message.guild.member(client.user).displayHexColor)
@@ -244,8 +262,14 @@ module.exports = class ban {
                             .addField(`Duration`, timeMsg, true)
                             .addField(`Reason`, "```" + reason + "```", true)
                             .setTimestamp();
-                        message.mentions.users.first().send(embed2);
+                        message.mentions.users.first().send(embed2).catch(err => {
+                            console.error(err);
+                            message.channel.send(client.functions.errorEmbed(`Ban`, `B003`, message.guild.member(client.user).displayHexColor));
+                        })
                     });
+                }).catch(err => {
+                    console.error(err);
+                    message.channel.send(client.functions.errorEmbed(`Ban`, `B002`, message.guild.member(client.user).displayHexColor));
                 });
             } else {
                 message.channel.send(client.functions.errorEmbed(`Ban`, `B001`, message.guild.member(client.user).displayHexColor));
