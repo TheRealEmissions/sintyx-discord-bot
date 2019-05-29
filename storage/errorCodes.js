@@ -7,5 +7,6 @@ module.exports = {
     'S002': `Could not find SUPPORT TICKET MANAGER ROLE for CHANNEL. Current ID ${roles['supportTicketManager']}.`,
     'U002': `Attempted to set embed field more than 1024 in length.`,
     'H001': 'Could not find INFORMATION for COMMAND',
-    'U003': 'Error while REQUESTING site for URBAN DICTIONARY.'
+    'U003': 'Error while REQUESTING site for URBAN DICTIONARY.',
+    'B001': 'Could not find MENTIONED USER'
 }

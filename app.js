@@ -51,7 +51,7 @@ modules.fs.readdir(`./events/`, (err, files) => {
         delete require.cache[require.resolve(`./events/${file}`)];
         console.log(`[LOG] Loaded event ${file}`);
     });
-})
+});
 
 const { CommandHandler } = require(`djs-commands`);
 let cmdHandler = new CommandHandler({
