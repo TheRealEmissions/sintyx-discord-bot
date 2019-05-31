@@ -1,13 +1,4 @@
-const modules = {
-    Discord: require(`discord.js`),
-    fs: require(`fs`),
-    mongoose: require(`mongoose`),
-    ms: require(`ms`),
-    random_string: require(`crypto-random-string`),
-    request: require(`request`),
-    querystring: require(`querystring`),
-    fetch: require(`node-fetch`)
-};
+const modules = require(`./modules.js`);
 const client = new modules.Discord.Client({
     disableEveryone: false,
     shardCount: 1,
@@ -21,6 +12,9 @@ const client = new modules.Discord.Client({
     restSweepInterval: 60,
     disabledEvents: ["TYPING_START"]
 });
+const models = {
+    userSettings: require(`./models/userSettings.js`)
+}
 const storage = {
     auth: require(`./storage/auth.js`),
     emojiCharacters: require(`./storage/emojiCharacters.js`),
@@ -40,6 +34,13 @@ const functions = {
 /*
 HANDLERS
 */
+
+let url = `mongodb+srv://user:Hd5V1v3UiOhBMS3S@emissions-fmfww.mongodb.net/sintyx?retryWrites=true&w=majority`;
+modules.mongoose.connect(url, { useNewUrlParser: true });
+mongoose.connection.on('error', console.error.bind(console, '[ERROR] Connection error:'));
+mongoose.connection.once('open', () => {
+    console.log(`[LOG] Connected to the database.`);
+});
 
 modules.fs.readdir(`./events/`, (err, files) => {
     if (err) return console.error(err);
@@ -67,6 +68,7 @@ client.modules = modules;
 client.commandHandler = cmdHandler;
 client.storage = storage;
 client.functions = functions;
+client.models = models;
 
 /*
 LOGIN
