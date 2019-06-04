@@ -30,6 +30,7 @@ module.exports = class help {
                 .addField(`-help`, `You can use this command to view the base help menu`, true)
                 .addField(`-urban <term/phrase>`, `Search a term or phrase on the Urban Dictionary!`, true)
                 .addField(`-stats`, `View statistics regarding the bot and the server`, true)
+                .addField(`-roleinfo`, `View information regarding any role`, true)
             message.channel.send(embed).then(msg => {
                 setTimeout(() => {
                     message.delete();
