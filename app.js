@@ -1,4 +1,7 @@
 const modules = require(`./modules.js`);
+const models = require(`./models.js`);
+const storage = require(`./storage.js`);
+const functions = require(`./functions.js`)
 const client = new modules.Discord.Client({
     disableEveryone: false,
     shardCount: 1,
@@ -12,23 +15,6 @@ const client = new modules.Discord.Client({
     restSweepInterval: 60,
     disabledEvents: ["TYPING_START"]
 });
-const models = {
-    userSettings: require(`./models/userSettings.js`)
-}
-const storage = {
-    auth: require(`./storage/auth.js`),
-    emojiCharacters: require(`./storage/emojiCharacters.js`),
-    errorCodes: require(`./storage/errorCodes.js`),
-    roles: require(`./storage/roles.js`),
-    helpInfo: require(`./storage/helpInfo.js`),
-    messageCache: require(`./storage/messageCache.js`)
-};
-const functions = {
-    trim: require(`./functions/trim.js`),
-    logError: require(`./functions/logError.js`),
-    errorEmbed: require(`./functions/errorEmbed.js`),
-    startReactionCache: require(`./functions/startReactionCache.js`)
-};
 
 
 /*
