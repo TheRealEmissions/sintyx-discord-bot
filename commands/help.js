@@ -42,8 +42,8 @@ module.exports = class help {
                 .setTitle(`**Help Menu** - Tickets`)
                 .setColor(message.guild.member(client.user).displayHexColor)
                 .setDescription(`To view a detailed description for any given command, please type: ` + "`" + `-help info <command>` + "`")
-                .addField(`-support (reason)`, `Open a support ticket with an optional reason`)
-                .addField(`-close (reason)`, `Close a support ticket with an optional reason`)
+                .addField(`-support (reason)`, `Open a support ticket with an optional reason`, true)
+                .addField(`-close (reason)`, `Close a support ticket with an optional reason`, true)
             message.channel.send(embed).then(msg => {
                 setTimeout(() => {
                     message.delete();
@@ -52,7 +52,17 @@ module.exports = class help {
             });
         } else
         if (args[1].toString() == "moderation") {
-
+            let embed = new client.modules.Discord.MessageEmbed()
+                .setTitle(`**Help Menu** - Moderation`)
+                .setColor(message.guild.member(client.user).displayHexColor)
+                .setDescription(`To view a detailed description for any given command, please type: ` + "`" + `-help info <command>` + "`")
+                .addField(`-ban (user) (reason)`, `Blacklist a user from the Discord`, true)
+            message.channel.send(embed).then(msg => {
+                setTimeout(() => {
+                    message.delete();
+                    msg.delete();
+                }, 30000);
+            });
         } else
         if (args[1].toString() == "administration") {
             let embed = new client.modules.Discord.MessageEmbed()

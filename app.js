@@ -71,7 +71,8 @@ client.functions = functions;
 client.models = models;
 
 /*
-LOGIN
+EXPORTS + LOGIN
 */
 
+module.exports = client;
 client.login(storage.auth['token']);
