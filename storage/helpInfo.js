@@ -28,5 +28,15 @@ module.exports = {
         description: `This command will close (delete) a Support Ticket with an optional reason after 10 seconds of confirming the closure. Anyone in the ticket can use this command.`,
         exampleUse: `-close Resolved issue\n-close Ticket not needed\n-close`,
         aliases: `-delete\n-cl`
+    },
+    "ban": {
+        description: `This command will blacklist a user from the Discord. Blacklisting effectively removes any and all permissions from a user and only allows them to view permissions from the given Blacklisted role. This is an alternative from banning them from the Discord itself and helps keep track of banned users that could possibly be reunited with the community. The command supports a wizard system - running ` + "`" + `-ban` + "`" + ` by itself - and a standard system of` + "`" +  `-ban @user reason` + "`" + `.`,
+        exampleUse: `-ban\n-ban @john Rule Breaking`,
+        aliases: `-blacklist`
+    },
+    "roleinfo": {
+        description: `This command will return information regarding any role on the server. Pretty self explanatory.`,
+        exampleUse: `-roleinfo Member\n-roleinfo 567441043822477322\n-roleinfo <@&567441043822477322>`,
+        aliases: `No aliases currently.`
     }
 }
