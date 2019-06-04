@@ -62,8 +62,8 @@ module.exports = function startReactionCache(client) {
                     return embed;
                 }
 
-                if (reaction.emoji.name == ec['heart']) {
-                    if (msg.guild.member(reaction.users.last()).roles.find(x => x.id == redRole.id)) {
+                function processRole(role) {
+                    if (msg.guild.member(reaction.users.last()).roles.find(x => x.id == role.id)) {
                         checkRoles(msg, reaction);
                         msg.channel.send(removedRoleEmbed(reaction.users.last())).then(msg => {
                             setTimeout(() => {
@@ -72,104 +72,15 @@ module.exports = function startReactionCache(client) {
                         });
                     } else {
                         checkRoles(msg, reaction);
-                        msg.guild.member(reaction.users.last()).roles.add(redRole.id);
-                        msg.channel.send(addedRoleEmbed(reaction.users.last(), redRole)).then(msg => {
-                            setTimeout(() => {
-                                msg.delete();
-                            }, 5000);
-                        });
-                    }
-                } else
-                if (reaction.emoji.name == ec['yellow_heart']) {
-                    if (msg.guild.member(reaction.users.last()).roles.find(x => x.id == yellowRole.id)) {
-                        checkRoles(msg, reaction);
-                        msg.channel.send(removedRoleEmbed(reaction.users.last())).then(msg => {
-                            setTimeout(() => {
-                                msg.delete();
-                            }, 5000);
-                        });
-                    } else {
-                        checkRoles(msg, reaction);
-                        msg.guild.member(reaction.users.last()).roles.add(yellowRole.id);
-                        msg.channel.send(addedRoleEmbed(reaction.users.last(), yellowRole)).then(msg => {
-                            setTimeout(() => {
-                                msg.delete();
-                            }, 5000);
-                        });
-                    }
-                } else
-                if (reaction.emoji.name == ec['green_heart']) {
-                    if (msg.guild.member(reaction.users.last()).roles.find(x => x.id == greenRole.id)) {
-                        checkRoles(msg, reaction);
-                        msg.channel.send(removedRoleEmbed(reaction.users.last())).then(msg => {
-                            setTimeout(() => {
-                                msg.delete();
-                            }, 5000);
-                        });
-                    } else {
-                        checkRoles(msg, reaction);
-                        msg.guild.member(reaction.users.last()).roles.add(greenRole.id);
-                        msg.channel.send(addedRoleEmbed(reaction.users.last(), greenRole)).then(msg => {
-                            setTimeout(() => {
-                                msg.delete();
-                            }, 5000);
-                        });
-                    }
-                } else
-                if (reaction.emoji.name == ec['blue_heart']) {
-                    if (msg.guild.member(reaction.users.last()).roles.find(x => x.id == blueRole.id)) {
-                        checkRoles(msg, reaction);
-                        msg.channel.send(removedRoleEmbed(reaction.users.last())).then(msg => {
-                            setTimeout(() => {
-                                msg.delete();
-                            }, 5000);
-                        });
-                    } else {
-                        checkRoles(msg, reaction);
-                        msg.guild.member(reaction.users.last()).roles.add(blueRole.id);
-                        msg.channel.send(addedRoleEmbed(reaction.users.last(), blueRole)).then(msg => {
-                            setTimeout(() => {
-                                msg.delete();
-                            }, 5000);
-                        });
-                    }
-                } else
-                if (reaction.emoji.name == ec['purple_heart']) {
-                    if (msg.guild.member(reaction.users.last()).roles.find(x => x.id == purpleRole.id)) {
-                        checkRoles(msg, reaction);
-                        msg.channel.send(removedRoleEmbed(reaction.users.last())).then(msg => {
-                            setTimeout(() => {
-                                msg.delete();
-                            }, 5000);
-                        });
-                    } else {
-                        checkRoles(msg, reaction);
-                        msg.guild.member(reaction.users.last()).roles.add(purpleRole.id);
-                        msg.channel.send(addedRoleEmbed(reaction.users.last(), purpleRole)).then(msg => {
-                            setTimeout(() => {
-                                msg.delete();
-                            }, 5000);
-                        });
-                    }
-                } else
-                if (reaction.emoji.name == ec['black_heart']) {
-                    if (msg.guild.member(reaction.users.last()).roles.find(x => x.id == blackRole.id)) {
-                        checkRoles(msg, reaction);
-                        msg.channel.send(removedRoleEmbed(reaction.users.last())).then(msg => {
-                            setTimeout(() => {
-                                msg.delete();
-                            }, 5000);
-                        });
-                    } else {
-                        checkRoles(msg, reaction);
-                        msg.guild.member(reaction.users.last()).roles.add(blackRole.id);
-                        msg.channel.send(addedRoleEmbed(reaction.users.last(), blackRole)).then(msg => {
+                        msg.guild.member(reaction.users.last()).roles.add(role.id);
+                        msg.channel.send(addedRoleEmbed(reaction.users.last(), role)).then(msg => {
                             setTimeout(() => {
                                 msg.delete();
                             }, 5000);
                         });
                     }
                 }
+                processRole(role);
             }
         });
     });
