@@ -8,6 +8,8 @@ module.exports = class trello {
 
     async run(client, message, args) {
         if (!args[1]) return;
+
+        // post system
         if (args[1].toString() == "post") {
             let main = new this.modules.Discord.MessageEmbed()
                 .setTitle(`**Trello Cards**`)
@@ -53,6 +55,7 @@ module.exports = class trello {
                                 let filter = (reaction, user) => ((reaction.emoji.name == client.storage.emojiCharacters['white_check_mark']) || (reaction.emoji.name == client.storage.emojiCharacters['x'])) && user.id == message.author.id;
                                 let collector = new trello.modules.Discord.ReactionCollector(origMsg, filter, {});
                                 collector.on('collect', function (reaction) {
+                                    collector.stop();
                                     if (reaction.emoji.name == client.storage.emojiCharacters['white_check_mark']) {
                                         // post to to-do channel
                                         let _cardID = trello.modules.random_string({
@@ -93,6 +96,72 @@ module.exports = class trello {
                     });
                 });
             }).catch(err => console.error(err));
+        }
+        // edit system
+        if (args[1].toString() == "edit") {
+            if (!args[2]) {
+                return;
+            } else {
+                client.models.trelloCards.findOne({
+                    "card_id": args[2]
+                }, (err, db) => {
+                    if (err) return console.error(err);
+                    if (!db) {
+                        message.channel.send("This card ID does not exist! Please check the card ID again.");
+                    } else {
+                        let wizard = new client.modules.Discord.MessageEmbed()
+                            .setDescription(`Which part of the card do you wish to edit? Please type your reply. *(title, description, task or stage)*`)
+                        message.channel.send(wizard).then(origMsg => {
+                            let collector = new client.modules.Discord.MessageCollector(message.channel, m => m.author.id == message.author.id, {
+                                max: 1
+                            });
+                            collector.on('collect', wizardMessage => {
+                                collector.stop();
+                                wizardMessage.delete();
+                                if (wizardMessage.toString() == "title") {
+                                    let embed = new client.modules.Discord.MessageEmbed()
+                                        .setTitle(`Selected: **title**`)
+                                        .setDescription(`What do you wish to change the title to?`)
+                                        .addField(`Current title:`, "`" + db.embed_title + "`");
+                                    origMsg.edit(embed);
+                                    let msgCollector = new client.modules.Discord.MessageCollector(message.channel, m => m.author.id == message.author.id, {
+                                        max: 1
+                                    });
+                                    msgCollector.on('collect', async (titleMessage) => {
+                                        db.embed_title = titleMessage.content;
+                                        db.save((err) => console.error(err));
+                                        let msg = await client.channels.find(x => x.id == (Boolean(db.card_stage == 1) ? client.storage.messageCache['trelloChannels'].stageOne : (Boolean(db.card_stage == 2) ? client.storage.messageCache['trelloChannels'].stageTwo : (Boolean(db.card_stage == 3) ? client.storage.messageCache['trelloChannels'].stageThree : client.storage.messageCache['trelloChannels'].stageFour)))).messages.fetch(db.message_id);
+                                        let embed = new client.modules.Discord.MessageEmbed()
+                                            .setTitle(`**${db.card_id}** - ${titleMessage.content}`)
+                                            .setDescription(db.embed_desc)
+                                            .addField(`Task:`, db.embed_task)
+                                        msg.edit(embed).then(msg => {
+                                            let confirmed = new client.modules.Discord.MessageEmbed()
+                                                .setDescription(`${client.storage.emojiCharacters['white_check_mark']} Updated the **title** to: ` + "`" + titleMessage.content + "`")
+                                            origMsg.edit(confirmed);
+                                            titleMessage.delete();
+                                        }).catch(err => console.error(err));
+                                    });
+                                }
+                                if (wizardMessage.toString() == "description") {
+
+                                }
+                                if (wizardMessage.toString() == "task") {
+
+                                }
+                                if (wizardMessage.toString() == "stage") {
+
+                                }
+                            })
+                        });
+                    }
+                })
+            }
+        }
+
+        // delete system
+        if (args[1].toString() == "del" || "delete") {
+
         }
     }
 }

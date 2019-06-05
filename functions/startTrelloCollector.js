@@ -95,8 +95,7 @@ module.exports = function startTrelloCollector(client, stage, card_id) {
             }
         });
     }
-
-
+    
     if (stage == 1) {
         stageOne();
     } else if (stage == 2) {

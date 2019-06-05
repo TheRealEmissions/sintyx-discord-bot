@@ -139,8 +139,8 @@ module.exports = function startReactionCache(client) {
                 _callback();
                 return;
             } else {
-                db.forEach(entry => {
-                    let msg = client.channels.find(x => x.id == client.storage.messageCache['trelloChannels'].stageTwo).messages.fetch(entry.message_id);
+                db.forEach(async(entry) => {
+                    let msg = await client.channels.find(x => x.id == client.storage.messageCache['trelloChannels'].stageTwo).messages.fetch(entry.message_id);
                     let filter = (reaction, user) => reaction.emoji.name == client.storage.emojiCharacters['double_arrow_forward'] && user.id !== client.user.id;
                     let collector = new client.modules.Discord.ReactionCollector(msg, filter, {});
                     _callback();
@@ -179,8 +179,8 @@ module.exports = function startReactionCache(client) {
             if (!db) {
                 return;
             } else {
-                db.forEach(entry => {
-                    let msg = client.channels.find(x => x.id == client.storage.messageCache['trelloChannels'].stageThree).messages.fetch(entry.message_id);
+                db.forEach(async(entry) => {
+                    let msg = await client.channels.find(x => x.id == client.storage.messageCache['trelloChannels'].stageThree).messages.fetch(entry.message_id);
                     let filter = (reaction, user) => reaction.emoji.name == client.storage.emojiCharacters['white_check_mark'] && user.id !== client.user.id;
                     let collector = new client.modules.Discord.ReactionCollector(msg, filter, {});
                     collector.on('collect', reaction => {
