@@ -84,4 +84,131 @@ module.exports = function startReactionCache(client) {
             }
         });
     });
+
+    // trello system
+
+    let { startTrelloCollector } = require(`../functions`);
+
+    async function startStageOne(_callback) {
+        client.models.trelloCards.find({
+            "card_stage": 1
+        }, (err, db) => {
+            if (err) return console.error(err);
+            if (!db) {
+                _callback();
+                return;
+            } else {
+                db.forEach(async(entry) => {
+                    let msg = await client.channels.find(x => x.id == client.storage.messageCache['trelloChannels'].stageOne).messages.fetch(entry.message_id);
+                    let filter = (reaction, user) => reaction.emoji.name == client.storage.emojiCharacters['thumbs_up'] && user.id !== client.user.id;
+                    let collector = new client.modules.Discord.ReactionCollector(msg, filter, {});
+                    _callback();
+                    collector.on('collect', reaction => {
+                        collector.stop();
+                        msg.delete();
+                        let embed = new client.modules.Discord.MessageEmbed()
+                            .setTitle(`**${entry.card_id}** - ${entry.embed_title}`)
+                            .setDescription(entry.embed_desc)
+                            .addField(`Task:`, entry.embed_task)
+                        client.channels.find(x => x.id == client.storage.messageCache['trelloChannels'].stageTwo).send(embed).then(message => {
+                            message.react(client.storage.emojiCharacters['double_arrow_forward']);
+                            client.models.trelloCards.findOne({
+                                "_id": entry._id
+                            }, (err, db) => {
+                                if (err) return console.error(err);
+                                db.card_stage = 2;
+                                db.message_id = message.id;
+                                db.save((err) => {
+                                    console.error(err);
+                                    startTrelloCollector(client, 2, db.card_id);
+                                });
+                            });
+                        });
+                    });
+                });
+            }
+        });
+    }
+
+    function startStageTwo(_callback) {
+        client.models.trelloCards.find({
+            "card_stage": 2
+        }, (err, db) => {
+            if (err) return console.error(err);
+            if (!db) {
+                _callback();
+                return;
+            } else {
+                db.forEach(entry => {
+                    let msg = client.channels.find(x => x.id == client.storage.messageCache['trelloChannels'].stageTwo).messages.fetch(entry.message_id);
+                    let filter = (reaction, user) => reaction.emoji.name == client.storage.emojiCharacters['double_arrow_forward'] && user.id !== client.user.id;
+                    let collector = new client.modules.Discord.ReactionCollector(msg, filter, {});
+                    _callback();
+                    collector.on('collect', reaction => {
+                        collector.stop();
+                        msg.delete();
+                        let embed = new client.modules.Discord.MessageEmbed()
+                            .setTitle(`**${entry.card_id}** - ${entry.embed_title}`)
+                            .setDescription(entry.embed_desc)
+                            .addField(`Task:`, entry.embed_task)
+                        client.channels.find(x => x.id == client.storage.messageCache['trelloChannels'].stageThree).send(embed).then(message => {
+                            message.react(client.storage.emojiCharacters['white_check_mark']);
+                            client.models.trelloCards.findOne({
+                                "_id": entry._id
+                            }, (err, db) => {
+                                if (err) return console.error(err);
+                                db.card_stage = 3;
+                                db.message_id = message.id;
+                                db.save((err) => {
+                                    console.error(err);
+                                    startTrelloCollector(client, 3, db.card_id);
+                                });
+                            });
+                        });
+                    });
+                })
+            }
+        });
+    }
+
+    function startStageThree() {
+        client.models.trelloCards.find({
+            "card_stage": 3
+        }, (err, db) => {
+            if (err) return console.error(err);
+            if (!db) {
+                return;
+            } else {
+                db.forEach(entry => {
+                    let msg = client.channels.find(x => x.id == client.storage.messageCache['trelloChannels'].stageThree).messages.fetch(entry.message_id);
+                    let filter = (reaction, user) => reaction.emoji.name == client.storage.emojiCharacters['white_check_mark'] && user.id !== client.user.id;
+                    let collector = new client.modules.Discord.ReactionCollector(msg, filter, {});
+                    collector.on('collect', reaction => {
+                        collector.stop();
+                        msg.delete();
+                        let embed = new client.modules.Discord.MessageEmbed()
+                            .setTitle(`**${entry.card_id}** - ${entry.embed_title}`)
+                            .setDescription(entry.embed_desc)
+                            .addField(`Task:`, entry.embed_task)
+                        client.channels.find(x => x.id == client.storage.messageCache['trelloChannels'].stageFour).send(embed).then(message => {
+                            client.models.trelloCards.findOne({
+                                "_id": entry._id
+                            }, (err, db) => {
+                                if (err) return console.error(err);
+                                db.card_stage = 4;
+                                db.message_id = message.id;
+                                db.save((err) => console.error(err));
+                            });
+                        });
+                    });
+                });
+            }
+        })
+    }
+
+    startStageOne(function() {
+        startStageTwo(function() {
+            startStageThree();
+        });
+    });
 }

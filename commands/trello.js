@@ -60,7 +60,7 @@ module.exports = class trello {
                                             type: 'url-safe'
                                         });
                                         let embed = new client.modules.Discord.MessageEmbed()
-                                            .setTitle(`${titleMessage} - **${_cardID}**`)
+                                            .setTitle(`**${_cardID}** - ${titleMessage}`)
                                             .setDescription(descMessage)
                                             .addField(`Task:`, taskMessage)
                                         client.channels.find(x => x.id == "585524157463134237").send(embed).then(msg => {
@@ -75,6 +75,8 @@ module.exports = class trello {
                                             });
                                             newCard.save(function (err) {
                                                 if (err) return console.error(err);
+                                                msg.react(client.storage.emojiCharacters['thumbs_up']);
+                                                client.functions.startTrelloCollector(client, 1, _cardID);
                                             });
                                         });
                                     } else {
