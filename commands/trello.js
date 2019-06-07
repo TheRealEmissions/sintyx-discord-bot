@@ -169,10 +169,32 @@ module.exports = class trello {
                                     });
                                 }
                                 if (wizardMessage.toString() == "task") {
-
+                                    let embed = new client.modules.Discord.MessageEmbed()
+                                        .setTitle(`Selected: **task**`)
+                                        .setDescription(`What do you wish to change the task to?`)
+                                        .addField(`Current task:`, "`" + db.embed_task + "`");
+                                    origMsg.edit(embed);
+                                    let msgCollector = new client.modules.Discord.MessageCollector(message.channel, m => m.author.id == message.author.id, {
+                                        max: 1
+                                    });
+                                    msgCollector.on('collect', async (taskMessage) => {
+                                        db.embed_task = taskMessage.content;
+                                        db.save((err) => console.error(err));
+                                        let msg = await client.channels.find(x => x.id == (Boolean(db.card_stage == 1) ? client.storage.messageCache['trelloChannels'].stageOne : (Boolean(db.card_stage == 2) ? client.storage.messageCache['trelloChannels'].stageTwo : (Boolean(db.card_stage == 3) ? client.storage.messageCache['trelloChannels'].stageThree : client.storage.messageCache['trelloChannels'].stageFour)))).messages.fetch(db.message_id);
+                                        let embed = new client.modules.Discord.MessageEmbed()
+                                            .setTitle(`**${db.card_id}** - ${db.embed_title}`)
+                                            .setDescription(db.embed_desc)
+                                            .addField(`Task:`, taskMessage)
+                                        msg.edit(embed).then(msg => {
+                                            let confirmed = new client.modules.Discord.MessageEmbed()
+                                                .setDescription(`${client.storage.emojiCharacters['white_check_mark']} Updated the **task** to: ` + "`" + taskMessage.content + "`")
+                                            origMsg.edit(confirmed);
+                                            taskMessage.delete();
+                                        }).catch(err => console.error(err));
+                                    });
                                 }
                                 if (wizardMessage.toString() == "stage") {
-
+                                    
                                 }
                             })
                         });
