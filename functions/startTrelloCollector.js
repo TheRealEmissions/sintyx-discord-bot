@@ -14,15 +14,21 @@ module.exports = function startTrelloCollector(client, stage, card_id) {
                 collector.on('collect', reaction => {
                     collector.stop();
                     msg.delete();
-                    let embed = new client.modules.Discord.MessageEmbed()
-                        .setTitle(`**${db.card_id}** - ${db.embed_title}`)
-                        .setDescription(db.embed_desc)
-                        .addField(`Task:`, db.embed_task)
-                    client.channels.find(x => x.id == client.storage.messageCache['trelloChannels'].stageFour).send(embed).then(message => {
-                        db.card_stage = 4;
-                        db.message_id = message.id;
-                        db.save((err) => {
-                            console.error(err);
+                    client.models.trelloCards.findOne({
+                        "card_stage": 3,
+                        "card_id": card_id
+                    }, async (err, db2) => {
+                        if (err) return console.error(err);
+                        let embed = new client.modules.Discord.MessageEmbed()
+                            .setTitle(`**${db2.card_id}** - ${db2.embed_title}`)
+                            .setDescription(db2.embed_desc)
+                            .addField(`Task:`, db2.embed_task)
+                        client.channels.find(x => x.id == client.storage.messageCache['trelloChannels'].stageFour).send(embed).then(message => {
+                            db.card_stage = 4;
+                            db.message_id = message.id;
+                            db.save((err) => {
+                                console.error(err);
+                            });
                         });
                     });
                 });
@@ -45,17 +51,23 @@ module.exports = function startTrelloCollector(client, stage, card_id) {
                 collector.on('collect', reaction => {
                     collector.stop();
                     msg.delete();
-                    let embed = new client.modules.Discord.MessageEmbed()
-                        .setTitle(`**${db.card_id}** - ${db.embed_title}`)
-                        .setDescription(db.embed_desc)
-                        .addField(`Task:`, db.embed_task)
-                    client.channels.find(x => x.id == client.storage.messageCache['trelloChannels'].stageThree).send(embed).then(message => {
-                        db.card_stage = 3;
-                        db.message_id = message.id;
-                        db.save((err) => {
-                            console.error(err);
-                            message.react(client.storage.emojiCharacters['white_check_mark']);
-                            stageThree();
+                    client.models.trelloCards.findOne({
+                        "card_stage": 2,
+                        "card_id": card_id
+                    }, async (err, db2) => {
+                        if (err) return console.error(err);
+                        let embed = new client.modules.Discord.MessageEmbed()
+                            .setTitle(`**${db2.card_id}** - ${db2.embed_title}`)
+                            .setDescription(db2.embed_desc)
+                            .addField(`Task:`, db2.embed_task)
+                        client.channels.find(x => x.id == client.storage.messageCache['trelloChannels'].stageThree).send(embed).then(message => {
+                            db.card_stage = 3;
+                            db.message_id = message.id;
+                            db.save((err) => {
+                                console.error(err);
+                                message.react(client.storage.emojiCharacters['white_check_mark']);
+                                stageThree();
+                            });
                         });
                     });
                 });
@@ -78,24 +90,30 @@ module.exports = function startTrelloCollector(client, stage, card_id) {
                 collector.on('collect', reaction => {
                     collector.stop();
                     msg.delete();
-                    let embed = new client.modules.Discord.MessageEmbed()
-                        .setTitle(`**${db.card_id}** - ${db.embed_title}`)
-                        .setDescription(db.embed_desc)
-                        .addField(`Task:`, db.embed_task)
-                    client.channels.find(x => x.id == client.storage.messageCache['trelloChannels'].stageTwo).send(embed).then(message => {
-                        db.card_stage = 2;
-                        db.message_id = message.id;
-                        db.save((err) => {
-                            console.error(err);
-                            message.react(client.storage.emojiCharacters['double_arrow_forward']);
-                            stageTwo()
+                    client.models.trelloCards.findOne({
+                        "card_stage": 1,
+                        "card_id": card_id
+                    }, async (err, db2) => {
+                        if (err) return console.error(err);
+                        let embed = new client.modules.Discord.MessageEmbed()
+                            .setTitle(`**${db2.card_id}** - ${db2.embed_title}`)
+                            .setDescription(db2.embed_desc)
+                            .addField(`Task:`, db2.embed_task)
+                        client.channels.find(x => x.id == client.storage.messageCache['trelloChannels'].stageTwo).send(embed).then(message => {
+                            db.card_stage = 2;
+                            db.message_id = message.id;
+                            db.save((err) => {
+                                console.error(err);
+                                message.react(client.storage.emojiCharacters['double_arrow_forward']);
+                                stageTwo()
+                            });
                         });
                     });
                 });
             }
         });
     }
-    
+
     if (stage == 1) {
         stageOne();
     } else if (stage == 2) {

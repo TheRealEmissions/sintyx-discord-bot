@@ -63,5 +63,5 @@ module.exports = {
 
 
     */
-    "token": "NTY3NDQxOTUyNjQwMDczNzM4.XOLUag.93IVgEO8LTp1HcJk1M0vbmivQSM"
+    "token": "NTY0MTA0NTk4MDM0NDQ4Mzg0.XPgEIA.vg8o3yKMqZHMm9uy_gpkYu24BYc"
 }

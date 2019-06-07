@@ -144,7 +144,29 @@ module.exports = class trello {
                                     });
                                 }
                                 if (wizardMessage.toString() == "description") {
-
+                                    let embed = new client.modules.Discord.MessageEmbed()
+                                        .setTitle(`Selected: **description**`)
+                                        .setDescription(`What do you wish to change the description to?`)
+                                        .addField(`Current description:`, "`" + db.embed_desc + "`");
+                                    origMsg.edit(embed);
+                                    let msgCollector = new client.modules.Discord.MessageCollector(message.channel, m => m.author.id == message.author.id, {
+                                        max: 1
+                                    });
+                                    msgCollector.on('collect', async (descMessage) => {
+                                        db.embed_desc = descMessage.content;
+                                        db.save((err) => console.error(err));
+                                        let msg = await client.channels.find(x => x.id == (Boolean(db.card_stage == 1) ? client.storage.messageCache['trelloChannels'].stageOne : (Boolean(db.card_stage == 2) ? client.storage.messageCache['trelloChannels'].stageTwo : (Boolean(db.card_stage == 3) ? client.storage.messageCache['trelloChannels'].stageThree : client.storage.messageCache['trelloChannels'].stageFour)))).messages.fetch(db.message_id);
+                                        let embed = new client.modules.Discord.MessageEmbed()
+                                            .setTitle(`**${db.card_id}** - ${db.embed_title}`)
+                                            .setDescription(descMessage.content)
+                                            .addField(`Task:`, db.embed_task)
+                                        msg.edit(embed).then(msg => {
+                                            let confirmed = new client.modules.Discord.MessageEmbed()
+                                                .setDescription(`${client.storage.emojiCharacters['white_check_mark']} Updated the **description** to: ` + "`" + descMessage.content + "`")
+                                            origMsg.edit(confirmed);
+                                            descMessage.delete();
+                                        }).catch(err => console.error(err));
+                                    });
                                 }
                                 if (wizardMessage.toString() == "task") {
 
