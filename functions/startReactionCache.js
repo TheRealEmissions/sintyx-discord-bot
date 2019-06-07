@@ -23,7 +23,10 @@ module.exports = function startReactionCache(client) {
                     greenRole = msg.guild.roles.find(x => x.name == "Green"),
                     blueRole = msg.guild.roles.find(x => x.name == "Blue"),
                     purpleRole = msg.guild.roles.find(x => x.name == "Purple"),
-                    blackRole = msg.guild.roles.find(x => x.name == "Black");
+                    blackRole = msg.guild.roles.find(x => x.name == "Black"),
+                    role;
+
+                reaction.emoji.name == ec['heart'] ? role = redRole : (reaction.emoji.name == ec['yellow_heart'] ? role = yellowRole : (reaction.emoji.name == ec['green_heart'] ? role = greenRole : (reaction.emoji.name == ec['blue_heart'] ? role = blueRole : (reaction.emoji.name == ec['purple_heart'] ? role = purpleRole : role = blackRole))));
 
                 function checkRoles(msg, reaction) {
                     if (msg.guild.member(reaction.users.last()).roles.find(x => x.id == redRole.id)) {
