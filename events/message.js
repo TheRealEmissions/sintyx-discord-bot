@@ -108,7 +108,7 @@ module.exports = (client, message) => {
                 if (err) return console.error(err);
                 let checkLevel = checkXPtoLevel(db.user_level, db.user_xp);
                 if (checkLevel !== db.user_level) {
-                    db.userLevel = checkLevel;
+                    db.user_level += 1;
                     let xpGained = (checkLevel - 1) * 1000;
                     let embed = new client.modules.Discord.MessageEmbed()
                         .setDescription(`<@${message.author.id}>! You have reached **${xpGained} XP** and have ranked up to **Level ${checkLevel}**!`)
@@ -118,6 +118,8 @@ module.exports = (client, message) => {
                         if (err) return console.error(err);
                         _callback();
                     });
+                } else {
+                    _callback();
                 }
             });
         }
