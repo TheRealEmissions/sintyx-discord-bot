@@ -254,7 +254,20 @@ module.exports = class trello {
 
         // delete system
         if (args[1].toString() == "del" || "delete") {
-
+            if (!args[2]) return;
+            client.models.trelloCards.findOne({
+                "card_id": args[2]
+            }, async (err, db) => {
+                if (err) return console.error(err);
+                if (!db) return message.channel.send(`That card could not be found.`);
+                let msg = await client.channels.find(x => x.id == (Boolean(db.card_stage == 1) ? client.storage.messageCache['trelloChannels'].stageOne : (Boolean(db.card_stage == 2) ? client.storage.messageCache['trelloChannels'].stageTwo : (Boolean(db.card_stage == 3) ? client.storage.messageCache['trelloChannels'].stageThree : client.storage.messageCache['trelloChannels'].stageFour)))).messages.fetch(db.message_id);
+                msg.delete();
+                client.models.trelloCards.findOneAndRemove({
+                    "card_id": args[2]
+                }, (err, offer) => {
+                    if (err) return console.error(err);
+                });
+            })
         }
     }
 }
