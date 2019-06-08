@@ -7,6 +7,9 @@ module.exports = class trello {
     }
 
     async run(client, message, args) {
+        console.log(args[0]);
+        console.log(args[1]);
+        console.log(args[2]);
         if (!args[1]) return;
 
         // post system
@@ -245,15 +248,15 @@ module.exports = class trello {
                                         });
                                     });
                                 }
-                            })
+                            });
                         });
                     }
-                })
+                });
             }
         }
 
         // delete system
-        if (args[1].toString() == "del" || "delete") {
+        if ((args[1].toString() == "del") || (args[1].toString() == "delete")) {
             if (!args[2]) return;
             client.models.trelloCards.findOne({
                 "card_id": args[2]
@@ -266,6 +269,7 @@ module.exports = class trello {
                     "card_id": args[2]
                 }, (err, offer) => {
                     if (err) return console.error(err);
+                    message.channel.send(`Removed card **${args[2]}** from their respective channel and database.`)
                 });
             })
         }
