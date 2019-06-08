@@ -194,7 +194,56 @@ module.exports = class trello {
                                     });
                                 }
                                 if (wizardMessage.toString() == "stage") {
-                                    
+                                    let embed = new client.modules.Discord.MessageEmbed()
+                                        .setTitle(`Selected: **stage**`)
+                                        .setDescription(`What do you wish to change the stage to?`)
+                                        .addField(`Current stage:`, "`" + db.card_stage + "`");
+                                    origMsg.edit(embed);
+                                    let msgCollector = new client.modules.Discord.MessageCollector(message.channel, m => m.author.id == message.author.id, {
+                                        max: 1
+                                    });
+                                    msgCollector.on('collect', async (stageMessage) => {
+                                        stageMessage.content = parseInt(stageMessage.content);
+                                        console.log(typeof stageMessage.content);
+                                        if (stageMessage.content == db.card_stage) {
+                                            let embed = new client.modules.Discord.MessageEmbed()
+                                                .setDescription(`${client.storage.emojiCharacters['x']} You cannot edit the stage to the stage it is already at!`)
+                                            origMsg.edit(embed);
+                                            return;
+                                        }
+                                        if (typeof stageMessage.content !== 'number') {
+                                            let embed = new client.modules.Discord.MessageEmbed()
+                                                .setDescription(`${client.storage.emojiCharacters['x']} The stage must be a number! (1, 2, 3 or 4)`)
+                                            origMsg.edit(embed);
+                                            return;
+                                        }
+                                        if ((stageMessage.content < 0) || (stageMessage.content > 4)) {
+                                            let embed = new client.modules.Discord.MessageEmbed()
+                                                .setDescription(`${client.storage.emojiCharacters['x']} The stage must be a number between 1 and 4!`)
+                                            origMsg.edit(embed);
+                                            return;
+                                        }
+                                        let origMessage = await client.channels.find(x => x.id == (Boolean(db.card_stage == 1) ? client.storage.messageCache['trelloChannels'].stageOne : (Boolean(db.card_stage == 2) ? client.storage.messageCache['trelloChannels'].stageTwo : (Boolean(db.card_stage == 3) ? client.storage.messageCache['trelloChannels'].stageThree : client.storage.messageCache['trelloChannels'].stageFour)))).messages.fetch(db.message_id);
+                                        origMessage.delete();
+                                        db.card_stage = stageMessage.content;
+                                        db.save((err) => console.error(err));
+                                        let channel = await client.channels.find(x => x.id == (Boolean(stageMessage.content == 1) ? client.storage.messageCache['trelloChannels'].stageOne : (Boolean(stageMessage.content == 2) ? client.storage.messageCache['trelloChannels'].stageTwo : (Boolean(stageMessage.content == 3) ? client.storage.messageCache['trelloChannels'].stageThree : client.storage.messageCache['trelloChannels'].stageFour))));
+                                        let embed = new client.modules.Discord.MessageEmbed()
+                                            .setTitle(`**${db.card_id}** - ${db.embed_title}`)
+                                            .setDescription(db.embed_desc)
+                                            .addField(`Task:`, db.embed_task);
+                                        let reaction = Boolean(stageMessage.content == 1) ? client.storage.emojiCharacters['thumbs_up'] : (Boolean(stageMessage.content == 2) ? client.storage.emojiCharacters['double_arrow_forward'] : (Boolean(stageMessage.content == 3) ? client.storage.emojiCharacters['white_check_mark'] : null))
+                                        channel.send(embed).then(msg => {
+                                            db.message_id = msg.id;
+                                            db.save((err) => console.error(err));
+                                            setTimeout(() => {
+                                                if (typeof reaction !== null) {
+                                                    msg.react(reaction);
+                                                    client.functions.startTrelloCollector(client, stageMessage.content, db.card_id);
+                                                }
+                                            }, 1000);
+                                        });
+                                    });
                                 }
                             })
                         });
