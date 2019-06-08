@@ -3,5 +3,7 @@ module.exports = {
     logError: require(`./functions/logError.js`),
     errorEmbed: require(`./functions/errorEmbed.js`),
     startReactionCache: require(`./functions/startReactionCache.js`),
-    startTrelloCollector: require(`./functions/startTrelloCollector.js`)
+    startTrelloCollector: require(`./functions/startTrelloCollector.js`),
+    genNumberBetween: require(`./functions/genNumberBetween.js`),
+    percentChance: require(`./functions/percentChance.js`)
 }
