@@ -38,5 +38,20 @@ module.exports = {
         description: `This command will return information regarding any role on the server. Pretty self explanatory.`,
         exampleUse: `-roleinfo Member\n-roleinfo 567441043822477322\n-roleinfo <@&567441043822477322>`,
         aliases: `No aliases currently.`
+    },
+    "evaluate": {
+        description: `This command is used to evaluate code on the bot as if it were running the code from files. This command can only be accessed by the bot creator for safety reasons - this command is very powerful.`,
+        exampleUse: `-evaluate message.channel.send("test");`,
+        aliases: `-eval`
+    },
+    "test": {
+        description: `This command is an 'example' command that can be structured to do anything Emissions needs it to.`,
+        exampleUse: `-test [options]`,
+        aliases: `No aliases currently.`
+    },
+    "trello": {
+        description: `As Project Voyager desired a dedicated system to manage our 'to-do list', we didn't want to use anymore platforms than we currently do. This inspired us to create a Trello system within Discord. Currently, we have four channels that allows us to move cards between those channels with a sophisticated editing system. This system drives the production you see today.`,
+        exampleUse: `-trello post\n-trello edit D987d874\n-trello del D987d874`,
+        aliases: `No aliases currently.`
     }
 }
