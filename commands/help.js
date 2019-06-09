@@ -72,6 +72,8 @@ module.exports = class help {
                 .setDescription(`To view a detailed description for any given command, please type: ` + "`" + `-help info <command>` + "`")
                 .addField(`-errorcode <code>`, `Look up an error code to view its meaning`, true)
                 .addField(`-test`, `Command for Emissions`, true)
+                .addField(`-trello <post/edit/delete>`, `Integrated Trello system that allows us to track progress with cards`, true)
+                .addField(`-evaluate <code>`, `Evaluate runnable code on the bot`, true)
             message.channel.send(embed).then(msg => {
                 setTimeout(() => {
                     message.delete();
