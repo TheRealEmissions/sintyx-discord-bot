@@ -1,8 +1,10 @@
 module.exports = class ban {
     constructor() {
         this.name = 'ban',
-            this.alias = ["blacklist"],
-            this.usage = '-ban'
+        this.alias = ["blacklist"],
+        this.usage = '-ban <user> [reason]',
+        this.category = 'moderation',
+        this.description = 'Blacklist a user from the Discord'
     }
 
     async run(client, message, args) {

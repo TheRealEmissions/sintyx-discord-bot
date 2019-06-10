@@ -2,7 +2,9 @@ module.exports = class urban {
     constructor() {
         this.name = 'urban',
             this.alias = [],
-            this.usage = `-urban`
+            this.usage = `-urban <term/phrase>`,
+            this.category = 'misc',
+            this.description = 'Search a term or phrase on the Urban Dictionary!'
     }
 
     async run(client, message, args) {

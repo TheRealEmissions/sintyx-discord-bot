@@ -2,7 +2,7 @@ module.exports = class trello {
     constructor() {
         this.name = 'trello',
             this.alias = [],
-            this.usage = '-trello',
+            this.usage = '-trello <post/edit/delete> [options]',
             this.modules = require(`../modules.js`)
     }
 
@@ -23,7 +23,7 @@ module.exports = class trello {
             let task = new this.modules.Discord.MessageEmbed()
                 .setDescription(`What is this task of this card?`)
             let trello = this;
-            message.channel.send(await main).then((origMsg) => {
+            message.channel.send(await main).then(async (origMsg) => {
                 // title
                 message.channel.send(await title).then(async function (wizardMsg) {
                     let titleCollector = new trello.modules.Discord.MessageCollector(message.channel, m => m.author.id == message.author.id, {

@@ -2,7 +2,9 @@ module.exports = class roleinfo {
     constructor() {
         this.name = 'roleinfo',
         this.alias = [],
-        this.usage = '-roleinfo'
+        this.usage = '-roleinfo <[@]role>',
+        this.category = 'misc',
+        this.description = 'View information regarding any role'
     }
 
     async run(client, message, args) {

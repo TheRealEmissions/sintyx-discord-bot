@@ -2,7 +2,9 @@ module.exports = class stats {
     constructor() {
         this.name = 'stats',
             this.alias = ["botinfo", "info", "statistics", "status"],
-            this.usage = `-stats`
+            this.usage = `-stats`,
+            this.category = 'misc',
+            this.description = 'View statistics regarding the bot and the server'
     }
 
     async run(client, message, args) {

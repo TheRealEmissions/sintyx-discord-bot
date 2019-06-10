@@ -1,8 +1,10 @@
 module.exports = class close {
     constructor() {
         this.name = 'close',
-            this.alias = ["delete", "cl"],
-            this.usage = `-close`
+        this.alias = ["delete", "cl"],
+        this.usage = `-close [reason]`,
+        this.category = 'tickets',
+        this.description = 'Close a support ticket with an optional reason'
     }
 
     async run(client, message, args) {

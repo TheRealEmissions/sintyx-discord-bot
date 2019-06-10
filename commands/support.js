@@ -2,7 +2,9 @@ module.exports = class support {
     constructor() {
         this.name = 'support',
             this.alias = ["supportticket"],
-            this.usage = `-support`
+            this.usage = `-support [reason]`,
+            this.category = 'tickets',
+            this.description = 'Open a support ticket with an optional reason'
     }
 
     async run(client, message, args) {

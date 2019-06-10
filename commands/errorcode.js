@@ -2,7 +2,9 @@ module.exports = class errorcode {
     constructor() {
         this.name = 'errorcode',
             this.alias = ["error", "errcode", "errorcodes", "err"],
-            this.usage = `-errorcode`
+            this.usage = `-errorcode <code>`,
+            this.category = 'administration',
+            this.description = 'Look up an error code to view its meaning'
     }
 
     async run(client, message, args) {

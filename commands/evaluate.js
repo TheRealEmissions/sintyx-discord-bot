@@ -2,7 +2,9 @@ module.exports = class evaluate {
     constructor() {
         this.name = 'evaluate',
         this.alias = ["eval"],
-        this.usage = '-evaluate'
+        this.usage = '-evaluate <...code...>',
+        this.category = 'administration',
+        this.description = 'Evaluate runnable code on the bot'
     }
 
     async run(client, message, args) {

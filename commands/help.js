@@ -2,10 +2,13 @@ module.exports = class help {
     constructor() {
         this.name = 'help',
             this.alias = ["guide", "helpme", "h"],
-            this.usage = `-help`
+            this.usage = `-help <category>/<info> <command>`,
+            this.category = 'misc',
+            this.description = 'You can use this command to view the base help menu'
     }
 
     async run(client, message, args) {
+        let categories = ["misc", "tickets", "moderation", "administration"];
         if (!args[1]) {
             let embed = new client.modules.Discord.MessageEmbed()
                 .setTitle(`**Help Menu**`)
@@ -22,59 +25,22 @@ module.exports = class help {
                 }, 30000);
             });
         } else
-        if (args[1].toString() == "misc") {
+        if (categories.indexOf(args[1].toString()) >= 0) {
             let embed = new client.modules.Discord.MessageEmbed()
-                .setTitle(`**Help Menu** - Miscellaneous`)
+                .setTitle(`**Help Menu** - ${args[1].toString().charAt(0).toUpperCase() + args[1].toString().slice(1)}`)
                 .setColor(message.guild.member(client.user).displayHexColor)
                 .setDescription(`To view a detailed description for any given command, please type: ` + "`" + `-help info <command>` + "`")
-                .addField(`-help`, `You can use this command to view the base help menu`, true)
-                .addField(`-urban <term/phrase>`, `Search a term or phrase on the Urban Dictionary!`, true)
-                .addField(`-stats`, `View statistics regarding the bot and the server`, true)
-                .addField(`-roleinfo`, `View information regarding any role`, true)
             message.channel.send(embed).then(msg => {
-                setTimeout(() => {
-                    message.delete();
-                    msg.delete();
-                }, 30000);
-            });
-        } else
-        if (args[1].toString() == "tickets") {
-            let embed = new client.modules.Discord.MessageEmbed()
-                .setTitle(`**Help Menu** - Tickets`)
-                .setColor(message.guild.member(client.user).displayHexColor)
-                .setDescription(`To view a detailed description for any given command, please type: ` + "`" + `-help info <command>` + "`")
-                .addField(`-support (reason)`, `Open a support ticket with an optional reason`, true)
-                .addField(`-close (reason)`, `Close a support ticket with an optional reason`, true)
-            message.channel.send(embed).then(msg => {
-                setTimeout(() => {
-                    message.delete();
-                    msg.delete();
-                }, 30000);
-            });
-        } else
-        if (args[1].toString() == "moderation") {
-            let embed = new client.modules.Discord.MessageEmbed()
-                .setTitle(`**Help Menu** - Moderation`)
-                .setColor(message.guild.member(client.user).displayHexColor)
-                .setDescription(`To view a detailed description for any given command, please type: ` + "`" + `-help info <command>` + "`")
-                .addField(`-ban (user) (reason)`, `Blacklist a user from the Discord`, true)
-            message.channel.send(embed).then(msg => {
-                setTimeout(() => {
-                    message.delete();
-                    msg.delete();
-                }, 30000);
-            });
-        } else
-        if (args[1].toString() == "administration") {
-            let embed = new client.modules.Discord.MessageEmbed()
-                .setTitle(`**Help Menu** - Administration`)
-                .setColor(message.guild.member(client.user).displayHexColor)
-                .setDescription(`To view a detailed description for any given command, please type: ` + "`" + `-help info <command>` + "`")
-                .addField(`-errorcode <code>`, `Look up an error code to view its meaning`, true)
-                .addField(`-test`, `Command for Emissions`, true)
-                .addField(`-trello <post/edit/delete>`, `Integrated Trello system that allows us to track progress with cards`, true)
-                .addField(`-evaluate <code>`, `Evaluate runnable code on the bot`, true)
-            message.channel.send(embed).then(msg => {
+                client.modules.fs.readdir(`./commands/`, async (err, files) => {
+                    if (err) return console.error(err);
+                    files.forEach(file => {
+                        if (!file.endsWith(".js")) return;
+                        file = require(`./${file}`);
+                        let command = new file();
+                        if (command.category !== args[1].toString()) return;
+                        msg.edit(embed.addField(command.usage, command.description, true));
+                    });
+                });
                 setTimeout(() => {
                     message.delete();
                     msg.delete();

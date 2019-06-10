@@ -2,12 +2,14 @@ module.exports = class test {
     constructor() {
         this.name = 'test',
             this.alias = [],
-            this.usage = `-test`
+            this.usage = `-test`,
+            this.category = 'administration',
+            this.description = 'Command for Emissions'
     }
 
     async run(client, message, args) {
         if (message.author.id == "201095756784992256") {
-            message.channel.send(`${client.storage.emojiCharacters['white_check_mark']}`).then(msg => {
+            /*message.channel.send(`${client.storage.emojiCharacters['white_check_mark']}`).then(msg => {
                 setTimeout(() => {
                     msg.delete();
                 }, 5000);
@@ -30,7 +32,11 @@ module.exports = class test {
                 await msg.react(ec['green_heart']);
                 await msg.react(ec['purple_heart']);
                 await msg.react(ec['black_heart']);
-            });
+            });*/
+
+            let ban = require(`./ban`);
+            let command = new ban();
+            console.log(command.category + " " + command.description);
 
         } else {
             return;
