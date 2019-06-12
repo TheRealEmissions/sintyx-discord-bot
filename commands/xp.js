@@ -1,7 +1,7 @@
 module.exports = class xp {
     constructor() {
         this.name = 'xp',
-        this.alias = [],
+        this.alias = ['exp'],
         this.usage = '-xp [@user]',
         this.category = 'user',
         this.description = 'View yours or another\'s XP balance'
