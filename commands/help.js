@@ -8,7 +8,7 @@ module.exports = class help {
     }
 
     async run(client, message, args) {
-        let categories = ["misc", "tickets", "moderation", "administration"];
+        let categories = ["misc", "tickets", "moderation", "administration", "user"];
         if (!args[1]) {
             let embed = new client.modules.Discord.MessageEmbed()
                 .setTitle(`**Help Menu**`)
