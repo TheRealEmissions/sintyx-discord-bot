@@ -56,7 +56,7 @@ module.exports = class stats {
             let embed2 = new client.modules.Discord.MessageEmbed()
                 .setTitle(`**${client.user.username} Server Statistics** - ${sbIP}`)
                 .setColor(message.guild.member(client.user).displayHexColor)
-                .addField(`Network`, Boolean(body.online) ? `**Online** ${client.storage.emojiCharacters['white_check_mark']}\n${body.players.now}/${body.players.max} Players` : `**Offline** ${client.storage.emojiCharacters['x']}`)
+                .addField(`Survival`, Boolean(body.online) ? `**Online** ${client.storage.emojiCharacters['white_check_mark']}\n${body.players.now}/${body.players.max} Players` : `**Offline** ${client.storage.emojiCharacters['x']}`)
                 .setTimestamp()
             message.channel.send(embed);
             message.channel.send(embed2);
