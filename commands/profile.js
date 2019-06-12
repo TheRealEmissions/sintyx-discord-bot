@@ -56,10 +56,20 @@ module.exports = class profile {
                                     return client.storage.emojiCharacters['x'];
                                 }
                             }
+                            let xpPing;
+                            let coinPing;
+                            settingsDB.options.forEach(option => {
+                                if (option.type == 'xp_ping') {
+                                    xpPing = Boolean(options.boolean == true) ? true : false
+                                }
+                                if (option.type == 'coin_ping') {
+                                    coinPing = Boolean(options.boolean == true) ? true : false
+                                }
+                            });
                             let embed = new client.modules.Discord.MessageEmbed()
                                 .setTitle(`**${user.username}${Boolean(user.username.endsWith('s')) ? `'` : `'s`}** Profile - **Settings Information**`)
-                                .addField(`XP Ping`, rebrandEmoji(settingsDB.xp_ping), true)
-                                .addField(`Coin Ping`, rebrandEmoji(settingsDB.coin_ping), true)
+                                .addField(`XP Ping`, rebrandEmoji(xpPing), true)
+                                .addField(`Coin Ping`, rebrandEmoji(coinPing), true)
                                 .setColor(message.guild.member(client.user).displayHexColor)
                             msg.edit(embed);
                         } else if (reaction.emoji.name == client.storage.emojiCharacters['x']) {

@@ -37,6 +37,7 @@ module.exports = (client, message) => {
                     }
                 });
             }
+
             function two(_callback) {
                 client.models.userSettings.findOne({
                     "user_id": message.author.id
@@ -45,8 +46,13 @@ module.exports = (client, message) => {
                     if (!db) {
                         let newdb = new client.models.userSettings({
                             user_id: message.author.id,
-                            xp_ping: false,
-                            coin_ping: false
+                            options: [{
+                                type: 'coin_ping',
+                                boolean: false
+                            }, {
+                                type: 'xp_ping',
+                                boolean: false
+                            }]
                         });
                         newdb.save(function (err) {
                             if (err) return console.error(err);
@@ -57,8 +63,8 @@ module.exports = (client, message) => {
                     }
                 });
             }
-            one(function() {
-                two(function() {
+            one(function () {
+                two(function () {
                     _callback();
                 });
             });
@@ -72,22 +78,28 @@ module.exports = (client, message) => {
                 if (err) return console.error(err);
                 let xpToAdd = client.functions.genNumberBetween(1, 20);
                 db.user_xp += xpToAdd;
-                db.xp_log.push({amount: xpToAdd});
+                db.xp_log.push({
+                    amount: xpToAdd
+                });
                 db.save((err) => {
                     if (err) return console.error(err);
                     // check if xp ping enabled
                     client.models.userSettings.findOne({
-                        "user_id": message.author.id
+                        "user_id": message.author.id,
                     }, (err, db) => {
                         if (err) return console.error(err);
-                        if (db.xp_ping == true) {
-                            message.channel.send(`<@${message.author.id}> **+${xpToAdd} XP**`).then(msg => {
-                                setTimeout(() => {
-                                    msg.delete();
-                                }, 1800);
-                            });
-                            _callback();
-                        }
+                        db.options.forEach(option => {
+                            if (option.type == 'xp_ping') {
+                                if (option.boolean == true) {
+                                    message.channel.send(`<@${message.author.id}> **+${xpToAdd} XP**`).then(msg => {
+                                        setTimeout(() => {
+                                            msg.delete();
+                                        }, 1800);
+                                    });
+                                    _callback();
+                                }
+                            }
+                        });
                     });
                 });
             });
@@ -140,13 +152,17 @@ module.exports = (client, message) => {
                         "user_id": message.author.id
                     }, (err, db) => {
                         if (err) return console.error(err);
-                        if (db.coin_ping == true) {
-                            message.channel.send(`<${message.author.id}> **+${coin} Coins**`).then(msg => {
-                                setTimeout(() => {
-                                    msg.delete();
-                                }, 1800);
-                            });
-                        }
+                        db.options.forEach(option => {
+                            if (option.type == 'coin_ping') {
+                                if (option.boolean == true) {
+                                    message.channel.send(`<${message.author.id}> **+${coin} Coins**`).then(msg => {
+                                        setTimeout(() => {
+                                            msg.delete();
+                                        }, 1800);
+                                    });
+                                }
+                            }
+                        });
                     });
                     db.save((err) => console.error(err));
                 }
