@@ -8,6 +8,17 @@ module.exports = class ticket {
     }
 
     async run(client, message, args) {
-        
+        /*
+
+        -ticket info <ID>
+        > sends static information
+        > formats logs into a file
+        > saves file
+        > sends file along with information
+        > deletes file
+
+
+
+        */
     }
 }
