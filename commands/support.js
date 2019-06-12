@@ -27,6 +27,13 @@ module.exports = class support {
                         startMsg.edit(` `).then(() => startMsg.edit(client.functions.errorEmbed(`Support Ticket`, `S002`, message.guild.member(client.user).displayHexColor)));
                         channel.delete();
                     } else {
+                        channel.overwritePermissions({
+                            permissionOverwrites: [{
+                                id: message.author.id,
+                                allow: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'EMBED_LINKS', 'ATTACH_FILES', 'READ_MESSAGE_HISTORY'],
+                            }, ],
+                            reason: 'Needed to change permissions'
+                        });
                         channel.send(`<@${message.author.id}> <@&${client.storage.roles['supportTicketManager']}>`).then(msg => {
                             setTimeout(() => {
                                 msg.delete();
