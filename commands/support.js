@@ -27,6 +27,14 @@ module.exports = class support {
                         startMsg.edit(` `).then(() => startMsg.edit(client.functions.errorEmbed(`Support Ticket`, `S002`, message.guild.member(client.user).displayHexColor)));
                         channel.delete();
                     } else {
+                        let reason = Boolean(args[1]) ? message.content.slice(args[0].length + 1) : `No reason provided`;
+                        let newdb = new client.models.supportTickets({
+                            user_id: message.author.id,
+                            reference_id: randomString,
+                            channel_id: channel.id,
+                            channel_reason: reason
+                        });
+                        newdb.save((err) => console.error(err));
                         channel.overwritePermissions({
                             permissionOverwrites: [{
                                 id: message.author.id,
@@ -39,7 +47,6 @@ module.exports = class support {
                                 msg.delete();
                             }, 10)
                         });
-                        let reason = Boolean(args[1]) ? message.content.slice(args[0].length + 1) : `No reason provided`;
                         let embed = new client.modules.Discord.MessageEmbed()
                             .setTitle(`**Support Ticket** opened by *${message.author.tag}*`)
                             .setColor(message.guild.member(client.user).displayHexColor)
