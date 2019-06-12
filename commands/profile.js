@@ -59,11 +59,11 @@ module.exports = class profile {
                             let xpPing;
                             let coinPing;
                             settingsDB.options.forEach(option => {
-                                if (option.type == 'xp_ping') {
-                                    xpPing = Boolean(options.boolean == true) ? true : false
+                                if (option.name == 'xp_ping') {
+                                    xpPing = Boolean(option.boolean == true) ? true : false
                                 }
-                                if (option.type == 'coin_ping') {
-                                    coinPing = Boolean(options.boolean == true) ? true : false
+                                if (option.name == 'coin_ping') {
+                                    coinPing = Boolean(option.boolean == true) ? true : false
                                 }
                             });
                             let embed = new client.modules.Discord.MessageEmbed()

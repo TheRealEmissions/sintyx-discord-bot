@@ -3,7 +3,7 @@ const modules = require(`../modules.js`);
 let userSettings = new modules.mongoose.Schema({
     user_id: String,
     options: [{
-        type: String,
+        name: String,
         boolean: Boolean
     }]
 });

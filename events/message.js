@@ -47,10 +47,10 @@ module.exports = (client, message) => {
                         let newdb = new client.models.userSettings({
                             user_id: message.author.id,
                             options: [{
-                                type: 'coin_ping',
+                                name: 'coin_ping',
                                 boolean: false
                             }, {
-                                type: 'xp_ping',
+                                name: 'xp_ping',
                                 boolean: false
                             }]
                         });
@@ -89,7 +89,7 @@ module.exports = (client, message) => {
                     }, (err, db) => {
                         if (err) return console.error(err);
                         db.options.forEach(option => {
-                            if (option.type == 'xp_ping') {
+                            if (option.name == 'xp_ping') {
                                 if (option.boolean == true) {
                                     message.channel.send(`<@${message.author.id}> **+${xpToAdd} XP**`).then(msg => {
                                         setTimeout(() => {
@@ -153,7 +153,7 @@ module.exports = (client, message) => {
                     }, (err, db) => {
                         if (err) return console.error(err);
                         db.options.forEach(option => {
-                            if (option.type == 'coin_ping') {
+                            if (option.name == 'coin_ping') {
                                 if (option.boolean == true) {
                                     message.channel.send(`<${message.author.id}> **+${coin} Coins**`).then(msg => {
                                         setTimeout(() => {
