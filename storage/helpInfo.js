@@ -58,5 +58,10 @@ module.exports = {
         description: `You can use this command to view your or another persons XP along with how far away they are from levelling up.`,
         exampleUse: `-xp\n-xp @john\n-xp 249279557167742976`,
         aliases: `-exp`
+    },
+    "level": {
+        description: `You can use this command to view your or another persons level along with your or their XP status.`,
+        exampleUse: `-level\n-level @john\n-level 249279557167742976`,
+        aliases: `No aliases currently.`
     }
 }
