@@ -1,7 +1,7 @@
 module.exports = class coins {
     constructor() {
         this.name = 'coins',
-        this.aliases = [],
+        this.alias = [],
         this.usage = '-coins [@user]',
         this.category = 'user',
         this.description = 'View yours or another\'s coin balance'
