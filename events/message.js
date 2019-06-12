@@ -25,7 +25,8 @@ module.exports = (client, message) => {
                             user_id: message.author.id,
                             user_xp: 0,
                             user_level: 1,
-                            user_coins: 0
+                            user_coins: 0,
+                            message_count: 0
                         });
                         newdb.save(function (err) {
                             if (err) return console.error(err);
