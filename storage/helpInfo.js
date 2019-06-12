@@ -63,5 +63,10 @@ module.exports = {
         description: `You can use this command to view your or another persons level along with your or their XP status.`,
         exampleUse: `-level\n-level @john\n-level 249279557167742976`,
         aliases: `No aliases currently.`
+    },
+    "coins": {
+        description: `You can use this command to view your or another persons coin balance.`,
+        exampleUse: `-coins\n-coins @john\n-coins 249279557167742976`,
+        aliases: `No aliases currently.`
     }
 }
