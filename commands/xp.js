@@ -14,7 +14,7 @@ module.exports = class xp {
             }, (err, db) => {
                 if (err) return console.error(err);
                 if (!db) {
-                    return message.channel.send(`You have not sent a non-command message to this guild yet! Please do so before running the -xp command.`)
+                    return message.channel.send(`You have not sent a non-command message to this guild yet! Please do so before running the ${args[0]} command.`)
                 }
                 let xpaway = (db.user_level * 1000) - db.user_xp;
                 let embed = new client.modules.Discord.MessageEmbed()
