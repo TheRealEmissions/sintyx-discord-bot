@@ -68,5 +68,10 @@ module.exports = {
         description: `You can use this command to view your or another persons coin balance.`,
         exampleUse: `-coins\n-coins @john\n-coins 249279557167742976`,
         aliases: `No aliases currently.`
+    },
+    "profile": {
+        description: `With this command you can view information on yourself or another person! This information includes XP amount, coin amount, average XP per msg and more!`,
+        exampleUse: `-profile\n-profile @john\n-profile 249279557167742976`,
+        aliases: `No aliases currently.`
     }
 }
