@@ -71,6 +71,7 @@ module.exports = (client, message) => {
                 if (err) return console.error(err);
                 let xpToAdd = client.functions.genNumberBetween(1, 20);
                 db.user_xp += xpToAdd;
+                db.xp_log.push({amount: xpToAdd});
                 db.save((err) => {
                     if (err) return console.error(err);
                     // check if xp ping enabled
@@ -178,5 +179,16 @@ module.exports = (client, message) => {
                 db.save((err) => console.error(err));
             });
         }
+
+        client.models.userProfiles.findOne({
+            "user_id": message.author.id
+        }, (err, db) => {
+            if (err) return console.error(err);
+            if (!db) {
+                return;
+            }
+            db.message_count = db.message_count + 1;
+            db.save((err) => console.error(err));
+        })
     }
 }

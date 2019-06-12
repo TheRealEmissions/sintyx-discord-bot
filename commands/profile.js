@@ -35,9 +35,15 @@ module.exports = class profile {
                     collector.on('collect', reaction => {
                         reaction.users.remove(message.author);
                         if (reaction.emoji.name == client.storage.emojiCharacters[1]) {
+                            let xpLogsLength = 0;
+                            profileDB.xp_log.forEach(log => xpLogsLength++);
+                            let average = profileDB.user_xp / xpLogsLength;
+                            let xpPerMsg = parseFloat(average.toFixed(2));
                             let embed = new client.modules.Discord.MessageEmbed()
-                                .setTitle(`**${user.username}${Boolean(user.username.endsWith('s')) ? `'`: `'s`}** Profile`)
+                                .setTitle(`**${user.username}${Boolean(user.username.endsWith('s')) ? `'`: `'s`}** Profile - **General Information**`)
+                                .addField(`Message Count`, profileDB.message_count, true)
                                 .addField(`XP`, profileDB.user_xp, true)
+                                .addField(`Average XP/msg`, xpPerMsg, true)
                                 .addField(`Level`, profileDB.user_level + ` *(${profileDB.user_xp} / ${profileDB.user_level * 1000})*`, true)
                                 .addField(`Coins`, profileDB.user_coins, true)
                                 .setColor(message.guild.member(client.user).displayHexColor)
@@ -51,7 +57,7 @@ module.exports = class profile {
                                 }
                             }
                             let embed = new client.modules.Discord.MessageEmbed()
-                                .setTitle(`**${user.username}${Boolean(user.username.endsWith('s')) ? `'` : `'s`}** Profile`)
+                                .setTitle(`**${user.username}${Boolean(user.username.endsWith('s')) ? `'` : `'s`}** Profile - **Settings Information**`)
                                 .addField(`XP Ping`, rebrandEmoji(settingsDB.xp_ping), true)
                                 .addField(`Coin Ping`, rebrandEmoji(settingsDB.coin_ping), true)
                                 .setColor(message.guild.member(client.user).displayHexColor)
