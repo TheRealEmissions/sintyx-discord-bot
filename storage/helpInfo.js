@@ -53,5 +53,10 @@ module.exports = {
         description: `As Project Voyager desired a dedicated system to manage our 'to-do list', we didn't want to use anymore platforms than we currently do. This inspired us to create a Trello system within Discord. Currently, we have four channels that allows us to move cards between those channels with a sophisticated editing system. This system drives the production you see today.`,
         exampleUse: `-trello post\n-trello edit D987d874\n-trello del D987d874`,
         aliases: `No aliases currently.`
+    },
+    "xp": {
+        description: `You can use this command to view your or another persons XP along with how far away they are from levelling up.`,
+        exampleUse: `-xp\n-xp @john\n-xp 249279557167742976`,
+        aliases: `-exp`
     }
 }
