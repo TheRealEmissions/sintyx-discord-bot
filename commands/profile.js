@@ -74,8 +74,8 @@ module.exports = class profile {
                             msg.edit(embed);
                         } else if (reaction.emoji.name == client.storage.emojiCharacters['x']) {
                             collector.stop();
-                            msg.delete();
-                            message.delete();
+                            msg.delete().catch(err => console.error(err));
+                            message.delete().catch(err => console.error(err));
                         }
                     })
                 });
