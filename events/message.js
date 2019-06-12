@@ -158,5 +158,25 @@ module.exports = (client, message) => {
                 });
             });
         });
+
+        if (message.channel.parentID == "587325973201027080") {
+            client.models.supportTickets.findOne({
+                "channel_id": message.channel.id,
+                "user_id": message.author.id
+            }, (err, db) => {
+                if (err) return console.error(err);
+                if (!db) {
+                    return console.log(`[ERROR] User typing in channel found in SUPPORT TICKETS but no SUPPORT TICKET DATABASE ENTRY can be found! (${message.channel.name} ${message.channel.id})`);
+                }
+                let logs = {
+                    user_id: message.author.id,
+                    message_id: message.id,
+                    message_content: message.content,
+                    timestamp: message.createdTimestamp
+                }
+                db.logs.push(logs);
+                db.save((err) => console.error(err));
+            });
+        }
     }
 }
