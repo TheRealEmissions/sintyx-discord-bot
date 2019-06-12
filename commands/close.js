@@ -24,6 +24,14 @@ module.exports = class close {
                 let collector = new client.modules.Discord.ReactionCollector(msg, filter, {});
                 collector.on('collect', async (reaction) => {
                     collector.stop();
+                    client.models.supportTickets.findOne({
+                        "channel_id": message.channel.id
+                    }, (err, db) => {
+                        if (err) return console.error(err);
+                        db.closure_id = message.author.id;
+                        db.closure_reason = reason;
+                        db.save((err) => console.error(err));
+                    })
                     let confirmed = new client.modules.Discord.MessageEmbed()
                         .setTitle(`**Support Ticket** - Closing`)
                         .setDescription(`Thank you for seeking support and opening this ticket. We hope the issue you had has been resolved. If not, please be sure to open another ticket!`)
