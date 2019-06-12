@@ -43,7 +43,7 @@ module.exports = class stats {
 
         */
 
-        let sbIP = `eu.hypixel.net`;
+        let sbIP = `smp.sintyx.com`;
         let sbPort = `25565`;
         let url = `http://mcapi.us/server/status?ip=` + sbIP + `&port=` + sbPort;
         client.modules.request(url, (err, response, body) => {
