@@ -9,10 +9,7 @@ let userProfiles = new modules.mongoose.Schema({
         type: Number,
         required: true,
         default: 0
-    },
-    xp_log: [{
-        amount: Number
-    }]
+    }
 });
 
 module.exports = modules.mongoose.model(`userProfiles`, userProfiles);

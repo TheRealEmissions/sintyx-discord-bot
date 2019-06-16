@@ -78,9 +78,6 @@ module.exports = (client, message) => {
                 if (err) return console.error(err);
                 let xpToAdd = client.functions.genNumberBetween(1, 20);
                 db.user_xp += xpToAdd;
-                db.xp_log.push({
-                    amount: xpToAdd
-                });
                 db.save((err) => {
                     if (err) return console.error(err);
                     // check if xp ping enabled
@@ -96,6 +93,8 @@ module.exports = (client, message) => {
                                             msg.delete();
                                         }, 1800);
                                     });
+                                    _callback();
+                                } else {
                                     _callback();
                                 }
                             }

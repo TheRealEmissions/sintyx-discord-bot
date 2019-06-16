@@ -35,9 +35,7 @@ module.exports = class profile {
                     collector.on('collect', reaction => {
                         reaction.users.remove(message.author);
                         if (reaction.emoji.name == client.storage.emojiCharacters[1]) {
-                            let xpLogsLength = 0;
-                            profileDB.xp_log.forEach(log => xpLogsLength++);
-                            let average = profileDB.user_xp / xpLogsLength;
+                            let average = profileDB.user_xp / profileDB.message_count;
                             let xpPerMsg = parseFloat(average.toFixed(2));
                             let embed = new client.modules.Discord.MessageEmbed()
                                 .setTitle(`**${user.username}${Boolean(user.username.endsWith('s')) ? `'`: `'s`}** Profile - **General Information**`)
