@@ -34,9 +34,7 @@ module.exports = class test {
                 await msg.react(ec['black_heart']);
             });*/
 
-            let ban = require(`./ban`);
-            let command = new ban();
-            console.log(command.category + " " + command.description);
+            message.channel.send(new client.modules.Discord.MessageEmbed());
 
         } else {
             return;

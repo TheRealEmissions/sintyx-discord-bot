@@ -8,5 +8,8 @@ module.exports = {
         stageTwo: "585524179751665664",
         stageThree: "585524194725330993",
         stageFour: "585524211452477460"
+    },
+    "welcomeChannel": {
+        greetings: "589795940165222410"
     }
 }
