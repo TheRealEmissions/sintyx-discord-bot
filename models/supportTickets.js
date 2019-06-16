@@ -15,6 +15,11 @@ module.exports = modules.mongoose.model(`supportTickets`, new modules.mongoose.S
         user_id: String,
         message_id: String,
         message_content: String,
+        edits: [{
+            number: Number,
+            timestamp: String,
+            content: String
+        }],
         timestamp: String
     }],
     closure_id: {
