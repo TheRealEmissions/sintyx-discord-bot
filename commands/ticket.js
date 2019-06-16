@@ -32,6 +32,7 @@ module.exports = class ticket {
                 }
                 if ((message.member.roles.has(x => x.name == "Owner")) || (db.user_id == message.author.id)) {
                     let embed;
+                    client.modules.fs.appendFileSync(`./commands/${db.channel_id}.json`, JSON.stringify(db.logs));
                     if (db.closure_id == null) {
                         embed = new client.modules.Discord.MessageEmbed()
                             .setTitle(`Ticket Information - **${args[2]}**`)
@@ -48,6 +49,9 @@ module.exports = class ticket {
                             .addField(`Closure reason:`, "```" + db.closure_reason + "```", true)
                     }
                     message.channel.send(embed);
+                    message.channel.send({files: [`./commands/${db.channel_id}.json`]}).then(() => {
+                        client.modules.fs.unlink(`./commands/${db.channel_id}.json`, (err) => console.error(err));
+                    });
                 } else {
                     return message.channel.send(`You do not have permission to view the information for this ticket.`);
                 }
