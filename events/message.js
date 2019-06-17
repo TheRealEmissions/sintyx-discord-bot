@@ -176,7 +176,7 @@ module.exports = (client, message) => {
             });
         });
 
-        if (message.channel.parentID == "587325973201027080") {
+        if (message.channel.parentID == "590285807265251339") {
             client.models.supportTickets.findOne({
                 "channel_id": message.channel.id,
                 "user_id": message.author.id
