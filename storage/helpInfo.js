@@ -22,7 +22,7 @@ module.exports = {
     "support": {
         description: `If, for any reason, you have an issue, please feel free to run this command to open a Support Ticket! These tickets can be used to discuss any problems you may have regarding Sintyx such as in-game bugs or payment issues to say the least.`,
         exampleUse: `-support The store won't accept my bank card\n-support Help me please`,
-        aliases: `-supportticket`
+        aliases: `-supportticket\n-new`
     },
     "close": {
         description: `This command will close (delete) a Support Ticket with an optional reason after 10 seconds of confirming the closure. Anyone in the ticket can use this command.`,

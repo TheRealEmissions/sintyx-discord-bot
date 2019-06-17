@@ -1,7 +1,7 @@
 module.exports = {
     "usernameColor": {
-        channel: "586574921258500113",
-        id: "586574943941165116"
+        channel: "590285756203794432",
+        id: "590286504522285073"
     },
     "trelloChannels": {
         stageOne: "585524157463134237",
@@ -10,6 +10,6 @@ module.exports = {
         stageFour: "585524211452477460"
     },
     "welcomeChannel": {
-        greetings: "589795940165222410"
+        greetings: "590287469593755659"
     }
 }

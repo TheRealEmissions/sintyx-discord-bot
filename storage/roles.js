@@ -1,3 +1,3 @@
 module.exports = {
-    'supportTicketManager': '564108758842605588',
+    'supportTicketManager': '590284032621805590',
 }

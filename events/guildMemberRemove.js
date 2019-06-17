@@ -56,7 +56,7 @@ module.exports = (client, member) => {
                 if (!db) {
                     return console.error(`[ERROR] Serious error! Cannot find LATEST MEMBER LOG DATABASE after CREATION`);
                 }
-                let welcomeMsg = await client.channels.find(x => x.id == "564105510723256343").messages.fetch(client.storage.messageCache['welcomeChannel'].greetings);
+                let welcomeMsg = await client.channels.find(x => x.id == "590285429404860443").messages.fetch(client.storage.messageCache['welcomeChannel'].greetings);
                 let embed;
                 if (db.latest_memberAdd_id == null) {
                     embed = new client.modules.Discord.MessageEmbed()
