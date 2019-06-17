@@ -9,14 +9,14 @@ module.exports = (client, oldMessage, newMessage) => {
         }, (err, db) => {
             if (err) return console.error(err);
             if (!db) {
-                return console.log(`[ERROR] User typing in channel found in SUPPORT TICKETS but no SUPPORT TICKET DATABASE ENTRY can be found! (${oldMessage.channel.name} ${oldMessage.channel.id})`)
+                return console.log(`[ERROR] User typing in channel found in SUPPORT TICKETS but no SUPPORT TICKET DATABASE ENTRY can be found! (${newMessage.channel.name} ${newMessage.channel.id})`)
             }
             let array = {
                 number: Boolean(db.logs.find(x => x.message_id == newMessage.id).edits) ? db.logs.find(x => x.message_id == newMessage.id).edits.length + 1 : 1,
                 timestamp: new Date(),
                 content: newMessage.content
             }
-            db.logs.find(x => x.message_id == oldMessage.id).edits.push(array);
+            db.logs.find(x => x.message_id == newMessage.id).edits.push(array);
             db.save((err) => console.error(err));
         });
     }

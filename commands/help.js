@@ -26,7 +26,7 @@ module.exports = class help {
                 }, 30000);
             });
         } else
-        if (categories.indexOf(args[1].toString()) >= 0) {
+        if (categories.indexOf(args[1].toLowerCase().toString()) >= 0) {
             let embed = new client.modules.Discord.MessageEmbed()
                 .setTitle(`**Help Menu** - ${args[1].toString().charAt(0).toUpperCase() + args[1].toString().slice(1)}`)
                 .setColor(message.guild.member(client.user).displayHexColor)
