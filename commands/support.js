@@ -37,9 +37,14 @@ module.exports = class support {
                         newdb.save((err) => console.error(err));
                         channel.overwritePermissions({
                             permissionOverwrites: [{
-                                id: message.author.id,
-                                allow: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'EMBED_LINKS', 'ATTACH_FILES', 'READ_MESSAGE_HISTORY'],
-                            }, ],
+                                    id: message.author.id,
+                                    allow: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'EMBED_LINKS', 'ATTACH_FILES', 'READ_MESSAGE_HISTORY'],
+                                },
+                                {
+                                    id: '590283187008045087',
+                                    deny: ['VIEW_CHANNEL', 'SEND_MESSAGES']
+                                },
+                            ],
                             reason: 'Needed to change permissions'
                         });
                         channel.send(`<@${message.author.id}> <@&${client.storage.roles['supportTicketManager']}>`).then(msg => {
