@@ -38,12 +38,12 @@ module.exports = class ban {
             message.channel.send(embeds.main).then(mainEmbed => {
                 message.channel.send(embeds[1]).then(wizardMsg => {
                     let msgCollector = new client.modules.Discord.MessageCollector(message.channel, m => m.author.id == message.author.id, {
-                        max: 1
+                        max: 10
                     });
                     msgCollector.on('collect', oneMsg => {
-                        msgCollector.stop();
                         oneMsg.delete();
                         if ((oneMsg.mentions.users.first()) || (message.guild.members.find(x => x.id == oneMsg.content))) {
+                            msgCollector.stop();
                             let user = Boolean(oneMsg.mentions.users.first()) ? oneMsg.mentions.users.first() : message.guild.members.find(x => x.id == oneMsg.content.toString()).user;
                             let member = Boolean(oneMsg.mentions.users.first()) ? oneMsg.mentions.members.first() : message.guild.members.find(x => x.id == oneMsg.content.toString());
                             embeds.main = new client.modules.Discord.MessageEmbed()
@@ -171,6 +171,11 @@ module.exports = class ban {
                                     });
                                 }
                             });
+                        }
+                        if (oneMsg.content.toLowerCase() == "cancel") {
+                            msgCollector.stop();
+                            mainEmbed.delete();
+                            wizardMsg.delete();
                         }
                     });
                 });
