@@ -19,7 +19,7 @@ module.exports = class evaluate {
                         return text;
                 }
                 try {
-                    let code = args.slice(args[0].length + 1).join(" ");
+                    let code = message.content.slice(args[0].length + 1);
                     let evaled = eval(code);
                     if (typeof evaled !== "string")
                         evaled = require("util").inspect(evaled);
