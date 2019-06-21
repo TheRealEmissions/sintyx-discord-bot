@@ -5,7 +5,6 @@ module.exports = (client, oldMessage, newMessage) => {
     if (newMessage.channel.parentID == "590285807265251339") {
         client.models.supportTickets.findOne({
             "channel_id": newMessage.channel.id,
-            "user_id": newMessage.author.id
         }, (err, db) => {
             if (err) return console.error(err);
             if (!db) {
