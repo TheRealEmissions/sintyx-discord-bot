@@ -2,7 +2,7 @@ module.exports = class help {
     constructor() {
         this.name = 'help',
             this.alias = ["guide", "helpme", "h"],
-            this.usage = `-help <category>/<info> <command>`,
+            this.usage = `-help <category>/info <command>`,
             this.category = 'misc',
             this.description = 'You can use this command to view the base help menu'
     }
