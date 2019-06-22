@@ -51,7 +51,7 @@ module.exports = class support {
                                         allow: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'EMBED_LINKS', 'ATTACH_FILES', 'READ_MESSAGE_HISTORY'],
                                     },
                                     {
-                                        id: '590283187008045087',
+                                        id: message.guild.roles.find(x => x.name == "@everyone").id,
                                         deny: ['VIEW_CHANNEL', 'SEND_MESSAGES']
                                     },
                                 ],
@@ -68,7 +68,7 @@ module.exports = class support {
                                 .setDescription(`Welcome to your Support Ticket. Please leave your issue in full detail and one of our staff members will assist you as soon as possible, thank you for your patience.`)
                                 .addField(`Reference ID:`, randomString, true)
                                 .addField(`Reason/Issue:`, "```" + reason + "```", true)
-                            channel.send(embed);
+                            channel.send(embed).then(msg => msg.pin());
                             let endDate = parseInt((new Date().getTime()) - startDate);
                             let embed2 = new client.modules.Discord.MessageEmbed()
                                 .setTitle(`**Support Ticket**`)
