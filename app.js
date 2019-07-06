@@ -60,5 +60,5 @@ client.models = models;
 EXPORTS + LOGIN
 */
 
-module.exports = client;
 client.login(storage.auth['token']);
+module.exports = client;
