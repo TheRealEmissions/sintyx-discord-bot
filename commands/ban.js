@@ -9,9 +9,15 @@ module.exports = class ban {
 
     async run(client, message, args) {
         if (message.member.roles.find(x => x.name == "Owner")) {
+            let random_string = require(`crypto-random-string`);
+            let id = random_string({
+                length: 10,
+                type: 'base64'
+            });
             let mE = new client.modules.Discord.MessageEmbed()
                 .setTitle(`**Ban** - Wizard`)
                 .setColor(message.guild.member(client.user).displayHexColor)
+                .addField(`Punishment ID`, id)
             message.channel.send(mE).then(mainEmbed => {
                 let stageOne = new client.modules.Discord.MessageEmbed()
                     .setDescription(`${client.storage.emojiCharacters[1]} Please tag or type the ID of the user you wish to ${args[0].toLowerCase().slice(1)}`)
@@ -28,6 +34,7 @@ module.exports = class ban {
                             mE = new client.modules.Discord.MessageEmbed()
                                 .setTitle(`**Ban** - Wizard`)
                                 .setColor(message.guild.member(client.user).displayHexColor)
+                                .addField(`Punishment ID`, id, true)
                                 .addField(`User`, user.tag, true)
                             mainEmbed.edit(mE);
                             let stageTwo = new client.modules.Discord.MessageEmbed()
@@ -42,6 +49,7 @@ module.exports = class ban {
                                     mE = new client.modules.Discord.MessageEmbed()
                                         .setTitle(`**Ban** - Wizard`)
                                         .setColor(message.guild.member(client.user).displayHexColor)
+                                        .addField(`Punishment ID`, id, true)
                                         .addField(`User`, user.tag, true)
                                         .addField(`Duration`, twoMsg.content.toLowerCase() == "perm" ? "Permanent" : twoMsg.content, true)
                                     mainEmbed.edit(mE);
@@ -58,6 +66,7 @@ module.exports = class ban {
                                             mE = new client.modules.Discord.MessageEmbed()
                                                 .setTitle(`**Ban** - Wizard`)
                                                 .setColor(message.guild.member(client.user).displayHexColor)
+                                                .addField(`Punishment ID`, id, true)
                                                 .addField(`User`, user.tag, true)
                                                 .addField(`Duration`, twoMsg.content.toLowerCase() == "perm" ? "Permanent" : twoMsg.content, true)
                                                 .addField(`Reason`, "```" + threeMsg.content + "```", true)
@@ -77,6 +86,7 @@ module.exports = class ban {
                                                                 mE = new client.modules.Discord.MessageEmbed()
                                                                     .setTitle(`**Successfully banned ${user.tag}!** ${client.storage.emojiCharacters['white_check_mark']}`)
                                                                     .setColor(message.guild.member(client.user).displayHexColor)
+                                                                    .addField(`Punishment ID`, id, true)
                                                                     .addField(`User`, user.tag, true)
                                                                     .addField(`Duration`, twoMsg.content.toLowerCase() == "perm" ? "Permanent" : twoMsg.content, true)
                                                                     .addField(`Reason`, "```" + threeMsg.content + "```", true)
@@ -84,10 +94,26 @@ module.exports = class ban {
                                                                 let embed = new client.modules.Discord.MessageEmbed()
                                                                     .setTitle(`You have been blacklisted from **${message.guild.name}**!`)
                                                                     .setDescription(`Being blacklisted means your permissions to ${message.guild.name} has been negated. You will have access to the minimum amount of channels and are not allowed to chat throughout the Discord. Information regarding your blacklist is provided below.`)
+                                                                    .addField(`Punishment ID`, id, true)
                                                                     .addField(`Moderator`, `${message.author.tag}\n*(${message.author.id})*`, true)
                                                                     .addField(`Duration`, twoMsg.content.toLowerCase() == "perm" ? "Permanent" : twoMsg.content, true)
                                                                     .addField(`Reason`, "```" + threeMsg.content + "```", true)
                                                                 user.send(embed);
+                                                                client.models.userProfiles.findOne({
+                                                                    "user_id": user.id
+                                                                }, (err, db) => {
+                                                                    if (err) return console.error(err);
+                                                                    let array = {
+                                                                        id: id,
+                                                                        type: "Blacklist",
+                                                                        date: new Date(),
+                                                                        moderator_id: message.author.id,
+                                                                        reason: threeMsg.content,
+                                                                        duration: twoMsg.content.toLowerCase() == "perm" ? "Permanent" : twoMsg.content
+                                                                    }
+                                                                    db.punishment_history.push(array);
+                                                                    db.save((err) => console.error(err));
+                                                                })
                                                             });
                                                             if (twoMsg.content.toLowerCase() !== "perm") {
                                                                 setTimeout(() => {
