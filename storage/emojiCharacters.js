@@ -53,5 +53,6 @@ module.exports = {
     'blue_heart': '💙',
     'purple_heart': '💜',
     'black_heart': '🖤',
-    'double_arrow_forward': '⏩'
+    'double_arrow_forward': '⏩',
+    'clap': '👏'
 }

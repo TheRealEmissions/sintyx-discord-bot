@@ -45,6 +45,7 @@ module.exports = class profile {
                                 .addField(`Level`, profileDB.user_level + ` *(${profileDB.user_xp} / ${profileDB.user_level * 1000})*`, true)
                                 .addField(`Coins`, profileDB.user_coins, true)
                                 .addField(`Open Tickets`, `${Boolean(profileDB.open_tickets) ? profileDB.open_tickets.length : 0}`, true)
+                                .addField(`Punishment Count`, Boolean(profileDB.punishment_history) ? profileDB.punishment_history.length : `0`, true)
                                 .setColor(message.guild.member(client.user).displayHexColor)
                             msg.edit(embed);
                         } else if (reaction.emoji.name == client.storage.emojiCharacters[2]) {
