@@ -2,7 +2,7 @@ module.exports = class ticket {
     constructor() {
         this.name = 'ticket',
             this.alias = [],
-            this.usage = '-ticket [options]',
+            this.usage = '-ticket [options: info]',
             this.category = 'administration',
             this.description = 'Retrieve information, edit or delete a Support Ticket'
     }
