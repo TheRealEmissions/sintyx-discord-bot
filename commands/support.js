@@ -43,6 +43,9 @@ module.exports = class support {
                                 db.open_tickets.push({
                                     reference_id: randomString
                                 });
+                                db.ticket_history.push({
+                                    reference_id: randomString
+                                });
                                 db.save((err) => console.error(err));
                             })
                             channel.overwritePermissions({
