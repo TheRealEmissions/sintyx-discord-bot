@@ -39,6 +39,12 @@ let userProfiles = new modules.mongoose.Schema({
             required: false,
             default: null
         }
+    }],
+    ticket_history: [{
+        reference_id: {
+            type: String,
+            required: true
+        }
     }]
 });
 
