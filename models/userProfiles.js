@@ -44,6 +44,10 @@ let userProfiles = new modules.mongoose.Schema({
         reference_id: {
             type: String,
             required: true
+        },
+        timestamp: {
+            type: Date,
+            required: true
         }
     }]
 });

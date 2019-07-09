@@ -44,7 +44,8 @@ module.exports = class support {
                                     reference_id: randomString
                                 });
                                 db.ticket_history.push({
-                                    reference_id: randomString
+                                    reference_id: randomString,
+                                    timestamp: new Date()
                                 });
                                 db.save((err) => console.error(err));
                             })
