@@ -81,6 +81,7 @@ module.exports = (client, message) => {
                 let embed = new client.modules.Discord.MessageEmbed()
                     .setTitle(`Suggestion from **${message.author.tag}**:`)
                     .setColor(message.guild.member(client.user).displayHexColor)
+                    .setThumbnail(message.author.avatarURL)
                     .setDescription(message.content)
                     .setTimestamp();
                 message.channel.send(embed).then((msg) => {
