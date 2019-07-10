@@ -3,7 +3,7 @@ module.exports = class resume {
         this.name = 'resume',
         this.alias = [],
         this.usage = '-resume',
-        this.category = 'resume',
+        this.category = 'music',
         this.description = 'Resume the paused music'
     }
 

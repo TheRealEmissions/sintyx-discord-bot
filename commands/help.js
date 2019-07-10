@@ -16,6 +16,7 @@ module.exports = class help {
                 .setDescription(`To view a detailed description for any given command, please type: ` + "`" + `-help info <command>` + "`")
                 .addField(`Misc`, `Contains all miscellaneous commands that do not fit a category`, true)
                 .addField(`User`, `Commands related to users`, true)
+                .addField(`Music`, `Commands relating to music`, true)
                 .addField(`Tickets`, `Commands related to the ticket system`, true)
                 .addField(`Moderation`, `Commands relating to moderation within the Discord`, true)
                 .addField(`Administration`, `Contains the commands that are only available to administrators`, true)

@@ -3,7 +3,7 @@ module.exports = class play {
         this.name = 'play',
         this.alias = [],
         this.usage = '-play <song>',
-        this.category = 'misc',
+        this.category = 'music',
         this.description = 'Queue a song to play'
     }
 

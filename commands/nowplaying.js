@@ -3,7 +3,7 @@ module.exports = class nowplaying {
         this.name = 'nowplaying',
         this.alias = ['np'],
         this.usage = `-nowplaying`,
-        this.category = 'misc',
+        this.category = 'music',
         this.description = 'Check the currently playing song'
     }
 

@@ -3,7 +3,7 @@ module.exports = class queue {
         this.name = 'queue',
         this.alias = ['q'],
         this.usage = '-queue',
-        this.category = 'misc',
+        this.category = 'music',
         this.description = 'View the current queue for songs'
     }
 

@@ -3,7 +3,7 @@ module.exports = class skip {
         this.name = 'skip',
         this.alias = [],
         this.usage = '-skip',
-        this.category = 'misc',
+        this.category = 'music',
         this.description = 'Skip the currently playing song'
     }
 

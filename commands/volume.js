@@ -3,7 +3,7 @@ module.exports = class volume {
         this.name = 'volume',
         this.alias = [],
         this.usage = '-volume',
-        this.category = 'misc',
+        this.category = 'music',
         this.description = 'Alter the volume of the music'
     }
 

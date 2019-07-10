@@ -3,7 +3,7 @@ module.exports = class pause {
         this.name = 'pause',
         this.alias = [],
         this.usage = '-pause',
-        this.category = 'misc',
+        this.category = 'music',
         this.description = 'Pause the currently playing music'
     }
 
