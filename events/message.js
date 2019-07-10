@@ -154,7 +154,7 @@ module.exports = (client, message) => {
                         db.options.forEach(option => {
                             if (option.name == 'coin_ping') {
                                 if (option.boolean == true) {
-                                    message.channel.send(`<${message.author.id}> **+${coin} Coins**`).then(msg => {
+                                    message.channel.send(`<@${message.author.id}> **+${coin} Coins**`).then(msg => {
                                         setTimeout(() => {
                                             msg.delete();
                                         }, 1800);

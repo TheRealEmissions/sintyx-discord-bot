@@ -11,5 +11,9 @@ module.exports = {
     },
     "welcomeChannel": {
         greetings: "590287469593755659"
+    },
+    "leaderboard": {
+        channel: "598405443844440085",
+        msg_id: "598405475884859393"
     }
 }

@@ -13,9 +13,10 @@ module.exports = class leaderboard {
             .addField(`XP Leaderboard`, client.storage.emojiCharacters[1], true)
             .addField(`Coin Leaderboard`, client.storage.emojiCharacters[2], true)
             .addField(`Avg. XP/msg Leaderboard`, client.storage.emojiCharacters[3], true)
+            .addField(`Message Count Leaderboard`, client.storage.emojiCharacters[4], true)
         message.channel.send(embed).then(msg => {
-            msg.react(client.storage.emojiCharacters[1]).then(() => msg.react(client.storage.emojiCharacters[2]).then(() => msg.react(client.storage.emojiCharacters[3])).then(() => msg.react(client.storage.emojiCharacters['x'])));
-            let filter = (reaction, user) => ((reaction.emoji.name == client.storage.emojiCharacters[1]) || (reaction.emoji.name == client.storage.emojiCharacters[2]) || (reaction.emoji.name == client.storage.emojiCharacters[3]) || (reaction.emoji.name == client.storage.emojiCharacters['x'])) && user.id == message.author.id;
+            msg.react(client.storage.emojiCharacters[1]).then(() => msg.react(client.storage.emojiCharacters[2]).then(() => msg.react(client.storage.emojiCharacters[3]).then(() => msg.react(client.storage.emojiCharacters[4]))).then(() => msg.react(client.storage.emojiCharacters['x'])));
+            let filter = (reaction, user) => ((reaction.emoji.name == client.storage.emojiCharacters[1]) || (reaction.emoji.name == client.storage.emojiCharacters[2]) || (reaction.emoji.name == client.storage.emojiCharacters[3]) || (reaction.emoji.name == client.storage.emojiCharacters[4]) || (reaction.emoji.name == client.storage.emojiCharacters['x'])) && user.id == message.author.id;
             let collector = new client.modules.Discord.ReactionCollector(msg, filter, {});
             collector.on('collect', async (reaction) => {
                 if (reaction.emoji.name == client.storage.emojiCharacters[1]) {
@@ -75,8 +76,8 @@ module.exports = class leaderboard {
                                 if (err) return reject(console.error(err));
                                 if (!result.length) return resolve(false);
                                 return resolve(result);
-                            })
-                        })
+                            });
+                        });
                     }
                     let leaderboard = await leaderboardFunc();
                     for (let count in leaderboard) {
@@ -139,6 +140,44 @@ module.exports = class leaderboard {
                             msg.edit(embed2);
                         }
                     });
+                }
+                if (reaction.emoji.name == client.storage.emojiCharacters[4]) {
+                    reaction.users.remove(reaction.users.last());
+                    let embed2 = {
+                        embed: {
+                            title: `**Message Count Leaderboard**: Top 9`,
+                            color: message.guild.member(client.user).displayHexColor,
+                            fields: []
+                        }
+                    }
+                    function leaderboardFunc() {
+                        return new Promise(async (resolve, reject) => {
+                            await client.models.userProfiles.find({}).sort(`-message_count`).exec((err, result) => {
+                                if (err) return reject(console.error(err));
+                                if (!result.length) return reject(false);
+                                return resolve(result);
+                            });
+                        });
+                    }
+                    let leaderboard = await leaderboardFunc();
+                    let i = 1;
+                    for (let count in leaderboard) {
+                        if (i >= 10) {
+                            end();
+                            break;
+                        }
+                        let userid = await leaderboard[count].user_id;
+                        let user = await Promise.resolve(client.users.fetch(userid));
+                        embed2.embed.fields.push({
+                            name: "`" + `#${i}` + "`" + ` ${user.username}#${user.discriminator}`,
+                            value: `${leaderboard[count].message_count}`,
+                            inline: false
+                        });
+                        i++
+                    }
+                    function end() {
+                        msg.edit(embed2);
+                    }
                 }
                 if (reaction.emoji.name == client.storage.emojiCharacters['x']) {
                     collector.stop();

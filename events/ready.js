@@ -54,4 +54,5 @@ module.exports = (client) => {
     update();
     client.setInterval(update, 30000);
     client.functions.startReactionCache(client);
+    client.functions.startLeaderboardUpdates(client);
 }
