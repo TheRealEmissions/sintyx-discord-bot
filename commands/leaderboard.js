@@ -4,7 +4,7 @@ module.exports = class leaderboard {
             this.usage = '-leaderboard',
             this.alias = ['lb', 'xptop', 'cointop'],
             this.category = 'user',
-            this.description = 'View the top 10 users of either XP or coins'
+            this.description = 'View the top 9 users of either XP, coins, avg. xp/msg or message count'
     }
 
     async run(client, message, args) {
