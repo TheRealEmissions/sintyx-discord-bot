@@ -11,7 +11,7 @@ module.exports = class tickets {
         if (!args[1]) {
             client.models.userProfiles.find({
                 "user_id": message.author.id
-            }).lean().exec((err, docs) => {
+            }).lean().exec(async(err, docs) => {
                 if (err) return console.error(err);
 
                 function replaceMonth(term) {
@@ -47,6 +47,9 @@ module.exports = class tickets {
                     }
                 }
                 if (docs[0].ticket_history) {
+                    docs[0].ticket_history = docs[0].ticket_history.sort((a, b) => {
+                        return new Date(b.timestamp) - new Date(a.timestamp);
+                    });
                     let embed = new client.modules.Discord.MessageEmbed()
                         .setTitle(`Ticket History for **${message.author.tag}**:`)
                         .setColor(message.guild.member(client.user).displayHexColor)
@@ -59,12 +62,13 @@ module.exports = class tickets {
             });
         } else {
             if (message.member.roles.find(x => x.name == "Owner")) {
-                let user = Boolean(message.mentions.users.first()) ? message.mentions.users.first() : message.guild.members.get(args[2]);
+                let user = Boolean(message.mentions.users.first()) ? message.mentions.users.first() : await Promise.resolve(client.users.fetch(args[1]));
                 if (user) {
                     client.models.userProfiles.find({
                         "user_id": user.id
                     }).lean().exec((err, docs) => {
                         if (err) return console.error(err);
+                        if (!docs[0].ticket_history) return;
 
                         function replaceMonth(term) {
                             if (term === 0) return "Jan."
@@ -98,7 +102,10 @@ module.exports = class tickets {
                                 return term;
                             }
                         }
-                        if (docs[0].ticket_history) {
+                        if ((docs[0].ticket_history.length > 0) || (!docs[0].ticket_history)) {
+                            docs[0].ticket_history = docs[0].ticket_history.sort((a, b) => {
+                                return new Date(b.timestamp) - new Date(a.timestamp);
+                            });
                             let embed = new client.modules.Discord.MessageEmbed()
                                 .setTitle(`Ticket History for **${user.tag}**:`)
                                 .setColor(message.guild.member(client.user).displayHexColor)
