@@ -85,6 +85,7 @@ module.exports = (client, message) => {
                     .setDescription(message.content)
                     .setTimestamp();
                 message.channel.send(embed).then((msg) => {
+                    message.delete();
                     msg.react(client.storage.emojiCharacters['white_check_mark']).then(() => msg.react(client.storage.emojiCharacters['x']));
                 });
                 setTimeout(() => {
