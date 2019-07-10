@@ -28,6 +28,7 @@ module.exports = class urban {
         let query = client.modules.querystring.stringify({
             term: message.content.slice(args[0].length + 1)
         });
+        console.log(query);
         message.channel.send(startMsg).then(msg => {
             client.modules.request(`https://api.urbandictionary.com/v0/define?${query}`, (err, response, body) => {
                 if (err) {
