@@ -6,5 +6,7 @@ module.exports = {
     random_string: require(`crypto-random-string`),
     request: require(`request`),
     querystring: require(`querystring`),
-    fetch: require(`node-fetch`)
+    fetch: require(`node-fetch`),
+    YouTube: require(`simple-youtube-api`),
+    ytdl: require(`ytdl-core`)
 }

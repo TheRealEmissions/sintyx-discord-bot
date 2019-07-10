@@ -54,5 +54,8 @@ module.exports = {
     'purple_heart': '💜',
     'black_heart': '🖤',
     'double_arrow_forward': '⏩',
-    'clap': '👏'
+    'clap': '👏',
+    'music': '🎶',
+    'pause': '⏸',
+    'play': '▶'
 }

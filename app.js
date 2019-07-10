@@ -47,6 +47,13 @@ let cmdHandler = new CommandHandler({
 });
 
 /*
+MUSIC
+*/
+
+const queue = new Map();
+const YouTube = new modules.YouTube(storage.auth['google_api_key']);
+
+/*
 BINDINGS
 */
 
@@ -55,6 +62,10 @@ client.commandHandler = cmdHandler;
 client.storage = storage;
 client.functions = functions;
 client.models = models;
+client.music = {
+    queue: queue,
+    YouTube: YouTube
+}
 
 /*
 EXPORTS + LOGIN
