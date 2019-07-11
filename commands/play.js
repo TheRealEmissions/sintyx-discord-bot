@@ -92,7 +92,7 @@ module.exports = class play {
                     let index = 0;
                     message.channel.send(new client.modules.Discord.MessageEmbed()
                         .setColor(message.guild.member(client.user).displayHexColor)
-                        .setDescription(`Please send a value between 1 and 10`)
+                        .setFooter(`Please send a value between 1 and 10`)
                         .addField(`Songs:`, videos.map(video2 => `**${++index} -** ${video2.title}`).join(`\n`))
                     );
                     try {
