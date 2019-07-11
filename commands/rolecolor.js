@@ -1,10 +1,10 @@
-module.exports = class mentionable {
+module.exports = class rolecolor {
     constructor() {
-        this.name = 'mentionable',
-            this.alias = [],
-            this.usage = '-mentionable <@role/role ID>',
-            this.category = 'administration',
-            this.description = 'Toggle making a role mentionable on/off'
+        this.name = 'rolecolor',
+        this.alias = ['rolecolour'],
+        this.usage = '-rolecolor <@role/role id> <hex color>',
+        this.category = 'administration',
+        this.description = 'Change the color of a role'
     }
 
     async run(client, message, args) {
@@ -14,10 +14,10 @@ module.exports = class mentionable {
                 return message.channel.send(`Please either mention a role or type its ID.`).then(msg => setTimeout(() => msg.delete(), 5000));
             }
             role.edit({
-                mentionable: role.mentionable ? false : true
+                color: args[2]
             }).then(() => {
-                message.channel.send(`Altered mentionability of **${role.name}** to **${role.mentionable ? 'true' : 'false'}**`);
-            });
+                return message.channel.send(`Altered the color of **${role.name}** to **${args[2]}**`);
+            }).catch(err => message.channel.send(`I couldn't edit that roles color! Error: ${err}`));
         }
     }
 }
