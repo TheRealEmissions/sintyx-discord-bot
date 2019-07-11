@@ -39,7 +39,7 @@ module.exports = class help {
                         if (!file.endsWith(".js")) return;
                         file = require(`./${file}`);
                         let command = new file();
-                        if (command.category !== args[1].toString()) return;
+                        if (command.category !== args[1].toLowerCase().toString()) return;
                         msg.edit(embed.addField(command.usage, command.description, true));
                     });
                 });
