@@ -28,10 +28,14 @@ module.exports = class help {
             });
         } else
         if (categories.indexOf(args[1].toLowerCase().toString()) >= 0) {
-            let embed = new client.modules.Discord.MessageEmbed()
-                .setTitle(`**Help Menu** - ${args[1].toString().charAt(0).toUpperCase() + args[1].toString().slice(1)}`)
-                .setColor(message.guild.member(client.user).displayHexColor)
-                .setDescription(`To view a detailed description for any given command, please type: ` + "`" + `-help info <command>` + "`")
+            let embed = {
+                embed: {
+                    title: `**Help Menu** - ${args[1].charAt(0).toUpperCase() + args[1].slice(1)}`,
+                    color: message.guild.member(client.user).displayHexColor,
+                    description: `To view a detailed description for any given command, please type: ` + "`" + `-help info <command>` + "`",
+                    fields: []
+                }
+            }
             message.channel.send(embed).then(msg => {
                 client.modules.fs.readdir(`./commands/`, async (err, files) => {
                     if (err) return console.error(err);
@@ -40,13 +44,18 @@ module.exports = class help {
                         file = require(`./${file}`);
                         let command = new file();
                         if (command.category !== args[1].toLowerCase().toString()) return;
-                        msg.edit(embed.addField(command.usage, command.description, true));
+                        embed.embed.fields.push({
+                            name: command.usage,
+                            value: command.description,
+                            inline: true
+                        });
                     });
+                    msg.edit(embed);
+                    setTimeout(() => {
+                        message.delete();
+                        msg.delete();
+                    }, 30000);
                 });
-                setTimeout(() => {
-                    message.delete();
-                    msg.delete();
-                }, 30000);
             });
         } else
         if (args[1].toString() == "info") {
