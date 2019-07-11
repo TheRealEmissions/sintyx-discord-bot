@@ -10,10 +10,30 @@ module.exports = class role {
     async run(client, message, args) {
         if (message.member.roles.find(x => x.name == "Owner")) {
             if (args[1].toLowerCase() == "add") {
-
+                if (!args[2]) return;
+                if (!args[3]) return;
+                let member = message.mentions.members.first() ? message.mentions.members.first() : message.guild.members.get(`${args[2]}`);
+                if (!member) return message.channel.send(`I could not find that member on this guild!`);
+                let role = message.mentions.roles.first() ? message.mentions.roles.first() : message.guild.roles.get(`${args[3]}`);
+                if (!role) return message.channel.send(`I could not find that role on this guild!`);
+                if (member.roles.get(role.id)) {
+                    return message.channel.send(`${member.user.username} already has ${role.name}!`);
+                } else {
+                    return member.roles.add(role).then(() => message.channel.send(`Added **${role.name}** to **${member.user.username}**!`)).catch(err => message.channel.send(`I could not add ${role.name} to ${member.user.username}! Error: ${err}`));
+                }
             } else
             if (args[1].toLowerCase() == "remove") {
-
+                if (!args[2]) return;
+                if (!args[3]) return;
+                let member = message.mentions.members.first() ? message.mentions.members.first() : message.guild.members.get(`${args[2]}`);
+                if (!member) return message.channel.send(`I could not find that member on this guild!`);
+                let role = message.mentions.roles.first() ? message.mentions.roles.first() : message.guild.roles.get(`${args[3]}`);
+                if (!role) return message.channel.send(`I could not find that role on this guild!`);
+                if (member.roles.get(role.id)) {
+                    return member.roles.remove(role).then(() => message.channel.send(`Removed **${role.name}** from **${member.user.username}**!`)).catch(err => message.channel.send(`I could not remove ${role.name} from ${member.user.username}! Error: ${err}`));
+                } else {
+                    return message.channel.send(`${member.user.username} does not have ${role.name}!`);
+                }
             } else
             if (args[1].toLowerCase() == "toggle") {
 
