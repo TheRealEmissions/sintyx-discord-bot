@@ -47,7 +47,7 @@ module.exports = class help {
                         embed.embed.fields.push({
                             name: command.usage,
                             value: command.description,
-                            inline: true
+                            inline: false
                         });
                     });
                     msg.edit(embed);
