@@ -13,8 +13,7 @@ module.exports = class queue {
         let index = 0;
         let embed = new client.modules.Discord.MessageEmbed()
             .setColor(message.guild.member(client.user).displayHexColor)
-            .addField(`Position`, serverQueue.songs.map(song => "`" + `${++index}` + "`").join(`\n`), true)
-            .addField(`Song`, serverQueue.songs.map(song => `${song.title}`).join(`\n`), true)
+            .addField(`Song`, serverQueue.songs.map(song => `**${++index} -** ${song.title}`).join(`\n`), true)
         return message.channel.send(embed);
     }
 }
