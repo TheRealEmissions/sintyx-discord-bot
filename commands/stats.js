@@ -57,7 +57,6 @@ module.exports = class stats {
                 .setTitle(`**${client.user.username} Server Statistics**`)
                 .setColor(message.guild.member(client.user).displayHexColor)
                 .addField(`Server`, Boolean(body.online) ? `**Online** ${client.storage.emojiCharacters['white_check_mark']}\n${body.players.now}/${body.players.max} Players` : `**Offline** ${client.storage.emojiCharacters['x']}`)
-                .addField(`${sbIP}`, Boolean(body.online) ? `**Online** ${client.storage.emojiCharacters['white_check_mark']}\n${body.players.now}/${body.players.max} Players` : `**Offline** ${client.storage.emojiCharacters['x']}`)
                 .setTimestamp()
             message.channel.send(embed);
             message.channel.send(embed2);
