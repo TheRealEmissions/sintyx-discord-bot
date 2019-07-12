@@ -53,15 +53,27 @@ module.exports = (client, message) => {
                             }, {
                                 name: 'xp_ping',
                                 boolean: false
+                            }, {
+                                name: 'ticket_mentioning',
+                                boolean: false
                             }]
                         });
                         newdb.save(function (err) {
                             if (err) return console.error(err);
-                            _callback();
+                            return _callback();
                         });
-                    } else {
-                        _callback();
                     }
+                    if (!db.options.find(x => x.name == "ticket_mentioning")) {
+                        db.options.push({
+                            name: 'ticket_mentioning',
+                            boolean: false
+                        });
+                        db.save((err) => {
+                            if (err) return console.error(err);
+                            if (!err) return _callback();
+                        });
+                    }
+                    return _callback();
                 });
             }
             one(function () {
@@ -213,6 +225,18 @@ module.exports = (client, message) => {
                         message_content: message.content,
                         timestamp: message.createdTimestamp
                     }
+                    client.models.userSettings.findOne({
+                        "user_id": message.author.id,
+                    }, (err, datab) => {
+                        if (err) return console.error(err);
+                        if (datab.options.find(x => x.name == "ticket_mentioning").boolean == true) {
+                            if (message.author.id !== db.user_id) {
+                                message.channel.send(`<@${db.user_id}>`).then((msg) => {
+                                    setTimeout(() => msg.delete(), 10);
+                                });
+                            }
+                        }
+                    });
                     db.logs.push(logs);
                     db.save((err) => console.error(err));
                 });
