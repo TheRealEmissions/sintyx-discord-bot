@@ -3,7 +3,7 @@ module.exports = (client) => {
     console.log(`- Username: ${client.user.username}`);
     console.log(`- Discriminator: ${client.user.discriminator}`);
     console.log(`- ID: ${client.user.id}`);
-    let ip = "smp.sintyx.com";
+    let ip = "mc.sintyx.com";
     let port = "25565";
     let url = 'http://mcapi.us/server/status?ip=' + ip + '&port=' + port;
 
