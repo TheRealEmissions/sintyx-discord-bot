@@ -58,6 +58,7 @@ module.exports = class profile {
                             }
                             let xpPing;
                             let coinPing;
+                            let ticketMention;
                             settingsDB.options.forEach(option => {
                                 if (option.name == 'xp_ping') {
                                     xpPing = Boolean(option.boolean == true) ? true : false
@@ -65,11 +66,15 @@ module.exports = class profile {
                                 if (option.name == 'coin_ping') {
                                     coinPing = Boolean(option.boolean == true) ? true : false
                                 }
+                                if (option.name == 'ticket_mentioning') {
+                                    ticketMention = Boolean(option.boolean == true) ? true : false
+                                }
                             });
                             let embed = new client.modules.Discord.MessageEmbed()
                                 .setTitle(`**${user.username}${Boolean(user.username.endsWith('s')) ? `'` : `'s`}** Profile - **Settings Information**`)
                                 .addField(`XP Ping`, rebrandEmoji(xpPing), true)
                                 .addField(`Coin Ping`, rebrandEmoji(coinPing), true)
+                                .addField(`Ticket Mentioning`, rebrandEmoji(ticketMention), true)
                                 .setColor(message.guild.member(client.user).displayHexColor)
                             msg.edit(embed);
                         } else if (reaction.emoji.name == client.storage.emojiCharacters['x']) {
