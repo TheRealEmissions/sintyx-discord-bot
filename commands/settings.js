@@ -34,7 +34,7 @@ module.exports = class settings {
                         "user_id": message.author.id
                     }, (err, db) => {
                         if (err) return console.error(err);
-                        msg.edit(createSettingsEmbed(db.options.find(x => x.name == "xp_ping").boolean, db.options.find(x => x.name == "coin_ping").boolean, db.options.find(x => x.name == "ticket_mentioning")));
+                        msg.edit(createSettingsEmbed(db.options.find(x => x.name == "xp_ping").boolean, db.options.find(x => x.name == "coin_ping").boolean, db.options.find(x => x.name == "ticket_mentioning").boolean));
                     });
                 }
 
