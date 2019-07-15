@@ -231,9 +231,13 @@ module.exports = (client, message) => {
                         if (err) return console.error(err);
                         if (datab.options.find(x => x.name == "ticket_mentioning").boolean == true) {
                             if (message.author.id !== db.user_id) {
-                                message.channel.send(`<@${db.user_id}>`).then((msg) => {
-                                    setTimeout(() => msg.delete(), 10);
-                                });
+                                if (message.mentions.users.first()) {
+                                    if (message.mentions.users.first() !== Promise.resolve(client.users.fetch(db.user_id))) {
+                                        message.channel.send(`<@${db.user_id}>`).then((msg) => {
+                                            setTimeout(() => msg.delete(), 10);
+                                        });
+                                    }
+                                }
                             }
                         }
                     });
