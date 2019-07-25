@@ -36,10 +36,8 @@ module.exports = class close {
                         }, (err, datab) => {
                             if (err) return console.error(err);
                             if ((!datab.open_tickets) || (!datab.open_tickets.find(x => x.reference_id == db.reference_id))) {
-                                console.log(`returned`);
                                 return;
                             } else if (datab.open_tickets.find(x => x.reference_id == db.reference_id)) {
-                                console.log(`found db entry`);
                                 client.models.userProfiles.findOneAndUpdate({
                                     "user_id": db.user_id
                                 }, {

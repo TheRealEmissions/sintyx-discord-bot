@@ -67,7 +67,7 @@ module.exports = class help {
                 let embed = new client.modules.Discord.MessageEmbed()
                     .setTitle(`**Help Menu** - Info: ${args[2].toString()}`)
                     .setColor(message.guild.member(client.user).displayHexColor)
-                    .setDescription(`This command doesn't exist and therefore I cannot show you any information about it! *(Error H001)*`)
+                    .setDescription(`This command doesn't exist and, therefore, I cannot show you any information about it! *(Error H001)*`)
                 message.channel.send(embed).then(msg => {
                     setTimeout(() => {
                         message.delete();
