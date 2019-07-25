@@ -62,16 +62,17 @@ module.exports = (client, message) => {
                             if (err) return console.error(err);
                             return _callback();
                         });
-                    }
-                    if (!db.options.find(x => x.name == "ticket_mentioning")) {
-                        db.options.push({
-                            name: 'ticket_mentioning',
-                            boolean: false
-                        });
-                        db.save((err) => {
-                            if (err) return console.error(err);
-                            if (!err) return _callback();
-                        });
+                    } else {
+                        if (!db.options.find(x => x.name == "ticket_mentioning")) {
+                            db.options.push({
+                                name: 'ticket_mentioning',
+                                boolean: false
+                            });
+                            db.save((err) => {
+                                if (err) return console.error(err);
+                                if (!err) return _callback();
+                            });
+                        }
                     }
                     return _callback();
                 });
