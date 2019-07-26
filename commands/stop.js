@@ -3,7 +3,7 @@ module.exports = class stop {
         this.name = 'stop',
         this.alias = [],
         this.usage = '-stop',
-        this.category = 'misc',
+        this.category = 'music',
         this.description = 'Stop the currently playing song'
     }
 
