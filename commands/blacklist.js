@@ -1,7 +1,7 @@
-module.exports = class ban {
+module.exports = class blacklist {
     constructor() {
-        this.name = 'ban',
-            this.alias = ["blacklist"],
+        this.name = 'blacklist',
+            this.alias = ["ban"],
             this.usage = '-ban <user> [reason]',
             this.category = 'moderation',
             this.description = 'Blacklist a user from the Discord'
