@@ -38,7 +38,6 @@ module.exports = class punishments {
                         .setTitle(`List of Punishments for **${message.author.tag}**:`)
                         .setColor(message.guild.member(client.user).displayHexColor)
                         .addField(`Blacklists:`, Boolean(docs[0].punishment_history.filter(x => x.type == "Blacklist").length > 0) ? docs[0].punishment_history.filter(x => x.type == "Blacklist").map(r => `${r.id}`).join(`\n`) : `None`, true)
-                        .addField(`Mutes:`, Boolean(docs[0].punishment_history.filter(x => x.type == "Mute").length > 0) ? docs[0].punishment_history.filter(x => x.type == "Mute").map(r => `${r.id}`).join(`\n`) : `None`, true)
                         .addField(`Kicks:`, Boolean(docs[0].punishment_history.filter(x => x.type == "Kick").length > 0) ? docs[0].punishment_history.filter(x => x.type == "Kick").map(r => `${r.id}`).join(`\n`) : `None`, true)
                         .addField(`Warns:`, Boolean(docs[0].punishment_history.filter(x => x.type == "Warn").length > 0) ? docs[0].punishment_history.filter(x => x.type == "Warn").map(r => `${r.id}`).join(`\n`) : `None`, true)
                     message.channel.send(embed);
@@ -124,7 +123,6 @@ module.exports = class punishments {
                                         .setTitle(`List of Punishments for **${message.mentions.users.first().tag}**:`)
                                         .setColor(message.guild.member(client.user).displayHexColor)
                                         .addField(`Blacklists:`, Boolean(docs[0].punishment_history.filter(x => x.type == "Blacklist").length > 0) ? docs[0].punishment_history.filter(x => x.type == "Blacklist").map(r => `${r.id}`).join(`\n`) : `None`, true)
-                                        .addField(`Mutes:`, Boolean(docs[0].punishment_history.filter(x => x.type == "Mute").length > 0) ? docs[0].punishment_history.filter(x => x.type == "Mute").map(r => `${r.id}`).join(`\n`) : `None`, true)
                                         .addField(`Kicks:`, Boolean(docs[0].punishment_history.filter(x => x.type == "Kick").length > 0) ? docs[0].punishment_history.filter(x => x.type == "Kick").map(r => `${r.id}`).join(`\n`) : `None`, true)
                                         .addField(`Warns:`, Boolean(docs[0].punishment_history.filter(x => x.type == "Warn").length > 0) ? docs[0].punishment_history.filter(x => x.type == "Warn").map(r => `${r.id}`).join(`\n`) : `None`, true)
                                     message.channel.send(embed);
