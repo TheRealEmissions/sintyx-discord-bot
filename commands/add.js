@@ -28,11 +28,12 @@ module.exports = class add {
                     message.delete();
                 }, 5000);
             });
-            message.channel.overwritePermissions({
-                permissionOverwrites: [{
-                    id: user.id,
-                    allow: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'EMBED_LINKS', 'ATTACH_FILES', 'READ_MESSAGE_HISTORY'],
-                }], reason: 'Needed to change permissions'
+            message.channel.updateOverwrites(user, {
+                VIEW_CHANNEL: true,
+                SEND_MESSAGES: true,
+                EMBED_LINKS: true,
+                ATTACH_FILES: true,
+                READ_MESSAGE_HISTORY: true
             });
             message.channel.send(new client.modules.Discord.MessageEmbed()
                 .setColor(message.guild.member(client.user).displayHexColor)

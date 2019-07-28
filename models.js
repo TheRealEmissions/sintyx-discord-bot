@@ -3,5 +3,6 @@ module.exports = {
     trelloCards: require(`./models/trelloCards.js`),
     userProfiles: require(`./models/userProfiles.js`),
     supportTickets: require(`./models/supportTickets.js`),
-    memberGreetings: require(`./models/memberGreetings.js`)
+    memberGreetings: require(`./models/memberGreetings.js`),
+    channelMutes: require(`./models/channelMutes.js`)
 }

@@ -29,11 +29,12 @@ module.expots = class remove {
                 }, 5000);
             });
             if (message.channel.permissionOverwrites.get(user.id)) {
-                message.channel.overwritePermissions({
-                    permissionOverwrites: [{
-                        id: user.id,
-                        deny: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'EMBED_LINKS', 'ATTACH_FILES', 'READ_MESSAGE_HISTORY']
-                    }], reason: 'Needed to change permissions'
+                message.channel.updateOverwrites(user, {
+                    VIEW_CHANNEL: false,
+                    SEND_MESSAGES: false,
+                    EMBED_LINKS: false,
+                    ATTACH_FILES: false,
+                    READ_MESSAGE_HISTORY: false
                 });
                 message.channel.send(new client.modules.Discord.MessageEmbed()
                     .setColor(message.guild.member(client.user).displayHexColor)
