@@ -37,7 +37,7 @@ module.exports = class add {
             message.channel.send(new client.modules.Discord.MessageEmbed()
                 .setColor(message.guild.member(client.user).displayHexColor)
                 .setDescription(`Added <@${user.id}> to <#${message.channel.id}>!`)
-                .addField(`Reason:`, "```" + args[2] ? message.content.slice(args[0].length + args[1].length + 2) : 'No reason provided')
+                .addField(`Reason:`, "```" + args[2] ? message.content.slice(args[0].length + args[1].length + 2) : 'No reason provided' + "```")
                 .setThumbnail(user.avatarURL())
             );
         });
