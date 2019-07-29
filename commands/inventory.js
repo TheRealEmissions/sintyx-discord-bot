@@ -142,7 +142,7 @@ module.exports = class inventory {
             if (db.inventory.length == 0) return message.channel.send(new client.modules.Discord.MessageEmbed().setColor(message.guild.member(client.user).displayHexColor).setDescription(`Your inventory is currently empty.`)).then(msg => setTimeout(() => {
                 msg.delete();
                 message.delete();
-            }, 5000));
+            }, 15000));
             let inv = db.inventory,
                 i = 0,
                 items = []
@@ -170,66 +170,13 @@ module.exports = class inventory {
                     break;
                 }
                 items.push({
-                    name: this.resolveToName(inv[count].id),
-                    desc: this.resolveToDesc(inv[count].id),
-                    amount: inv[count].amount
+                    name: this.resolveToName(inv[count - 1].id),
+                    desc: this.resolveToDesc(inv[count - 1].id),
+                    amount: inv[count - 1].amount
                 });
                 i++;
             }
         });
-        /*
-        client.models.userInventories.find({
-            "user_id": message.author.id
-        }.lean().exec((err, docs) => {
-            if (err) return console.error(err);
-            docs = docs[0];
-            if (!docs) {
-                let newdb = new client.models.userInventories({
-                    user_id: message.author.id,
-                    inventory: []
-                });
-                newdb.save((err) => console.error(err));
-                return message.channel.send("We found that you did not have an inventory... so we created you one. Please run the command again.")
-            }
-            if (docs.inventory.length < 1) return message.channel.send(new client.modules.Discord.MessageEmbed().setDescription(`Your inventory is currently empty.`).setColor(message.guild.member(client.user).displayHexColor)).then(msg => setTimeout(() => {
-                msg.delete();
-                message.delete();
-            }, 5000));
-            let inv = docs.inventory,
-                i = 0,
-                items = []
-            for (let count in inv) {
-                if (i >= inv.length) {
-                    let embed = {
-                        embed: {
-                            color: message.guild.member(client.user).displayHexColor,
-                            title: `${message.author.username}${message.author.username.endsWith('s') ? `'` : `'s`} Inventory:`,
-                            description: `** ** \n:one: Use item\n:two: Send an item to another user\n:three: Delete an item\n** **`,
-                            fields: []
-                        }
-                    }
-                    embed.embed.fields.push({
-                        name: `Item:`,
-                        value: items.map(i => `[${i.name}](https://sintyx.com/ "${i.desc}")`).join(`\n`),
-                        inline: true
-                    }, {
-                        name: `Amount:`,
-                        value: items.map(i => `${i.amount}`).join(`\n`),
-                        inline: true
-                    });
-                    message.channel.send(embed).then(msg => {
-                        this.initInventory(client, message, args, msg, docs, items);
-                    });
-                    break;
-                }
-                items.push({
-                    name: this.resolveToName(inv[count].id),
-                    desc: this.resolveToDesc(inv[count].id),
-                    amount: inv[count].amount
-                });
-                i++;
-            }
-        }));*/
     }
 
     initInventory(client, message, args, msg, db, items) {
