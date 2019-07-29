@@ -128,6 +128,7 @@ module.exports = class inventory {
         client.models.userInventories.find({
             "user_id": message.author.id
         }.lean().exec((err, docs) => {
+            docs = docs[0];
             if (err) return console.error(err);
             if (!docs) {
                 let newdb = new client.models.userInventories({
