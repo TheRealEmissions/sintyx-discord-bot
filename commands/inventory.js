@@ -193,8 +193,8 @@ module.exports = class inventory {
                 });
                 i++;
             }
-        }));
-    }*/
+        }));*/
+    }
 
     initInventory(client, message, args, msg, docs, items) {
 
