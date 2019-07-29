@@ -1,4 +1,4 @@
-module.expots = class remove {
+module.exports = class remove {
     constructor() {
         this.name = 'remove',
         this.alias = [],

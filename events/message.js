@@ -77,9 +77,32 @@ module.exports = (client, message) => {
                     return _callback();
                 });
             }
+
+            function three(_callback) {
+                client.models.userInventories.findOne({
+                    "user_id": message.author.id
+                }, (err, db) => {
+                    if (err) return console.error(err);
+                    if (!db) {
+                        let newdb = new client.models.userInventories({
+                            user_id: message.author.id,
+                            inventory: []
+                        });
+                        newdb.save((err) => {
+                            if (err) return console.error(err);
+                            _callback();
+                        });
+                    } else {
+                        _callback();
+                    }
+                })
+            }
+
             one(function () {
                 two(function () {
-                    _callback();
+                    three(function() {
+                        _callback();
+                    })
                 });
             });
         }
@@ -204,12 +227,30 @@ module.exports = (client, message) => {
                 });
             }
 
-            databaseExists(function () {
-                dbAddXP(function () {
-                    dbCheckLevel(function () {
-                        dbAddCoins();
+            function dbAddMessageCount(_callback) {
+                client.models.userProfiles.findOne({
+                    "user_id": message.author.id
+                }, (err, db) => {
+                    if (err) return console.error(err);
+                    if (!db) {
+                        return console.error(`[ERROR] Database not found to add MESSAGE COUNT`);
+                    }
+                    db.message_count = db.message_count + 1;
+                    db.save((err) => {
+                        if (err) return console.error(err);
+                        _callback();
                     });
                 });
+            }
+
+            databaseExists(function () {
+                dbAddMessageCount(function() {
+                    dbAddXP(function () {
+                        dbCheckLevel(function () {
+                            dbAddCoins();
+                        });
+                    });
+                })
             });
 
             if (message.channel.parentID == "590285807265251339") {
@@ -246,17 +287,6 @@ module.exports = (client, message) => {
                     db.save((err) => console.error(err));
                 });
             }
-
-            client.models.userProfiles.findOne({
-                "user_id": message.author.id
-            }, (err, db) => {
-                if (err) return console.error(err);
-                if (!db) {
-                    return;
-                }
-                db.message_count = db.message_count + 1;
-                db.save((err) => console.error(err));
-            });
         }
     }
 }
