@@ -139,7 +139,7 @@ module.exports = class inventory {
                 });
                 return message.channel.send("We found that you did not have an inventory... so we created you one. Please run the command again.");
             }
-            console.log(db.inventory);
+            console.log(db.inventory.length);
         });
         /*
         client.models.userInventories.find({
