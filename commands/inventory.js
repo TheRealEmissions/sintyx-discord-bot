@@ -125,6 +125,23 @@ module.exports = class inventory {
             confirmation
             removes amount from their inventory
         */
+        client.models.userInventories.findOne({
+            "user_id": message.author.id
+        }, (err, db) => {
+            if (err) return console.error(err);
+            if (!db) {
+                let newdb = new client.models.userInventories({
+                    user_id: message.author.id,
+                    inventory: []
+                });
+                newdb.save((err) => {
+                    if (err) return console.error(err);
+                });
+                return message.channel.send("We found that you did not have an inventory... so we created you one. Please run the command again.");
+            }
+            console.log(db.inventory);
+        });
+        /*
         client.models.userInventories.find({
             "user_id": message.author.id
         }.lean().exec((err, docs) => {
@@ -177,7 +194,7 @@ module.exports = class inventory {
                 i++;
             }
         }));
-    }
+    }*/
 
     initInventory(client, message, args, msg, docs, items) {
 
