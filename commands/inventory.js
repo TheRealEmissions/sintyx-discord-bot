@@ -314,7 +314,95 @@ module.exports = class inventory {
         }
         // POUCH HANDLER
         if (pouch.indexOf(id) >= 0) {
-
+            this.confirmUseItem(client, message, id).then(boolean => {
+                if (boolean == true) {
+                    let pouchValue = {
+                        2: 10,
+                        3: 50,
+                        4: 100,
+                        5: 250,
+                        6: 500,
+                        7: 1000,
+                        8: 2000,
+                        16: 1,
+                        17: 2,
+                        18: 5,
+                        19: 10,
+                        20: 25,
+                        21: 50,
+                        22: 100,
+                        23: 200,
+                        24: 500,
+                        25: 1000
+                    }
+                    let xpPouch = [2, 3, 4, 5, 6, 7, 8];
+                    let coinPouch = [16, 17, 18, 19, 20, 21, 22, 23, 24, 25];
+                    client.models.userProfiles.findOne({
+                        "user_id": message.author.id
+                    }, (err, db) => {
+                        if (err) return console.error(err);
+                        if (!db) return console.error(`No database found for USER PROFILE while running INVENTORY COMMAND`);
+                        if (xpPouch.indexOf(id) >= 0) {
+                            db.user_xp += pouchValue[id];
+                            db.save((err) => {
+                                if (err) return console.error(err);
+                                message.channel.send(new client.modules.Discord.MessageEmbed()
+                                    .setColor(message.guild.member(client.user).displayHexColor)
+                                    .setDescription(`> Claimed [${this.resolveToName(id)}](https://sintyx.com "${this.resolveToDesc(id)}")\nYou have been awarded the ${pouchValue[id]} XP!\nYou have ${parseInt(db.inventory.find(x => x.id == id).amount) - 1} of this item left in your inventory.`)
+                                );
+                                client.models.userInventories.findOne({
+                                    "user_id": message.author.id
+                                }, (err, db) => {
+                                    if (err) return console.error(err);
+                                    db.inventory.find(x => x.id == id).amount = parseInt(db.inventory.find(x => x.id == id).amount) - 1;
+                                    db.save((err) => {
+                                        console.error(err);
+                                        client.functions.inventoryCheckAmount(client, id, message.author.id);
+                                    });
+                                });
+                                client.models.userProfiles.findOne({
+                                    "user_id": message.author.id
+                                }, (err, db) => {
+                                    if (err) return console.error(err);
+                                    let amountToLevel = db.user_level * 1000;
+                                    if (xp >= amountToLevel) {
+                                        db.user_level += 1;
+                                        message.channel.send(new client.modules.Discord.MessageEmbed()
+                                            .setColor(message.guild.member(client.user).displayHexColor)
+                                            .setDecription(`<@${message.author.id}>! You have reached **${amountToLevel} XP** and have ranked up to **Level ${db.user_level}**!`)
+                                        );
+                                        db.save((err) => console.error(err));
+                                    } else {
+                                        return;
+                                    }
+                                })
+                            })
+                        }
+                        if (coinPouch.indexOf(id) >= 0) {
+                            db.user_coins += pouchValue[id];
+                            db.save((err) => {
+                                if (err) return console.error(err);
+                                message.channel.send(new client.modules.Discord.MessageEmbed()
+                                    .setColor(message.guild.member(client.user).displayHexColor)
+                                    .setDescription(`> Claimed [${this.resolveToName(id)}](https://sintyx.com "${this.resolveToDesc(id)}")\nYou have been awarded the ${pouchValue[id]} Coins!\nYou have ${parseInt(db.inventory.find(x => x.id == id).amount) - 1} of this item left in your inventory.`)
+                                );
+                                client.models.userInventories.findOne({
+                                    "user_id": message.author.id
+                                }, (err, db) => {
+                                    if (err) return console.error(err);
+                                    db.inventory.find(x => x.id == id).amount = parseInt(db.inventory.find(x => x.id == id).amount) - 1;
+                                    db.save((err) => {
+                                        console.error(err);
+                                        client.functions.inventoryCheckAmount(client, id, message.author.id);
+                                    });
+                                });
+                            });
+                        }
+                    });
+                } else {
+                    return;
+                }
+            })
         }
         // CRATE HANDLER
         if (crate.indexOf(id) >= 0) {
