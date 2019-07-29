@@ -346,17 +346,17 @@ module.exports = class inventory {
                             db.user_xp += pouchValue[id];
                             db.save((err) => {
                                 if (err) return console.error(err);
-                                message.channel.send(new client.modules.Discord.MessageEmbed()
-                                    .setColor(message.guild.member(client.user).displayHexColor)
-                                    .setDescription(`> Claimed [${this.resolveToName(id)}](https://sintyx.com "${this.resolveToDesc(id)}")\nYou have been awarded the ${pouchValue[id]} XP!\nYou have ${parseInt(db.inventory.find(x => x.id == id).amount) - 1} of this item left in your inventory.`)
-                                );
                                 client.models.userInventories.findOne({
                                     "user_id": message.author.id
                                 }, (err, db) => {
                                     if (err) return console.error(err);
+                                    message.channel.send(new client.modules.Discord.MessageEmbed()
+                                        .setColor(message.guild.member(client.user).displayHexColor)
+                                        .setDescription(`> Claimed [${this.resolveToName(id)}](https://sintyx.com "${this.resolveToDesc(id)}")\nYou have been awarded ${pouchValue[id]} XP!\nYou have ${parseInt(db.inventory.find(x => x.id == id).amount) - 1} of this item left in your inventory.`)
+                                    );
                                     db.inventory.find(x => x.id == id).amount = parseInt(db.inventory.find(x => x.id == id).amount) - 1;
                                     db.save((err) => {
-                                        console.error(err);
+                                        if (err) console.error(err);
                                         client.functions.inventoryCheckAmount(client, id, message.author.id);
                                     });
                                 });
@@ -365,7 +365,7 @@ module.exports = class inventory {
                                 }, (err, db) => {
                                     if (err) return console.error(err);
                                     let amountToLevel = db.user_level * 1000;
-                                    if (xp >= amountToLevel) {
+                                    if (db.user_xp >= amountToLevel) {
                                         db.user_level += 1;
                                         message.channel.send(new client.modules.Discord.MessageEmbed()
                                             .setColor(message.guild.member(client.user).displayHexColor)
@@ -382,14 +382,14 @@ module.exports = class inventory {
                             db.user_coins += pouchValue[id];
                             db.save((err) => {
                                 if (err) return console.error(err);
-                                message.channel.send(new client.modules.Discord.MessageEmbed()
-                                    .setColor(message.guild.member(client.user).displayHexColor)
-                                    .setDescription(`> Claimed [${this.resolveToName(id)}](https://sintyx.com "${this.resolveToDesc(id)}")\nYou have been awarded the ${pouchValue[id]} Coins!\nYou have ${parseInt(db.inventory.find(x => x.id == id).amount) - 1} of this item left in your inventory.`)
-                                );
                                 client.models.userInventories.findOne({
                                     "user_id": message.author.id
                                 }, (err, db) => {
                                     if (err) return console.error(err);
+                                    message.channel.send(new client.modules.Discord.MessageEmbed()
+                                        .setColor(message.guild.member(client.user).displayHexColor)
+                                        .setDescription(`> Claimed [${this.resolveToName(id)}](https://sintyx.com "${this.resolveToDesc(id)}")\nYou have been awarded ${pouchValue[id]} Coins!\nYou have ${parseInt(db.inventory.find(x => x.id == id).amount) - 1} of this item left in your inventory.`)
+                                    );
                                     db.inventory.find(x => x.id == id).amount = parseInt(db.inventory.find(x => x.id == id).amount) - 1;
                                     db.save((err) => {
                                         console.error(err);
