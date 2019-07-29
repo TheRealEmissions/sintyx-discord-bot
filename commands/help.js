@@ -14,12 +14,12 @@ module.exports = class help {
                 .setTitle(`**Help Menu**`)
                 .setColor(message.guild.member(client.user).displayHexColor)
                 .setDescription(`To view a detailed description for any given command, please type: ` + "`" + `-help info <command>` + "`")
-                .addField(`Misc`, `Contains all miscellaneous commands that do not fit a category`, true)
-                .addField(`User`, `Commands related to users`, true)
-                .addField(`Music`, `Commands relating to music`, true)
-                .addField(`Tickets`, `Commands related to the ticket system`, true)
-                .addField(`Moderation`, `Commands relating to moderation within the Discord`, true)
-                .addField(`Administration`, `Contains the commands that are only available to administrators`, true)
+                .addField(`Misc`, `Contains all miscellaneous commands that do not fit a category`, false)
+                .addField(`User`, `Commands related to users`, false)
+                .addField(`Music`, `Commands relating to music`, false)
+                .addField(`Tickets`, `Commands related to the ticket system`, false)
+                .addField(`Moderation`, `Commands relating to moderation within the Discord`, false)
+                .addField(`Administration`, `Contains the commands that are only available to administrators`, false)
             message.channel.send(embed).then(msg => {
                 setTimeout(() => {
                     message.delete();
