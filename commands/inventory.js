@@ -100,6 +100,24 @@ module.exports = class inventory {
         return items[id-1];
     }
 
+    resolveNameToID(name) {
+        let i = 0,
+            amounts = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25],
+            obj = [];
+        for (let count in amounts) {
+            count = parseInt(count) + 1;
+            if (i >= amounts.length) {
+                break;
+            }
+            obj.push({
+                name: this.resolveToName(count),
+                id: count
+            });
+            i++;
+        }
+        return obj.find(x => x.name == name).id;
+    }
+
     async run(client, message, args) {
         /*
 
@@ -190,51 +208,52 @@ module.exports = class inventory {
                     embed: {
                         color: message.guild.member(client.user).displayHexColor,
                         title: `${message.author.username}${message.author.username.endsWith(`s`) ? `'` : `'`} Inventory: **Use an item**`,
-                        description: `** ** \n> Please respond with the ID of the item to use\n** ** `,
+                        description: `> Please respond with the ID of the item to use\n** ** `,
                         fields: []
                     }
                 },
                     i = 0,
                     inv = db.inventory,
-                    fields = {
-                        ids: [],
-                        items: [],
-                        amounts: []
-                    }
+                    fields = [];
                 for (let count in inv) {
                     if (i >= inv.length) {
                         break;
                     }
                     if (this.checkItemUsable(inv[count].id) == true) {
-                        fields.ids.push({
-                            id: count
-                        });
-                        fields.items.push({
-                            item: `[${this.resolveToName(inv[count].id)}](https://sintyx.com/ "${this.resolveToDesc(inv[count].id)}")`
-                        });
-                        fields.amounts.push({
-                            amount: inv[count].amount
+                        fields.push({
+                            id: count,
+                            item: `[${this.resolveToName(inv[count].id)}](https://sintyx.com/ "${this.resolveToDesc(inv[count].id)}")`,
+                            amount: inv[count].amount,
+                            name: this.resolveToName(inv[count].id)
                         });
                     } else {
                         continue;
                     }
                     i++;
                 }
-                embed.embeds.fields.push({
+                embed.embed.fields.push({
                     name: 'ID',
-                    value: fields.ids.map(i => `${i.id}`).join(`\n`),
+                    value: fields.map(i => `${i.id}`).join(`\n`),
                     inline: true
                 }, {
                     name: 'Item',
-                    value: fields.items.map(i => `${i.item}`).join(`\n`),
+                    value: fields.map(i => `${i.item}`).join(`\n`),
                     inline: true
                 }, {
                     name: 'Amount',
-                    value: fields.amounts.map(i => `${i.amount}`).join(`\n`),
+                    value: fields.map(i => `${i.amount}`).join(`\n`),
                     inline: true
                 });
                 message.channel.send(embed).then(msg => {
-
+                    let collector = new client.modules.Discord.MessageCollector(message.channel, m => m.author.id == message.author.id, {});
+                    collector.on('collect', id => {
+                        if (fields.find(x => x.id == `${id}`)) {
+                            collector.stop();
+                            id.delete();
+                            msg.delete();
+                            this.handleUseItem(client, message, this.resolveNameToID(fields.find(x => x.id == `${id}`).name));
+                        }
+                    });
                 });
             }
             if (reaction.emoji.name == '2⃣') {
@@ -255,5 +274,74 @@ module.exports = class inventory {
         if (ids.indexOf(id) >= 0) {
             return true;
         } else return false;
+    }
+
+    handleUseItem(client, message, id) {
+        let roles = [1];
+        let pouch = [2, 3, 4, 5, 6, 7, 8, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25];
+        let crate = [9, 10, 11, 12, 13, 14, 15];
+        // ROLE HANDLER
+        if (roles.indexOf(id) >= 0) {
+            this.confirmUseItem(client, message, id).then(boolean => {
+                if (boolean == true) {
+                    let roles = {
+                        1: 'VIP'
+                    }
+                    console.log(roles[id]);
+                    message.member.roles.add([message.guild.roles.find(x => x.name == roles[id]).id]).then(() => {
+                        client.models.userInventories.findOne({
+                            "user_id": message.author.id
+                        }, (err, db) => {
+                            if (err) return console.error(err);
+                            message.channel.send(new client.modules.Discord.MessageEmbed()
+                                .setColor(message.guild.member(client.user).displayHexColor)
+                                .setDescription(`> Claimed [${this.resolveToName(id)}](https://sintyx.com "${this.resolveToDesc(id)}")\nYou have been awarded the ${roles[id]} role!\nYou have ${parseInt(db.inventory.find(x => x.id == id).amount) - 1} of this item left in your inventory.`)
+                            );
+                            db.inventory.find(x => x.id == id).amount = parseInt(db.inventory.find(x => x.id == id).amount) - 1;
+                            db.save((err) => {
+                                if (err) return console.error(err);
+                                client.functions.inventoryCheckAmount(client, id, message.author.id);
+                            });
+                        });
+                    }).catch(err => {
+                        message.channel.send(`Unfortunately, you cannot claim this item:\n\`\`\`${err}\`\`\``);
+                        console.error(err);
+                    });
+                } else {
+                    return;
+                }
+            });
+        }
+        // POUCH HANDLER
+        if (pouch.indexOf(id) >= 0) {
+
+        }
+        // CRATE HANDLER
+        if (crate.indexOf(id) >= 0) {
+
+        }
+    }
+
+    confirmUseItem(client, message, id) {
+        return new Promise(async(resolve, reject) => {
+            message.channel.send(new client.modules.Discord.MessageEmbed()
+                .setTitle(`Confirmation...`)
+                .setDescription(`Are you sure you want to claim your [${this.resolveToName(id)}](https://sintyx.com/ "${this.resolveToDesc(id)}")? Claiming this item is irreversible!`)
+                .setColor(message.guild.member(client.user).displayHexColor)
+            ).then(msg => {
+                msg.react(`✅`).then(msg.react(`❌`));
+                let collector = new client.modules.Discord.ReactionCollector(msg, (reaction, user) => ((reaction.emoji.name == '✅') || (reaction.emoji.name == '❌')) && user.id == message.author.id, {});
+                collector.on('collect', reaction => {
+                    collector.stop();
+                    if (reaction.emoji.name == '✅') {
+                        msg.delete();
+                        resolve(true);
+                    } else {
+                        msg.delete();
+                        resolve(false);
+                    }
+                });
+            });
+        });
     }
 }
