@@ -66,7 +66,7 @@ module.exports = class inventory {
             'Coin Pouch - 500 Coins',   // 24
             'Coin Pouch - 1000 Coins'   // 25
         ]
-        return items[id];
+        return items[id-1];
     }
 
     resolveToDesc(id) {
@@ -97,7 +97,7 @@ module.exports = class inventory {
             'A claimable pouch that gives you 500 Coins',
             'A claimable pouch that gives you 1000 Coins'
         ]
-        return items[id];
+        return items[id-1];
     }
 
     async run(client, message, args) {
@@ -152,7 +152,7 @@ module.exports = class inventory {
                         embed: {
                             color: message.guild.member(client.user).displayHexColor,
                             title: `${message.author.username}${message.author.username.endsWith('s') ? `'` : `'s`} Inventory:`,
-                            description: `** ** \n:one: Use item\n:two: Send an item to another user\n:three: Delete an item\n** **`,
+                            description: `** ** \n:one: Use item\n:two: Send an item to another user\n:three: Delete an item\n** ** `,
                             fields: [{
                                 name: `Item:`,
                                 value: items.map(i => `[${i.name}](https://sintyx.com "${i.desc}")`).join(`\n`),
@@ -170,9 +170,9 @@ module.exports = class inventory {
                     break;
                 }
                 items.push({
-                    name: this.resolveToName(inv[count - 1].id),
-                    desc: this.resolveToDesc(inv[count - 1].id),
-                    amount: inv[count - 1].amount
+                    name: this.resolveToName(inv[count].id),
+                    desc: this.resolveToDesc(inv[count].id),
+                    amount: inv[count].amount
                 });
                 i++;
             }
@@ -180,6 +180,80 @@ module.exports = class inventory {
     }
 
     initInventory(client, message, args, msg, db, items) {
+        msg.react(`1⃣`).then(() => msg.react(`2⃣`).then(() => msg.react(`3⃣`).then(() => msg.react(`❌`))));
+        let collector = new client.modules.Discord.ReactionCollector(msg, (reaction, user) => ((reaction.emoji.name == '1⃣') || (reaction.emoji.name == '2⃣') || (reaction.emoji.name == '3⃣') || (reaction.emoji.name == '❌')) && user.id == message.author.id, {});
+        collector.on('collect', reaction => {
+            collector.stop();
+            if (reaction.emoji.name == '1⃣') {
+                msg.delete();
+                let embed = {
+                    embed: {
+                        color: message.guild.member(client.user).displayHexColor,
+                        title: `${message.author.username}${message.author.username.endsWith(`s`) ? `'` : `'`} Inventory: **Use an item**`,
+                        description: `** ** \n> Please respond with the ID of the item to use\n** ** `,
+                        fields: []
+                    }
+                },
+                    i = 0,
+                    inv = db.inventory,
+                    fields = {
+                        ids: [],
+                        items: [],
+                        amounts: []
+                    }
+                for (let count in inv) {
+                    if (i >= inv.length) {
+                        break;
+                    }
+                    if (this.checkItemUsable(inv[count].id) == true) {
+                        fields.ids.push({
+                            id: count
+                        });
+                        fields.items.push({
+                            item: `[${this.resolveToName(inv[count].id)}](https://sintyx.com/ "${this.resolveToDesc(inv[count].id)}")`
+                        });
+                        fields.amounts.push({
+                            amount: inv[count].amount
+                        });
+                    } else {
+                        continue;
+                    }
+                    i++;
+                }
+                embed.embeds.fields.push({
+                    name: 'ID',
+                    value: fields.ids.map(i => `${i.id}`).join(`\n`),
+                    inline: true
+                }, {
+                    name: 'Item',
+                    value: fields.items.map(i => `${i.item}`).join(`\n`),
+                    inline: true
+                }, {
+                    name: 'Amount',
+                    value: fields.amounts.map(i => `${i.amount}`).join(`\n`),
+                    inline: true
+                });
+                message.channel.send(embed).then(msg => {
 
+                });
+            }
+            if (reaction.emoji.name == '2⃣') {
+
+            }
+            if (reaction.emoji.name == '3⃣') {
+
+            }
+            if (reaction.emoji.name == '❌') {
+                msg.delete();
+                message.delete();
+            }
+        });
+    }
+
+    checkItemUsable(id) {
+        let ids = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25];
+        if (ids.indexOf(id) >= 0) {
+            return true;
+        } else return false;
     }
 }
