@@ -137,7 +137,7 @@ module.exports = class inventory {
                 newdb.save((err) => console.error(err));
                 return message.channel.send("We found that you did not have an inventory... so we created you one. Please run the command again.")
             }
-            if (docs.inventory.length > 1) return message.channel.send(new client.modules.Discord.MessageEmbed().setDescription(`Your inventory is currently empty.`).setColor(message.guild.member(client.user).displayHexColor)).then(msg => setTimeout(() => {
+            if (docs.inventory.length < 1) return message.channel.send(new client.modules.Discord.MessageEmbed().setDescription(`Your inventory is currently empty.`).setColor(message.guild.member(client.user).displayHexColor)).then(msg => setTimeout(() => {
                 msg.delete();
                 message.delete();
             }, 5000));
@@ -164,7 +164,7 @@ module.exports = class inventory {
                         inline: true
                     });
                     message.channel.send(embed).then(msg => {
-
+                        this.initInventory(client, message, args, msg, docs, items);
                     });
                     break;
                 }
@@ -176,5 +176,9 @@ module.exports = class inventory {
                 i++;
             }
         }));
+    }
+
+    initInventory(client, message, args, msg, docs, items) {
+
     }
 }
