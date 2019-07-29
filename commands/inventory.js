@@ -139,7 +139,43 @@ module.exports = class inventory {
                 });
                 return message.channel.send("We found that you did not have an inventory... so we created you one. Please run the command again.");
             }
-            console.log(db.inventory.length);
+            if (db.inventory.length == 0) return message.channel.send(new client.modules.Discord.MessageEmbed().setColor(message.guild.member(client.user).displayHexColor).setDescription(`Your inventory is currently empty.`)).then(msg => setTimeout(() => {
+                msg.delete();
+                message.delete();
+            }, 5000));
+            let inv = db.inventory,
+                i = 0,
+                items = []
+            for (let count in inv) {
+                if (i >= inv.length) {
+                    let embed = {
+                        embed: {
+                            color: message.guild.member(client.user).displayHexColor,
+                            title: `${message.author.username}${message.author.username.endsWith('s') ? `'` : `'s`} Inventory:`,
+                            description: `** ** \n:one: Use item\n:two: Send an item to another user\n:three: Delete an item\n** **`,
+                            fields: [{
+                                name: `Item:`,
+                                value: items.map(i => `[${i.name}](https://sintyx.com "${i.desc}")`).join(`\n`),
+                                inline: true
+                            }, {
+                                name: `Amount:`,
+                                value: items.map(i => `${i.amount}`).join(`\n`),
+                                inline: true
+                            }]
+                        }
+                    }
+                    message.channel.send(embed).then(msg => {
+                        this.initInventory(client, message, args, msg, db, items);
+                    });
+                    break;
+                }
+                items.push({
+                    name: this.resolveToName(inv[count].id),
+                    desc: this.resolveToDesc(inv[count].id),
+                    amount: inv[count].amount
+                });
+                i++;
+            }
         });
         /*
         client.models.userInventories.find({
@@ -196,7 +232,7 @@ module.exports = class inventory {
         }));*/
     }
 
-    initInventory(client, message, args, msg, docs, items) {
+    initInventory(client, message, args, msg, db, items) {
 
     }
 }
