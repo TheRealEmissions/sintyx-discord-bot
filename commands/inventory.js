@@ -197,7 +197,7 @@ module.exports = class inventory {
                             if (err) return console.error(err);
                             message.channel.send(new client.modules.Discord.MessageEmbed()
                                 .setColor(message.guild.member(client.user).displayHexColor)
-                                .setDescription(`> Claimed [${this.resolveToName(id)}](https://sintyx.com "${this.resolveToDesc(id)}")\nYou have been awarded the ${roles[id]} role!\nYou have ${parseInt(db.inventory.find(x => x.id == id).amount) - 1} of this item left in your inventory.`)
+                                .setDescription(`> Claimed [${this.resolveToName(id)}](https://sintyx.com "${this.resolveToDesc(id)}")\nYou have been awarded the ${this.items.find(x => x.id == id).rewards[0].role_name} role!\nYou have ${parseInt(db.inventory.find(x => x.id == id).amount) - 1} of this item left in your inventory.`)
                             );
                             db.inventory.find(x => x.id == id).amount = parseInt(db.inventory.find(x => x.id == id).amount) - 1;
                             db.save((err) => {
