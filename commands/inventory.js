@@ -8,47 +8,6 @@ module.exports = class inventory {
         this.items = require(`../storage`).inventoryItems
     }
 
-    /*
-    ITEMS:
-
-    1 => VIP Role
-    2 => XP Pouch - 10 XP
-    3 => XP Pouch - 50 XP
-    4 => XP Pouch - 100 XP
-    5 => XP Pouch - 250 XP
-    6 => XP Pouch - 500 XP
-    7 => XP Pouch - 1000 XP
-    8 => XP Pouch - 2000 XP
-    9 => XP Crate - 10-50 XP
-    10 => XP Crate - 50-100 XP
-    11 => XP Crate - 100-250 XP
-    12 => XP Crate - 250-500 XP
-    13 => XP Crate - 500-1000 XP
-    14 => XP Crate - 1000-2000 XP
-    15 => XP Crate - 10-2000 XP
-    16 => Coin Pouch - 1 Coin
-    17 => Coin Pouch - 2 Coins
-    18 => Coin Pouch - 5 Coins
-    19 => Coin Pouch - 10 Coins
-    20 => Coin Pouch - 25 Coins
-    21 => Coin Pouch - 50 Coins
-    22 => Coin Pouch - 100 Coins
-    23 => Coin Pouch - 200 Coins
-    24 => Coin Pouch - 500 Coins
-    25 => Coin Pouch - 1000 Coins
-    26 => Coin Crate - 1-2 Coins
-    27 => Coin Crate - 2-5 Coins
-    28 => Coin Crate - 5-10 Coins
-    29 => Coin Crate - 10-25 Coins
-    30 => Coin Crate - 25-50 Coins
-    31 => Coin Crate - 50-100 Coins
-    32 => Coin Crate - 100-200 Coins
-    33 => Coin Crate - 200-500 Coins
-    34 => Coin Crate - 500-1000 Coins
-    35 => Coin Crate - 1-1000 Coins
-
-    */
-
     resolveToName(id) {
         return this.items.find(x => x.id == id).name;
     }
@@ -134,7 +93,7 @@ module.exports = class inventory {
                         }
                     }
                     message.channel.send(embed).then(msg => {
-                        this.initInventory(client, message, args, msg, db, items);
+                        this.initInventory(client, message, msg, db);
                     });
                     break;
                 }
@@ -148,7 +107,7 @@ module.exports = class inventory {
         });
     }
 
-    initInventory(client, message, args, msg, db, items) {
+    initInventory(client, message, msg, db) {
         msg.react(`1⃣`).then(() => msg.react(`2⃣`).then(() => msg.react(`3⃣`).then(() => msg.react(`❌`))));
         let collector = new client.modules.Discord.ReactionCollector(msg, (reaction, user) => ((reaction.emoji.name == '1⃣') || (reaction.emoji.name == '2⃣') || (reaction.emoji.name == '3⃣') || (reaction.emoji.name == '❌')) && user.id == message.author.id, {});
         collector.on('collect', reaction => {
