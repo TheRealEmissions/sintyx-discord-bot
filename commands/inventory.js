@@ -167,7 +167,61 @@ module.exports = class inventory {
                 });
             }
             if (reaction.emoji.name == '2⃣') {
-
+                /*
+                send inventory, what item to send
+                amount of items
+                user to send to
+                confirm
+                send
+                */
+                msg.delete();
+                let embed = {
+                    embed: {
+                        color: message.guild.member(client.user).displayHexColor,
+                        title: `${message.author.username}${message.author.username.endsWith(`s`) ? `'` : `'`} Inventory: **Send an item**`,
+                        description: `> Please respond with the ID of the item you wish to send to another user\n** ** `,
+                        fields: []
+                    }
+                },
+                    i = 0,
+                    inv = db.inventory,
+                    fields = [];
+                for (let count in inv) {
+                    if (i >= inv.length) {
+                        break;
+                    }
+                    fields.push({
+                        id: count,
+                        item: `${this.resolveToEmbedName(inv[count].id)}`,
+                        amount: inv[count].amount,
+                        name: this.resolveToName(inv[count].id)
+                    });
+                    i++;
+                }
+                embed.embed.fields.push({
+                    name: 'ID',
+                    value: fields.map(i => `${i.id}`).join(`\n`),
+                    inline: true
+                }, {
+                    name: 'Item',
+                    value: fields.map(i => `${i.item}`).join(`\n`),
+                    inline: true
+                }, {
+                    name: 'Amount',
+                    value: fields.map(i => `${i.amount}`).join(`\n`),
+                    inline: true
+                });
+                message.channel.send(embed).then(msg => {
+                    let collector = new client.modules.Discord.MessageCollector(message.channel, m => m.author.id == message.author.id, {});
+                    collector.on('collect', id => {
+                        if (fields.find(x => x.id == `${id}`)) {
+                            collector.stop();
+                            id.delete();
+                            msg.delete();
+                            this.handleSendItem(client, message, this.resolveNameToID(fields.find(x => x.id == `${id}`).name));
+                        }
+                    });
+                });
             }
             if (reaction.emoji.name == '3⃣') {
 
@@ -176,6 +230,115 @@ module.exports = class inventory {
                 msg.delete();
                 message.delete();
             }
+        });
+    }
+
+    handleSendItem(client, message, id) {
+        this.fetchItemSendingAmount(client, message, id).then((amount) => {
+            this.fetchItemSendingUser(client, message, id, amount).then((user) => {
+                this.confirmSendItem(client, message, id, amount, user).then((boolean) => {
+                    if (boolean == true) {
+                        // remove from user database
+                        client.models.userInventories.findOne({
+                            "user_id": message.author.id
+                        }, (err, db) => {
+                            if (err) return console.error(err);
+                            db.inventory.find(x => x.id == id).amount = db.inventory.find(x => x.id == id).amount - amount;
+                            db.save((err) => console.error(err));
+                            client.functions.inventoryCheckAmount(client, id, message.author.id);
+                        });
+                        // add to new database
+                        client.models.userInventories.findOne({
+                            "user_id": user.id
+                        }, (err, db) => {
+                            if (err) return console.error(err);
+                            if (db.inventory.find(x => x.id)) {
+                                db.inventory.find(x => x.id).amount += amount;
+                                db.save((err) => console.error(err));
+                            } else {
+                                db.inventory.push({
+                                    id: id,
+                                    amount: amount
+                                });
+                                db.save((err) => console.error(err));
+                            }
+                        });
+                        message.channel.send(new client.modules.Discord.MessageEmbed()
+                            .setColor(message.guild.member(client.user).displayHexColor)
+                            .setDescription(`Sent ${amount}x ${this.resolveToEmbedName(id)} to <@${user.id}>`)
+                        );
+                        user.send(new client.modules.Discord.MessageEmbed()
+                            .setColor(message.guild.member(client.user).displayHexColor)
+                            .setDescription(`<@${message.author.id}> has sent you ${amount}x ${this.resolveToEmbedName(id)}! This has automatically been debited into your inventory.`)
+                        );
+                    } else {
+                        return;
+                    }
+                })
+            }).catch(err => console.error(err));
+        });
+    }
+
+    fetchItemSendingAmount(client, message, id) {
+        return new Promise((resolve, reject) => {
+            client.models.userInventories.findOne({
+                "user_id": message.author.id
+            }, (err, db) => {
+                if (err) return reject(err);
+                message.channel.send(new client.modules.Discord.MessageEmbed()
+                .setColor(message.guild.member(client.user).displayHexColor)
+                .setDescription(`> You currently have ${db.inventory.find(x => x.id == id).amount} item of ${this.resolveToEmbedName(id)}\nHow many of this item do you wish to send?`)
+                ).then(msg => {
+                    let collector = new client.modules.Discord.MessageCollector(message.channel, m => m.author.id == message.author.id, {});
+                    collector.on('collect', amount => {
+                        collector.stop();
+                        msg.delete();
+                        if (isNaN(parseInt(amount))) {
+                            if (amount <= db.inventory.find(x => x.id == id).amount && amount > 0) {
+                                return resolve(parseInt(amount));
+                            } else {
+                                return reject(`Cannot send more than inventory amount or less than 1`);
+                            }
+                        }
+                    });
+                });
+            });
+        });
+    }
+
+    fetchItemSendingUser(client, message, id, amount) {
+        return new Promise((resolve, reject) => {
+            message.channel.send(new client.modules.Discord.MessageEmbed()
+                .setColor(message.guild.member(client.user).displayHexColor)
+                .setDescription(`What user do you want to send ${amount}x ${this.resolveToEmbedName(id)} to?`)
+            ).then(msg => {
+                let collector = new client.modules.Discord.MessageCollector(message.channel, m => m.author.id == message.author.id, {});
+                collector.on('collect', user => {
+                    let user = message.mentions.users.first() ? message.mentions.users.first() : message.guild.members.get(user.content);
+                    if (!user) {
+                        return reject(`No user could be found`);
+                    }
+                    msg.delete();
+                    return resolve(user);
+                });
+            });
+        });
+    }
+
+    confirmSendItem(client, message, id, amount, user) {
+        return new Promise((resolve, reject) => {
+            message.channel.send(new client.modules.Discord.MessageEmbed()
+                .setColor(message.guild.member(client.user).displayHexColor)
+                .setDescription(`Are you sure want to send ${amount}x ${this.resolveToEmbedName(id)} to <@${user.id}>?`)
+            ).then(msg => {
+                msg.react(`✅`).then(() => msg.react(`❌`));
+                let collector = new client.modules.Discord.ReactionCollector(msg, (reaction, user) => ((reaction.emoji.name == '✅') || (reaction.emoji.name == '❌')) && user.id == message.author.id, {});
+                collector.on('collect', reaction => {
+                    if (reaction.emoji.name == '✅') {
+                        return resolve(true);
+                    } else return resolve(false);
+                });
+            });
         });
     }
 
