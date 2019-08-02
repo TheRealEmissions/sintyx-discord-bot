@@ -28,6 +28,7 @@ module.exports = class analystabuse {
                             amount: 100
                         });
                     }
+                    i++;
                 }
                 function end() {
                     db.save((err) => console.error(err));
