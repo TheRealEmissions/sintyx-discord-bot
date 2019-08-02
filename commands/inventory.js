@@ -300,7 +300,7 @@ module.exports = class inventory {
                         collector.stop();
                         msg.delete();
                         if (isNaN(parseInt(amount))) {
-                            if (amount <= db.inventory.find(x => x.id == id).amount && amount > 0) {
+                            if (parseInt(amount) <= parseInt(db.inventory.find(x => x.id == id).amount) && parseInt(amount) > 0) {
                                 return resolve(parseInt(amount));
                             } else {
                                 return reject(`Cannot send more than inventory amount or less than 1`);
