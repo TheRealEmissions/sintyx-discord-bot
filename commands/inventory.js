@@ -340,6 +340,7 @@ module.exports = class inventory {
                 msg.react(`✅`).then(() => msg.react(`❌`));
                 let collector = new client.modules.Discord.ReactionCollector(msg, (reaction, user) => ((reaction.emoji.name == '✅') || (reaction.emoji.name == '❌')) && user.id == message.author.id, {});
                 collector.on('collect', reaction => {
+                    msg.delete();
                     if (reaction.emoji.name == '✅') {
                         return resolve(true);
                     } else return resolve(false);
