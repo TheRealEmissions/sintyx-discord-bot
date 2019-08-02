@@ -224,12 +224,143 @@ module.exports = class inventory {
                 });
             }
             if (reaction.emoji.name == '3⃣') {
-
+                /*
+                What item
+                how many
+                confirm
+                delete
+                */
+                msg.delete();
+                let embed = {
+                    embed: {
+                        color: message.guild.member(client.user).displayHexColor,
+                        title: `${message.author.username}${message.author.username.endsWith(`s`) ? `'` : `'`} Inventory: **Delete an item**`,
+                        description: `> Please respond with the ID of the item you wish to delete\n** ** `,
+                        fields: []
+                    }
+                },
+                    i = 0,
+                    inv = db.inventory,
+                    fields = [];
+                for (let count in inv) {
+                    if (i >= inv.length) {
+                        break;
+                    }
+                    fields.push({
+                        id: count,
+                        item: `${this.resolveToEmbedName(inv[count].id)}`,
+                        amount: inv[count].amount,
+                        name: this.resolveToName(inv[count].id)
+                    });
+                    i++;
+                }
+                embed.embed.fields.push({
+                    name: 'ID',
+                    value: fields.map(i => `${i.id}`).join(`\n`),
+                    inline: true
+                }, {
+                    name: 'Item',
+                    value: fields.map(i => `${i.item}`).join(`\n`),
+                    inline: true
+                }, {
+                    name: 'Amount',
+                    value: fields.map(i => `${i.amount}`).join(`\n`),
+                    inline: true
+                });
+                message.channel.send(embed).then(msg => {
+                    let collector = new client.modules.Discord.MessageCollector(message.channel, m => m.author.id == message.author.id, {});
+                    collector.on('collect', id => {
+                        if (fields.find(x => x.id == `${id}`)) {
+                            collector.stop();
+                            id.delete();
+                            msg.delete();
+                            this.handleDeleteItem(client, message, this.resolveNameToID(fields.find(x => x.id == `${id}`).name));
+                        }
+                    });
+                });
             }
             if (reaction.emoji.name == '❌') {
                 msg.delete();
                 message.delete();
             }
+        });
+    }
+
+    handleDeleteItem(client, message, id) {
+        this.fetchItemDeleteAmount(client, message, id).then((amount) => {
+            this.confirmItemDelete(client, message, id, amount).then((boolean) => {
+                if (boolean == true) {
+                    client.models.userInventories.findOne({
+                        "user_id": message.author.id
+                    }, (err, db) => {
+                       if (err) return console.error(err);
+                       db.inventory.find(x => x.id).amount = db.inventory.find(x => x.id).amount - amount;
+                       db.save((err) => console.error(err));
+                       client.functions.inventoryCheckAmount(client, id, message.author.id);
+                       message.channel.send(new client.modules.Discord.MessageEmbed()
+                            .setColor(message.guild.member(client.user).displayHexColor)
+                            .setDescription(`Deleted ${amount}x ${this.resolveToEmbedName(id)} from your inventory`)
+                       );
+                    });
+                } else {
+                    return;
+                }
+            }).catch(err => {
+                console.error(err);
+                message.channel.send(`We cannot complete the deletion process! Error: \`\`\`${err}\`\`\``);
+            });
+        }).catch(err => {
+            console.error(err);
+            message.channel.send(`We cannot complete the deletion process! Error: \`\`\`${err}\`\`\``);
+        });
+    }
+
+    fetchItemDeleteAmount(client, message, id) {
+        return new Promise((resolve, reject) => {
+            client.models.userInventories.findOne({
+                "user_id": message.author.id
+            }, (err, db) => {
+                if (err) return reject(err);
+                message.channel.send(new client.modules.Discord.MessageEmbed()
+                    .setColor(message.guild.member(client.user).displayHexColor)
+                    .setDescription(`> You currently have ${db.inventory.find(x => x.id == id).amount} ${this.resolveToEmbedName(id)}\nHow many ${this.resolveToEmbedName(id)} do you want to delete?`)
+                ).then(msg => {
+                    let collector = new client.modules.Discord.MessageCollector(message.channel, m => m.author.id == message.author.id, {});
+                    collector.on('collect', amount => {
+                        msg.delete();
+                        if (!isNan(parseInt(amount))) {
+                            amount = parseInt(amount);
+                            if (amount <= db.inventory.find(x => x.id == id).amount && amount > 0) {
+                                return resolve(amount);
+                            } else {
+                                return reject(`Amount provided is either above inventory amount or below 1`);
+                            }
+                        } else {
+                            return reject(`Amount provided is not a number`);
+                        }
+                    });
+                });
+            })
+        });
+    }
+
+    confirmItemDelete(client, message, id, amount) {
+        return new Promise((resolve, reject) => {
+            message.channel.send(new client.modules.Discord.MessageEmbed()
+                .setColor(message.guild.member(client.user).displayHexColor)
+                .setDescription(`Are you sure you want to delete ${amount}x ${this.resolveToEmbedName(id)}?`)
+            ).then(msg => {
+                msg.react(`✅`).then(() => msg.react(`❌`));
+                let collector = new client.modules.Discord.ReactionCollector(msg, (reaction, user) => ((reaction.emoji.name == '✅') || (reaction.emoji.name == '❌')) && user.id == message.author.id, {});
+                collector.on('collect', reaction => {
+                    msg.delete();
+                    if (reaction.emoji.name == '✅') {
+                        resolve(true);
+                    } else {
+                        resolve(false);
+                    }
+                })
+            });
         });
     }
 
