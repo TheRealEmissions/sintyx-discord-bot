@@ -293,13 +293,13 @@ module.exports = class inventory {
                 if (err) return reject(err);
                 message.channel.send(new client.modules.Discord.MessageEmbed()
                 .setColor(message.guild.member(client.user).displayHexColor)
-                .setDescription(`> You currently have ${db.inventory.find(x => x.id == id).amount} item of ${this.resolveToEmbedName(id)}\nHow many of this item do you wish to send?`)
+                .setDescription(`> You currently have ${db.inventory.find(x => x.id == id).amount} ${this.resolveToEmbedName(id)}\nHow many of this item do you wish to send?`)
                 ).then(msg => {
                     let collector = new client.modules.Discord.MessageCollector(message.channel, m => m.author.id == message.author.id, {});
                     collector.on('collect', amount => {
                         collector.stop();
                         msg.delete();
-                        if (isNaN(parseInt(amount))) {
+                        if (!isNaN(parseInt(amount))) {
                             if (parseInt(amount) <= parseInt(db.inventory.find(x => x.id == id).amount) && parseInt(amount) > 0) {
                                 return resolve(parseInt(amount));
                             } else {
