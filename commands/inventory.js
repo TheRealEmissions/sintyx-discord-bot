@@ -275,7 +275,10 @@ module.exports = class inventory {
                         return;
                     }
                 })
-            }).catch(err => console.error(err));
+            }).catch(err => {
+                console.error(err);
+                message.channel.send(`We cannot complete the sending process! Error:\n\`\`\`${err}\`\`\``);
+            });
         });
     }
 
