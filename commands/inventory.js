@@ -235,8 +235,8 @@ module.exports = class inventory {
 
     handleSendItem(client, message, id) {
         this.fetchItemSendingAmount(client, message, id).then((amount) => {
-            this.fetchItemSendingUser(client, message, id, amount).then((user) => {
-                this.confirmSendItem(client, message, id, amount, user).then((boolean) => {
+            this.fetchItemSendingUser(client, message, id, amount).then((usr) => {
+                this.confirmSendItem(client, message, id, amount, usr).then((boolean) => {
                     if (boolean == true) {
                         // remove from user database
                         client.models.userInventories.findOne({
@@ -249,7 +249,7 @@ module.exports = class inventory {
                         });
                         // add to new database
                         client.models.userInventories.findOne({
-                            "user_id": user.id
+                            "user_id": usr.id
                         }, (err, db) => {
                             if (err) return console.error(err);
                             if (db.inventory.find(x => x.id)) {
@@ -265,9 +265,9 @@ module.exports = class inventory {
                         });
                         message.channel.send(new client.modules.Discord.MessageEmbed()
                             .setColor(message.guild.member(client.user).displayHexColor)
-                            .setDescription(`Sent ${amount}x ${this.resolveToEmbedName(id)} to <@${user.id}>`)
+                            .setDescription(`Sent ${amount}x ${this.resolveToEmbedName(id)} to <@${usr.id}>`)
                         );
-                        user.send(new client.modules.Discord.MessageEmbed()
+                        usr.send(new client.modules.Discord.MessageEmbed()
                             .setColor(message.guild.member(client.user).displayHexColor)
                             .setDescription(`<@${message.author.id}> has sent you ${amount}x ${this.resolveToEmbedName(id)}! This has automatically been debited into your inventory.`)
                         );
