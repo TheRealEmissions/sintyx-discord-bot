@@ -320,7 +320,7 @@ module.exports = class inventory {
             ).then(msg => {
                 let collector = new client.modules.Discord.MessageCollector(message.channel, m => m.author.id == message.author.id, {});
                 collector.on('collect', user => {
-                    user = message.mentions.users.first() ? message.mentions.users.first() : message.guild.members.get(user.content);
+                    user = user.mentions.users.first() ? user.mentions.users.first() : message.guild.members.get(user.content);
                     if (!user) {
                         return reject(`No user could be found`);
                     }
