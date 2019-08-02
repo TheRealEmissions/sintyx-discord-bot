@@ -279,6 +279,9 @@ module.exports = class inventory {
                 console.error(err);
                 message.channel.send(`We cannot complete the sending process! Error:\n\`\`\`${err}\`\`\``);
             });
+        }).catch(err => {
+            console.error(err);
+            message.channel.send(`We cannot complete the sending process! Error:\n\`\`\`${err}\`\`\``);
         });
     }
 
