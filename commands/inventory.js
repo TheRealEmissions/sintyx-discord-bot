@@ -328,7 +328,7 @@ module.exports = class inventory {
                     let collector = new client.modules.Discord.MessageCollector(message.channel, m => m.author.id == message.author.id, {});
                     collector.on('collect', amount => {
                         msg.delete();
-                        if (!isNan(parseInt(amount))) {
+                        if (!isNaN(parseInt(amount))) {
                             amount = parseInt(amount);
                             if (amount <= db.inventory.find(x => x.id == id).amount && amount > 0) {
                                 return resolve(amount);
