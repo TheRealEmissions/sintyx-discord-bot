@@ -13,7 +13,8 @@ module.exports = class analystabuse {
                 "user_id": message.author.id
             }, (err, db) => {
                 if (err) return console.error(err);
-                let items = require(`../storage`).inventoryItems,
+                let storage = require(`../storage`).inventoryItems;
+                let items = [storage[0], storage[1], storage[6], storage[11], storage[21], storage[29], storage[35]];
                     i = 0;
                 for (let count in items) {
                     if (i >= items.length) {
