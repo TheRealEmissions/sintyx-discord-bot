@@ -15,7 +15,7 @@ module.exports = function startReactionCache(client) {
         let collector = new client.modules.Discord.ReactionCollector(msg, filter, {});
         collector.on('collect', (reaction) => {
             reaction.users.remove(reaction.users.last());
-            if (!msg.guild.roles.find(x => x.name == ("Red") || ("Yellow") || ("Green") || ("Blue") || ("Purple") || ("Black"))) {
+            if (!msg.guild.roles.find(x => x.name == (("Red") || ("Yellow") || ("Green") || ("Blue") || ("Purple") || ("Black")))) {
                 return;
             } else {
                 let redRole = msg.guild.roles.find(x => x.name == "Red"),
@@ -27,7 +27,7 @@ module.exports = function startReactionCache(client) {
                     role;
 
                 reaction.emoji.name == ec['heart'] ? role = redRole : (reaction.emoji.name == ec['yellow_heart'] ? role = yellowRole : (reaction.emoji.name == ec['green_heart'] ? role = greenRole : (reaction.emoji.name == ec['blue_heart'] ? role = blueRole : (reaction.emoji.name == ec['purple_heart'] ? role = purpleRole : role = blackRole))));
-
+                
                 function checkRoles(msg, reaction) {
                     if (msg.guild.member(reaction.users.last()).roles.find(x => x.id == redRole.id)) {
                         msg.guild.member(reaction.users.last()).roles.remove(redRole.id);
