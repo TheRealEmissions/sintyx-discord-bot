@@ -8,6 +8,10 @@ module.exports = mongoose.model(`suggestionsData`, new mongoose.Schema({
         type: String,
         required: true
     },
+    message_id: {
+        type: String,
+        required: true
+    },
     suggestion_desc: {
         type: String,
         required: true
@@ -19,17 +23,15 @@ module.exports = mongoose.model(`suggestionsData`, new mongoose.Schema({
     suggestion_info: [{
         type: {
             type: String,
-            required: true,
-            default: 'PENDING'
+            required: false,
         },
         timestamp: {
             type: Date,
             required: false,
-            default: new Date()
         },
         comment: {
             type: String,
-            required: true
+            required: false
         }
     }]
 }))
