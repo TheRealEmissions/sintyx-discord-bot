@@ -49,7 +49,12 @@ let userProfiles = new modules.mongoose.Schema({
             type: Date,
             required: true
         }
-    }]
+    }],
+    blacklisted: {
+        type: Boolean,
+        required: false,
+        default: false
+    }
 });
 
 module.exports = modules.mongoose.model(`userProfiles`, userProfiles);

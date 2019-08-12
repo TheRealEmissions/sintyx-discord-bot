@@ -103,6 +103,7 @@ module.exports = class blacklist {
                                                                     "user_id": user.id
                                                                 }, (err, db) => {
                                                                     if (err) return console.error(err);
+                                                                    if (!db.blacklisted) db.blacklisted = true;
                                                                     let array = {
                                                                         id: id,
                                                                         type: "Blacklist",
