@@ -14,8 +14,8 @@ class checkBlacklisted {
             this.client.models.userProfiles.findOne({
                 "user_id": this.member.user.id
             }, (err, db) => {
-                if (err) reject(err);
-                if (!db) resolve(false);
+                if (err) return reject(err);
+                if (!db) return resolve(false);
                 if (!db.blacklisted) {
                     db.blacklisted = false;
                     db.save((err) => {

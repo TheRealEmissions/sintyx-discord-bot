@@ -128,16 +128,16 @@ module.exports = (client, message) => {
                 message.channel.send(embed).then((msg) => {
                     message.delete();
                     msg.react(client.storage.emojiCharacters['white_check_mark']).then(() => msg.react(client.storage.emojiCharacters['x']));
-                });
-                let newdb = new client.models.suggestionsData({
-                    reference_id: id,
-                    user_id: message.author.id,
-                    message_id: message.id,
-                    suggestion_desc: message.content,
-                    suggestion_timestamp: new Date()
-                });
-                newdb.save((err) => {
-                    if (err) return console.error(err);
+                    let newdb = new client.models.suggestionsData({
+                        reference_id: id,
+                        user_id: message.author.id,
+                        message_id: msg.id,
+                        suggestion_desc: message.content,
+                        suggestion_timestamp: new Date()
+                    });
+                    newdb.save((err) => {
+                        if (err) return console.error(err);
+                    });
                 });
                 setTimeout(() => {
                     suggestionCooldown.delete(message.author.id)
