@@ -5,5 +5,6 @@ module.exports = {
     supportTickets: require(`./models/supportTickets.js`),
     memberGreetings: require(`./models/memberGreetings.js`),
     channelMutes: require(`./models/channelMutes.js`),
-    userInventories: require(`./models/userInventories.js`)
+    userInventories: require(`./models/userInventories.js`),
+    suggestionsData: require(`./models/suggestionsData`)
 }
