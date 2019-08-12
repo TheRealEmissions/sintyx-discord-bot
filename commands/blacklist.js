@@ -123,6 +123,22 @@ module.exports = class blacklist {
                                                                             .setTitle(`Your blacklist has expired on **${message.guild.name}**!`)
                                                                             .setDescription(`Your previous blacklist on ${message.guild.name} has expired. This means your permissions to the Discord have been restored and you can now chat again! Please do not break the rules again as you will be punished accordingly.`)
                                                                         user.send(embed);
+                                                                        client.models.userProfiles.findOne({
+                                                                            "user_id": user.id
+                                                                        }, (err, db) => {
+                                                                            if (err) return console.error(err);
+                                                                            db.blacklisted = false;
+                                                                            db.save((err) => console.error(err));
+                                                                        })
+                                                                    }).catch(err => {
+                                                                        console.error(err);
+                                                                        client.models.userProfiles.findOne({
+                                                                            "user_id": user.id
+                                                                        }, (err, db) => {
+                                                                            if (err) return console.error(err);
+                                                                            db.blacklisted = false;
+                                                                            db.save((err) => console.error(err));
+                                                                        });
                                                                     });
                                                                 }, client.modules.ms(twoMsg.content));
                                                             }
