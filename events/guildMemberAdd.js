@@ -1,5 +1,6 @@
 module.exports = (client, member) => {
     new welcomeMessage(client, member).run();
+    new checkBlacklisted(client, member).run();
 }
 
 class checkBlacklisted {
