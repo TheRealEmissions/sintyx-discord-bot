@@ -34,7 +34,7 @@ module.exports = class test {
                 await msg.react(ec['black_heart']);
             });*/
 
-            message.channel.send(new client.modules.Discord.MessageEmbed());
+            new client.methods.log(client, message.guild).error(`test`);
 
         } else {
             return;

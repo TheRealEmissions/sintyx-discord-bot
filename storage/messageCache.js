@@ -15,5 +15,8 @@ module.exports = {
     "leaderboard": {
         channel: "598405443844440085",
         msg_id: "598405475884859393"
+    },
+    "logChannel": {
+        id: '610976356288823316'
     }
 }

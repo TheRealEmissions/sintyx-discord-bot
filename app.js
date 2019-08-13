@@ -1,7 +1,8 @@
 const modules = require(`./modules.js`);
 const models = require(`./models.js`);
 const storage = require(`./storage.js`);
-const functions = require(`./functions.js`)
+const functions = require(`./functions.js`);
+const methods = require(`./methods.js`);
 const client = new modules.Discord.Client({
     disableEveryone: false,
     shardCount: 1,
@@ -61,6 +62,7 @@ client.commandHandler = cmdHandler;
 client.storage = storage;
 client.functions = functions;
 client.models = models;
+client.methods = methods;
 client.music = {
     queue: queue,
     YouTube: YouTube
