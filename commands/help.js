@@ -27,7 +27,7 @@ module.exports = class help {
                 }, 30000);
             });
         } else
-        if (categories.indexOf(args[1].toLowerCase().toString()) >= 0) {
+        if (categories.includes(args[1].toLowerCase().toString())) {
             let embed = {
                 embed: {
                     title: `**Help Menu** - ${args[1].charAt(0).toUpperCase() + args[1].slice(1)}`,
