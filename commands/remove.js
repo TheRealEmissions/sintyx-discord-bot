@@ -11,7 +11,7 @@ module.exports = class remove {
         client.models.supportTickets.findOne({
             "channel_id": message.channel.id
         }, (err, db) => {
-            if (err) return console.error(err);
+            if (err) return new client.methods.log(client, message.guild).error(err);
             if (!db) {
                 return message.channel.send(`:x: You can only remove users from Support Tickets!`).then(msg => {
                     setTimeout(() => {

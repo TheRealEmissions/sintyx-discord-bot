@@ -15,7 +15,7 @@ module.exports = class profile {
             client.models.userSettings.findOne({
                 "user_id": user.id
             }, (err2, settingsDB) => {
-                if (err) return console.error(err);
+                if (err) return new client.methods.log(client, message.guild).error(err);
                 if (err2) return console.error(err2);
                 if (!profileDB) {
                     return console.log(`[ERROR] Profile database not found ${new Date()}`)
@@ -79,8 +79,8 @@ module.exports = class profile {
                             msg.edit(embed);
                         } else if (reaction.emoji.name == client.storage.emojiCharacters['x']) {
                             collector.stop();
-                            msg.delete().catch(err => console.error(err));
-                            message.delete().catch(err => console.error(err));
+                            msg.delete().catch(err => new client.methods.log(client, message.guild).error(err));
+                            message.delete().catch(err => new client.methods.log(client, message.guild).error(err));
                         }
                     })
                 });

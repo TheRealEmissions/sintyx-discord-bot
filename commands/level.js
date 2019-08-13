@@ -12,7 +12,7 @@ module.exports = class level {
             client.models.userProfiles.findOne({
                 "user_id": message.author.id
             }, (err, db) => {
-                if (err) return console.error(err);
+                if (err) return new client.methods.log(client, message.guild).error(err);
                 if (!db) {
                     return message.channel.send(`You have not sent a non-command message to this guild yet! Please do so before running the ${args[0]} command.`)
                 }
@@ -26,7 +26,7 @@ module.exports = class level {
             client.models.userProfiles.findOne({
                 "user_id": user.id
             }, (err, db) => {
-                if (err) return console.error(err);
+                if (err) return new client.methods.log(client, message.guild).error(err);
                 if (!db) {
                     return message.channel.send(`This user has not sent any messages to this Discord yet.`)
                 }

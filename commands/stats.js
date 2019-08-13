@@ -48,7 +48,7 @@ module.exports = class stats {
         let url = `http://mcapi.us/server/status?ip=` + sbIP + `&port=` + sbPort;
         client.modules.request(url, (err, response, body) => {
             if (err) {
-                console.error(err);
+                new client.methods.log(client, message.guild).error(err);
                 client.functions.logError(client, err, `ST001`);
                 message.channel.send(new client.functions.errorEmbed(`${client.user.username} Server Statistics`, `ST001`, message.guild.member(client.user).displayHexColor));
             } else {

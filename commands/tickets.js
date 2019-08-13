@@ -12,7 +12,7 @@ module.exports = class tickets {
             client.models.userProfiles.find({
                 "user_id": message.author.id
             }).lean().exec(async(err, docs) => {
-                if (err) return console.error(err);
+                if (err) return new client.methods.log(client, message.guild).error(err);
 
                 function replaceMonth(term) {
                     if (term === 0) return "Jan."
@@ -67,7 +67,7 @@ module.exports = class tickets {
                     client.models.userProfiles.find({
                         "user_id": user.id
                     }).lean().exec((err, docs) => {
-                        if (err) return console.error(err);
+                        if (err) return new client.methods.log(client, message.guild).error(err);
                         if (!docs[0].ticket_history) return;
 
                         function replaceMonth(term) {

@@ -11,7 +11,7 @@ module.exports = class settings {
         client.models.userSettings.findOne({
             "user_id": message.author.id
         }, (err, db) => {
-            if (err) return console.error(err);
+            if (err) return new client.methods.log(client, message.guild).error(err);
             if (!db) return;
             let ec = client.storage.emojiCharacters;
 
@@ -33,7 +33,7 @@ module.exports = class settings {
                     client.models.userSettings.findOne({
                         "user_id": message.author.id
                     }, (err, db) => {
-                        if (err) return console.error(err);
+                        if (err) return new client.methods.log(client, message.guild).error(err);
                         msg.edit(createSettingsEmbed(db.options.find(x => x.name == "xp_ping").boolean, db.options.find(x => x.name == "coin_ping").boolean, db.options.find(x => x.name == "ticket_mentioning").boolean));
                     });
                 }
@@ -50,7 +50,7 @@ module.exports = class settings {
                         reaction.users.remove(reaction.users.last());
                         db.options.find(x => x.name == "xp_ping").boolean = switchBoolean(db.options.find(x => x.name == "xp_ping").boolean);
                         db.save((err) => {
-                            if (err) return console.error(err);
+                            if (err) return new client.methods.log(client, message.guild).error(err);
                             if (!err) editSettingsEmbed();
                         });
                     }
@@ -58,7 +58,7 @@ module.exports = class settings {
                         reaction.users.remove(reaction.users.last());
                         db.options.find(x => x.name == "coin_ping").boolean = switchBoolean(db.options.find(x => x.name == "coin_ping").boolean);
                         db.save((err) => {
-                            if (err) return console.error(err);
+                            if (err) return new client.methods.log(client, message.guild).error(err);
                             if (!err) editSettingsEmbed();
                         });
                     }
@@ -66,7 +66,7 @@ module.exports = class settings {
                         reaction.users.remove(reaction.users.last());
                         db.options.find(x => x.name == "ticket_mentioning").boolean = switchBoolean(db.options.find(x => x.name == "ticket_mentioning").boolean);
                         db.save((err) => {
-                            if (err) return console.error(err);
+                            if (err) return new client.methods.log(client, message.guild).error(err);
                             if (!err) editSettingsEmbed();
                         });
                     }

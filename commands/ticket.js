@@ -24,7 +24,7 @@ module.exports = class ticket {
         client.models.supportTickets.findOne({
             "reference_id": args[2]
         }, (err, db) => {
-            if (err) return console.error(err);
+            if (err) return new client.methods.log(client, message.guild).error(err);
             if (!db) {
                 return message.channel.send(`The reference ID you have provided does not match a support ticket.`);
             }
@@ -50,7 +50,7 @@ module.exports = class ticket {
                 message.channel.send({
                     files: [`./commands/${db.channel_id}.json`]
                 }).then(() => {
-                    client.modules.fs.unlink(`./commands/${db.channel_id}.json`, (err) => console.error(err));
+                    client.modules.fs.unlink(`./commands/${db.channel_id}.json`, (err) => new client.methods.log(client, message.guild).error(err));
                 });
             } else {
                 return message.channel.send(`You do not have permission to view the information for this ticket.`);

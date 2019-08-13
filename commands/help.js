@@ -38,7 +38,7 @@ module.exports = class help {
             }
             message.channel.send(embed).then(msg => {
                 client.modules.fs.readdir(`./commands/`, async (err, files) => {
-                    if (err) return console.error(err);
+                    if (err) return new client.methods.log(client, message.guild).error(err);
                     files.forEach(file => {
                         if (!file.endsWith(".js")) return;
                         file = require(`./${file}`);

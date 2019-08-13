@@ -13,7 +13,7 @@ module.exports = class suggestionaccept {
         client.models.suggestionsData.findOne({
             "reference_id": args[1]
         }, (err, db) => {
-            if (err) return console.error(err);
+            if (err) return new client.methods.log(client, message.guild).error(err);
             if (!db) return message.channel.send(`The suggestion with the reference ID **${args[1]}** does not exist!`);
             message.channel.send(new client.modules.Discord.MessageEmbed()
                 .setColor(message.guild.member(client.user).displayHexColor)
@@ -34,10 +34,10 @@ module.exports = class suggestionaccept {
         client.models.suggestionsData.findOne({
             "reference_id": id
         }, async (err, db) => {
-            if (err) return console.error(err);
+            if (err) return new client.methods.log(client, message.guild).error(err);
             let user = await client.users.fetch(db.user_id);
             let channel = await message.guild.channels.find(x => x.name == "suggestions");
-            let msg = await channel.messages.fetch(db.message_id).catch(err => console.error(err));
+            let msg = await channel.messages.fetch(db.message_id).catch(err => new client.methods.log(client, message.guild).error(err));
             msg.delete();
             message.guild.channels.find(x => x.name == "accepted").send(new client.modules.Discord.MessageEmbed()
                 .setColor(message.guild.member(client.user).displayHexColor)
@@ -56,7 +56,7 @@ module.exports = class suggestionaccept {
                 timestamp: new Date(),
                 comment: comment
             });
-            db.save((err) => console.error(err));
+            db.save((err) => new client.methods.log(client, message.guild).error(err));
         })
     }
 }

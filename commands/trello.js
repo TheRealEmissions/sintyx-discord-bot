@@ -80,7 +80,7 @@ module.exports = class trello {
                                                 embed_task: taskMessage
                                             });
                                             newCard.save(function (err) {
-                                                if (err) return console.error(err);
+                                                if (err) return new client.methods.log(client, message.guild).error(err);
                                                 msg.react(client.storage.emojiCharacters['thumbs_up']);
                                                 client.functions.startTrelloCollector(client, 1, _cardID);
                                             });
@@ -98,7 +98,7 @@ module.exports = class trello {
                         });
                     });
                 });
-            }).catch(err => console.error(err));
+            }).catch(err => new client.methods.log(client, message.guild).error(err));
         }
         // edit system
         if (args[1].toString() == "edit") {
@@ -108,7 +108,7 @@ module.exports = class trello {
                 client.models.trelloCards.findOne({
                     "card_id": args[2]
                 }, (err, db) => {
-                    if (err) return console.error(err);
+                    if (err) return new client.methods.log(client, message.guild).error(err);
                     if (!db) {
                         message.channel.send("This card ID does not exist! Please check the card ID again.");
                     } else {
@@ -132,7 +132,7 @@ module.exports = class trello {
                                     });
                                     msgCollector.on('collect', async (titleMessage) => {
                                         db.embed_title = titleMessage.content;
-                                        db.save((err) => console.error(err));
+                                        db.save((err) => new client.methods.log(client, message.guild).error(err));
                                         let msg = await client.channels.find(x => x.id == (Boolean(db.card_stage == 1) ? client.storage.messageCache['trelloChannels'].stageOne : (Boolean(db.card_stage == 2) ? client.storage.messageCache['trelloChannels'].stageTwo : (Boolean(db.card_stage == 3) ? client.storage.messageCache['trelloChannels'].stageThree : client.storage.messageCache['trelloChannels'].stageFour)))).messages.fetch(db.message_id);
                                         let embed = new client.modules.Discord.MessageEmbed()
                                             .setTitle(`**${db.card_id}** - ${titleMessage.content}`)
@@ -143,7 +143,7 @@ module.exports = class trello {
                                                 .setDescription(`${client.storage.emojiCharacters['white_check_mark']} Updated the **title** to: ` + "`" + titleMessage.content + "`")
                                             origMsg.edit(confirmed);
                                             titleMessage.delete();
-                                        }).catch(err => console.error(err));
+                                        }).catch(err => new client.methods.log(client, message.guild).error(err));
                                     });
                                 }
                                 if (wizardMessage.toString() == "description") {
@@ -157,7 +157,7 @@ module.exports = class trello {
                                     });
                                     msgCollector.on('collect', async (descMessage) => {
                                         db.embed_desc = descMessage.content;
-                                        db.save((err) => console.error(err));
+                                        db.save((err) => new client.methods.log(client, message.guild).error(err));
                                         let msg = await client.channels.find(x => x.id == (Boolean(db.card_stage == 1) ? client.storage.messageCache['trelloChannels'].stageOne : (Boolean(db.card_stage == 2) ? client.storage.messageCache['trelloChannels'].stageTwo : (Boolean(db.card_stage == 3) ? client.storage.messageCache['trelloChannels'].stageThree : client.storage.messageCache['trelloChannels'].stageFour)))).messages.fetch(db.message_id);
                                         let embed = new client.modules.Discord.MessageEmbed()
                                             .setTitle(`**${db.card_id}** - ${db.embed_title}`)
@@ -168,7 +168,7 @@ module.exports = class trello {
                                                 .setDescription(`${client.storage.emojiCharacters['white_check_mark']} Updated the **description** to: ` + "`" + descMessage.content + "`")
                                             origMsg.edit(confirmed);
                                             descMessage.delete();
-                                        }).catch(err => console.error(err));
+                                        }).catch(err => new client.methods.log(client, message.guild).error(err));
                                     });
                                 }
                                 if (wizardMessage.toString() == "task") {
@@ -182,7 +182,7 @@ module.exports = class trello {
                                     });
                                     msgCollector.on('collect', async (taskMessage) => {
                                         db.embed_task = taskMessage.content;
-                                        db.save((err) => console.error(err));
+                                        db.save((err) => new client.methods.log(client, message.guild).error(err));
                                         let msg = await client.channels.find(x => x.id == (Boolean(db.card_stage == 1) ? client.storage.messageCache['trelloChannels'].stageOne : (Boolean(db.card_stage == 2) ? client.storage.messageCache['trelloChannels'].stageTwo : (Boolean(db.card_stage == 3) ? client.storage.messageCache['trelloChannels'].stageThree : client.storage.messageCache['trelloChannels'].stageFour)))).messages.fetch(db.message_id);
                                         let embed = new client.modules.Discord.MessageEmbed()
                                             .setTitle(`**${db.card_id}** - ${db.embed_title}`)
@@ -193,7 +193,7 @@ module.exports = class trello {
                                                 .setDescription(`${client.storage.emojiCharacters['white_check_mark']} Updated the **task** to: ` + "`" + taskMessage.content + "`")
                                             origMsg.edit(confirmed);
                                             taskMessage.delete();
-                                        }).catch(err => console.error(err));
+                                        }).catch(err => new client.methods.log(client, message.guild).error(err));
                                     });
                                 }
                                 if (wizardMessage.toString() == "stage") {
@@ -229,7 +229,7 @@ module.exports = class trello {
                                         let origMessage = await client.channels.find(x => x.id == (Boolean(db.card_stage == 1) ? client.storage.messageCache['trelloChannels'].stageOne : (Boolean(db.card_stage == 2) ? client.storage.messageCache['trelloChannels'].stageTwo : (Boolean(db.card_stage == 3) ? client.storage.messageCache['trelloChannels'].stageThree : client.storage.messageCache['trelloChannels'].stageFour)))).messages.fetch(db.message_id);
                                         origMessage.delete();
                                         db.card_stage = stageMessage.content;
-                                        db.save((err) => console.error(err));
+                                        db.save((err) => new client.methods.log(client, message.guild).error(err));
                                         let channel = await client.channels.find(x => x.id == (Boolean(stageMessage.content == 1) ? client.storage.messageCache['trelloChannels'].stageOne : (Boolean(stageMessage.content == 2) ? client.storage.messageCache['trelloChannels'].stageTwo : (Boolean(stageMessage.content == 3) ? client.storage.messageCache['trelloChannels'].stageThree : client.storage.messageCache['trelloChannels'].stageFour))));
                                         let embed = new client.modules.Discord.MessageEmbed()
                                             .setTitle(`**${db.card_id}** - ${db.embed_title}`)
@@ -238,7 +238,7 @@ module.exports = class trello {
                                         let reaction = Boolean(stageMessage.content == 1) ? client.storage.emojiCharacters['thumbs_up'] : (Boolean(stageMessage.content == 2) ? client.storage.emojiCharacters['double_arrow_forward'] : (Boolean(stageMessage.content == 3) ? client.storage.emojiCharacters['white_check_mark'] : null))
                                         channel.send(embed).then(msg => {
                                             db.message_id = msg.id;
-                                            db.save((err) => console.error(err));
+                                            db.save((err) => new client.methods.log(client, message.guild).error(err));
                                             setTimeout(() => {
                                                 if (typeof reaction !== null) {
                                                     msg.react(reaction);
@@ -261,14 +261,14 @@ module.exports = class trello {
             client.models.trelloCards.findOne({
                 "card_id": args[2]
             }, async (err, db) => {
-                if (err) return console.error(err);
+                if (err) return new client.methods.log(client, message.guild).error(err);
                 if (!db) return message.channel.send(`That card could not be found.`);
                 let msg = await client.channels.find(x => x.id == (Boolean(db.card_stage == 1) ? client.storage.messageCache['trelloChannels'].stageOne : (Boolean(db.card_stage == 2) ? client.storage.messageCache['trelloChannels'].stageTwo : (Boolean(db.card_stage == 3) ? client.storage.messageCache['trelloChannels'].stageThree : client.storage.messageCache['trelloChannels'].stageFour)))).messages.fetch(db.message_id);
                 msg.delete();
                 client.models.trelloCards.findOneAndRemove({
                     "card_id": args[2]
                 }, (err, offer) => {
-                    if (err) return console.error(err);
+                    if (err) return new client.methods.log(client, message.guild).error(err);
                     message.channel.send(`Removed card **${args[2]}** from their respective channel and database.`)
                 });
             })

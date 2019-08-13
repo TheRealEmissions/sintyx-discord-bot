@@ -40,13 +40,13 @@ module.exports = class mutechat {
            client.models.channelMutes.findOne({
                "channel_id": message.channel.id
            }, (err, db) => {
-               if (err) return console.error(err);
+               if (err) return new client.methods.log(client, message.guild).error(err);
                if (!db) {
                    let newdb = new client.models.channelMutes({
                        channel_id: message.channel.id,
                        muted: true
                    });
-                   newdb.save((err) => console.error(err));
+                   newdb.save((err) => new client.methods.log(client, message.guild).error(err));
                    this.muteChannel(message.channel, message.guild);
                    let reason;
                    if (args[1] == (("on") || ("off")) && args[2]) {
@@ -82,7 +82,7 @@ module.exports = class mutechat {
                          .addField(`Reason:`, "```" + reason + "```", true)
                         );
                         db.boolean = true;
-                        db.save((err) => console.error(err));
+                        db.save((err) => new client.methods.log(client, message.guild).error(err));
                         return;
                     }
                     if (args[1].toLowerCase() == "off") {
@@ -93,7 +93,7 @@ module.exports = class mutechat {
                             .setDescription(`**The channel has been unmuted.** You may chat again and add reactions to messages.`)
                         );
                         db.boolean = false;
-                        db.save((err) => console.error(err));
+                        db.save((err) => new client.methods.log(client, message.guild).error(err));
                         return;
                     }
                     if (db.boolean == true) {
@@ -103,7 +103,7 @@ module.exports = class mutechat {
                             .setDescription(`**The channel has been unmuted.** You may chat again and add reactions to messages.`)
                         );
                         db.boolean = false;
-                        db.save((err) => console.error(err));
+                        db.save((err) => new client.methods.log(client, message.guild).error(err));
                     } else {
                         this.muteChannel(message.channel, message.guild);
                         let reason = args[2] ? message.content.slice(args[0].length + args[1].length + 2) : args[1];
@@ -115,7 +115,7 @@ module.exports = class mutechat {
                          .addField(`Reason:`, "```" + reason + "```", true)
                         );
                         db.boolean = true;
-                        db.save((err) => console.error(err));
+                        db.save((err) => new client.methods.log(client, message.guild).error(err));
                     }
                } else {
                    if (db.boolean == true) {
@@ -125,7 +125,7 @@ module.exports = class mutechat {
                         .setDescription(`**The channel has been unmuted.** You may chat again and add reactions to messages.`)
                     );
                     db.boolean = false;
-                    db.save((err) => console.error(err));
+                    db.save((err) => new client.methods.log(client, message.guild).error(err));
                    } else {
                     this.muteChannel(message.channel, message.guild);
                     message.channel.send(new client.modules.Discord.MessageEmbed()
@@ -136,7 +136,7 @@ module.exports = class mutechat {
                      .addField(`Reason:`, "```" + 'No reason provided' + "```", true)
                     );
                     db.boolean = true;
-                    db.save((err) => console.error(err));
+                    db.save((err) => new client.methods.log(client, message.guild).error(err));
                    }
                }
                }

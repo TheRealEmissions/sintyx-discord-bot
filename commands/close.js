@@ -27,14 +27,14 @@ module.exports = class close {
                     client.models.supportTickets.findOne({
                         "channel_id": message.channel.id
                     }, (err, db) => {
-                        if (err) return console.error(err);
+                        if (err) return new client.methods.log(client, message.guild).error(err);
                         db.closure_id = message.author.id;
                         db.closure_reason = reason;
-                        db.save((err) => console.error(err));
+                        db.save((err) => new client.methods.log(client, message.guild).error(err));
                         client.models.userProfiles.findOne({
                             "user_id": db.user_id
                         }, (err, datab) => {
-                            if (err) return console.error(err);
+                            if (err) return new client.methods.log(client, message.guild).error(err);
                             if ((!datab.open_tickets) || (!datab.open_tickets.find(x => x.reference_id == db.reference_id))) {
                                 return;
                             } else if (datab.open_tickets.find(x => x.reference_id == db.reference_id)) {
@@ -47,7 +47,7 @@ module.exports = class close {
                                         }
                                     }
                                 }, (err, model) => {
-                                    if (err) return console.error(err);
+                                    if (err) return new client.methods.log(client, message.guild).error(err);
                                 });
                             }
                         })

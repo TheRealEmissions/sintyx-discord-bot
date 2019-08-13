@@ -22,7 +22,7 @@ module.exports = class punishments {
             client.models.userProfiles.findOne({
                 "user_id": message.author.id
             }, (err, db) => {
-                if (err) return console.error(err);
+                if (err) return new client.methods.log(client, message.guild).error(err);
                 if (!db) return;
                 if (!db.punishment_history) {
                     let embed = new client.modules.Discord.MessageEmbed()
@@ -33,7 +33,7 @@ module.exports = class punishments {
                 client.models.userProfiles.find({
                     "user_id": message.author.id
                 }).lean().exec((err, docs) => {
-                    if (err) return console.error(err);
+                    if (err) return new client.methods.log(client, message.guild).error(err);
                     let embed = new client.modules.Discord.MessageEmbed()
                         .setTitle(`List of Punishments for **${message.author.tag}**:`)
                         .setColor(message.guild.member(client.user).displayHexColor)
@@ -48,7 +48,7 @@ module.exports = class punishments {
                 client.models.userProfiles.find({
                     "user_id": message.author.id
                 }).lean().exec((err, docs) => {
-                    if (err) return console.error(err);
+                    if (err) return new client.methods.log(client, message.guild).error(err);
                     if (docs[0].punishment_history.filter(x => x.id == args[1]).length > 0) {
                         let entry = docs[0].punishment_history.filter(x => x.id == args[1]);
                         let embed;
@@ -81,7 +81,7 @@ module.exports = class punishments {
                         client.models.userProfiles.find({
                             "user_id": message.mentions.users.first().id
                         }).lean().exec((err, docs) => {
-                            if (err) return console.error(err);
+                            if (err) return new client.methods.log(client, message.guild).error(err);
                             if (docs[0].punishment_history.filter(x => x.id == args[2]).length > 0) {
                                 let entry = docs[0].punishment_history.filter(x => x.id == args[2]);
                                 let embed;
@@ -112,13 +112,13 @@ module.exports = class punishments {
                         client.models.userProfiles.findOne({
                             "user_id": message.mentions.users.first().id
                         }, (err, db) => {
-                            if (err) return console.error(err);
+                            if (err) return new client.methods.log(client, message.guild).error(err);
                             if (!db) return;
                             client.models.userProfiles.find({
                                 "user_id": message.mentions.users.first().id
                             }).lean().exec((err, docs) => {
                                 if (docs[0].punishment_history) {
-                                    if (err) return console.error(err);
+                                    if (err) return new client.methods.log(client, message.guild).error(err);
                                     let embed = new client.modules.Discord.MessageEmbed()
                                         .setTitle(`List of Punishments for **${message.mentions.users.first().tag}**:`)
                                         .setColor(message.guild.member(client.user).displayHexColor)

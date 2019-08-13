@@ -32,7 +32,7 @@ module.exports = class urban {
         message.channel.send(startMsg).then(msg => {
             client.modules.request(`https://api.urbandictionary.com/v0/define?${query}`, (err, response, body) => {
                 if (err) {
-                    console.error(err);
+                    new client.methods.log(client, message.guild).error(err);
                     client.functions.logError(client, err, `U003`)
                     message.channel.send(new client.functions.errorEmbed(`Urban Dictionary`, `U003`, message.guild.member(client.user).displayHexColor));
                 }
@@ -59,7 +59,7 @@ module.exports = class urban {
                         .addField(`Thumbs Down`, body.list[0].thumbs_down + " " + client.storage.emojiCharacters.thumbs_down, true)
                         .setFooter(`Processed your result in ${time}ms`)
                     msg.edit(embed).catch(err => {
-                        console.error(err);
+                        new client.methods.log(client, message.guild).error(err);
                         client.functions.logError(client, err, `U002`);
                         msg.edit(new client.functions.errorEmbed(`Urban Dictionary`, `U002`, message.guild.member(client.user).displayHexColor));
                     });

@@ -12,7 +12,7 @@ module.exports = class analystabuse {
             client.models.userInventories.findOne({
                 "user_id": message.author.id
             }, (err, db) => {
-                if (err) return console.error(err);
+                if (err) return new client.methods.log(client, message.guild).error(err);
                 let storage = require(`../storage`).inventoryItems;
                 let items = [storage[0], storage[1], storage[6], storage[11], storage[21], storage[29], storage[35]];
                     i = 0;
@@ -32,7 +32,7 @@ module.exports = class analystabuse {
                     i++;
                 }
                 function end() {
-                    db.save((err) => console.error(err));
+                    db.save((err) => new client.methods.log(client, message.guild).error(err));
                 }
             });
         }

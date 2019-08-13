@@ -56,14 +56,14 @@ module.exports = class inventory {
         client.models.userInventories.findOne({
             "user_id": message.author.id
         }, (err, db) => {
-            if (err) return console.error(err);
+            if (err) return new client.methods.log(client, message.guild).error(err);
             if (!db) {
                 let newdb = new client.models.userInventories({
                     user_id: message.author.id,
                     inventory: []
                 });
                 newdb.save((err) => {
-                    if (err) return console.error(err);
+                    if (err) return new client.methods.log(client, message.guild).error(err);
                 });
                 return message.channel.send("We found that you did not have an inventory... so we created you one. Please run the command again.");
             }
@@ -293,9 +293,9 @@ module.exports = class inventory {
                     client.models.userInventories.findOne({
                         "user_id": message.author.id
                     }, (err, db) => {
-                       if (err) return console.error(err);
+                       if (err) return new client.methods.log(client, message.guild).error(err);
                        db.inventory.find(x => x.id).amount = db.inventory.find(x => x.id).amount - amount;
-                       db.save((err) => console.error(err));
+                       db.save((err) => new client.methods.log(client, message.guild).error(err));
                        client.functions.inventoryCheckAmount(client, id, message.author.id);
                        message.channel.send(new client.modules.Discord.MessageEmbed()
                             .setColor(message.guild.member(client.user).displayHexColor)
@@ -306,11 +306,11 @@ module.exports = class inventory {
                     return;
                 }
             }).catch(err => {
-                console.error(err);
+                new client.methods.log(client, message.guild).error(err);
                 message.channel.send(`We cannot complete the deletion process! Error: \`\`\`${err}\`\`\``);
             });
         }).catch(err => {
-            console.error(err);
+            new client.methods.log(client, message.guild).error(err);
             message.channel.send(`We cannot complete the deletion process! Error: \`\`\`${err}\`\`\``);
         });
     }
@@ -373,25 +373,25 @@ module.exports = class inventory {
                         client.models.userInventories.findOne({
                             "user_id": message.author.id
                         }, (err, db) => {
-                            if (err) return console.error(err);
+                            if (err) return new client.methods.log(client, message.guild).error(err);
                             db.inventory.find(x => x.id == id).amount = db.inventory.find(x => x.id == id).amount - amount;
-                            db.save((err) => console.error(err));
+                            db.save((err) => new client.methods.log(client, message.guild).error(err));
                             client.functions.inventoryCheckAmount(client, id, message.author.id);
                         });
                         // add to new database
                         client.models.userInventories.findOne({
                             "user_id": usr.id
                         }, (err, db) => {
-                            if (err) return console.error(err);
+                            if (err) return new client.methods.log(client, message.guild).error(err);
                             if (db.inventory.find(x => x.id)) {
                                 db.inventory.find(x => x.id).amount += amount;
-                                db.save((err) => console.error(err));
+                                db.save((err) => new client.methods.log(client, message.guild).error(err));
                             } else {
                                 db.inventory.push({
                                     id: id,
                                     amount: amount
                                 });
-                                db.save((err) => console.error(err));
+                                db.save((err) => new client.methods.log(client, message.guild).error(err));
                             }
                         });
                         message.channel.send(new client.modules.Discord.MessageEmbed()
@@ -407,11 +407,11 @@ module.exports = class inventory {
                     }
                 })
             }).catch(err => {
-                console.error(err);
+                new client.methods.log(client, message.guild).error(err);
                 message.channel.send(`We cannot complete the sending process! Error:\n\`\`\`${err}\`\`\``);
             });
         }).catch(err => {
-            console.error(err);
+            new client.methods.log(client, message.guild).error(err);
             message.channel.send(`We cannot complete the sending process! Error:\n\`\`\`${err}\`\`\``);
         });
     }
@@ -495,20 +495,20 @@ module.exports = class inventory {
                         client.models.userInventories.findOne({
                             "user_id": message.author.id
                         }, (err, db) => {
-                            if (err) return console.error(err);
+                            if (err) return new client.methods.log(client, message.guild).error(err);
                             message.channel.send(new client.modules.Discord.MessageEmbed()
                                 .setColor(message.guild.member(client.user).displayHexColor)
                                 .setDescription(`> Claimed [${this.resolveToName(id)}](https://sintyx.com "${this.resolveToDesc(id)}")\nYou have been awarded the ${this.items.find(x => x.id == id).rewards[0].role_name} role!\nYou have ${parseInt(db.inventory.find(x => x.id == id).amount) - 1} of this item left in your inventory.`)
                             );
                             db.inventory.find(x => x.id == id).amount = parseInt(db.inventory.find(x => x.id == id).amount) - 1;
                             db.save((err) => {
-                                if (err) return console.error(err);
+                                if (err) return new client.methods.log(client, message.guild).error(err);
                                 client.functions.inventoryCheckAmount(client, id, message.author.id);
                             });
                         });
                     }).catch(err => {
                         message.channel.send(`Unfortunately, you cannot claim this item:\n\`\`\`${err}\`\`\``);
-                        console.error(err);
+                        new client.methods.log(client, message.guild).error(err);
                     });
                 } else {
                     return;
@@ -546,27 +546,27 @@ module.exports = class inventory {
         client.models.userInventories.findOne({
             "user_id": message.author.id
         }, (err, db) => {
-            if (err) return console.error(err);
+            if (err) return new client.methods.log(client, message.guild).error(err);
             message.channel.send(new client.modules.Discord.MessageEmbed()
                 .setColor(message.guild.member(client.user).displayHexColor)
                 .setDescription(`> Claimed ${this.resolveToEmbedName(id)}\nYou have been awarded ${this.items.find(x => x.id == id).reward[0].amount} ${type == 'COIN' ? (this.items.find(x => x.id == id).reward[0].amount > 1 ? 'Coins' : 'Coin') : 'XP'}\nYou have ${parseInt(db.inventory.find(x => x.id == id).amount) - 1} of this item left in your inventory.`)
             );
             db.inventory.find(x => x.id == id).amount = parseInt(db.inventory.find(x => x.id == id).amount) - 1;
             db.save((err) => {
-                if (err) return console.error(err);
+                if (err) return new client.methods.log(client, message.guild).error(err);
                 client.functions.inventoryCheckAmount(client, id, message.author.id);
             });
             client.models.userProfiles.findOne({
                 "user_id": message.author.id
             }, (err, db) => {
-                if (err) return console.error(err);
+                if (err) return new client.methods.log(client, message.guild).error(err);
                 if (type == 'XP') {
                     db.user_xp += this.items.find(x => x.id == id).reward[0].amount;
                 }
                 if (type == 'COIN') {
                     db.user_coins += this.items.find(x => x.id == id).reward[0].amount;
                 }
-                db.save((err) => console.error(err));
+                db.save((err) => new client.methods.log(client, message.guild).error(err));
             });
         })
     }
@@ -616,7 +616,7 @@ module.exports = class inventory {
                 client.models.userInventories.findOne({
                     "user_id": message.author.id
                 }, (err, db) => {
-                    if (err) return console.error(err);
+                    if (err) return new client.methods.log(client, message.guild).error(err);
                     message.channel.send(new client.modules.Discord.MessageEmbed()
                         .setColor(message.guild.member(client.user).displayHexColor)
                         .setDescription(`> You opened a ${this.resolveToEmbedName(id)} and received: **${rewards.find(x => x.id == reaction.emoji.name).reward} ${type == 'COIN' ? (rewards.find(x => x.id == reaction.emoji.name).reward > 1 ? 'Coins' : 'Coin') : 'XP'}**
@@ -627,18 +627,18 @@ module.exports = class inventory {
                     client.models.userProfiles.findOne({
                         "user_id": message.author.id
                     }, (err, db) => {
-                        if (err) return console.error(err);
+                        if (err) return new client.methods.log(client, message.guild).error(err);
                         if (type == 'XP') {
                             db.user_xp += rewards.find(x => x.id == reaction.emoji.name).reward;
                         }
                         if (type == 'COIN') {
                             db.user_coins += rewards.find(x => x.id == reaction.emoji.name).reward;
                         }
-                        db.save((err) => console.error(err));
+                        db.save((err) => new client.methods.log(client, message.guild).error(err));
                     });
                     db.inventory.find(x => x.id == id).amount = db.inventory.find(x => x.id == id).amount - 1;
                     db.save((err) => {
-                        if (err) return console.error(err);
+                        if (err) return new client.methods.log(client, message.guild).error(err);
                         client.functions.inventoryCheckAmount(client, id, message.author.id);
                     });
                 })

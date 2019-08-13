@@ -33,7 +33,7 @@ module.exports = class leaderboard {
                     function leaderboardFunc() {
                         return new Promise(async (resolve, reject) => {
                             await client.models.userProfiles.find({}).sort(`-user_xp`).exec((err, result) => {
-                                if (err) return reject(console.error(err));
+                                if (err) return reject(new client.methods.log(client, message.guild).error(err));
                                 if (!result.length) return resolve(false);
                                 return resolve(result);
                             });
@@ -73,7 +73,7 @@ module.exports = class leaderboard {
                     function leaderboardFunc() {
                         return new Promise(async (resolve, reject) => {
                             await client.models.userProfiles.find({}).sort(`-user_coins`).exec((err, result) => {
-                                if (err) return reject(console.error(err));
+                                if (err) return reject(new client.methods.log(client, message.guild).error(err));
                                 if (!result.length) return resolve(false);
                                 return resolve(result);
                             });
@@ -109,7 +109,7 @@ module.exports = class leaderboard {
                         }
                     }
                     client.models.userProfiles.find({}).lean().exec(async (err, docs) => {
-                        if (err) return console.error(err);
+                        if (err) return new client.methods.log(client, message.guild).error(err);
                         let obj = {
                             users: []
                         };
@@ -153,7 +153,7 @@ module.exports = class leaderboard {
                     function leaderboardFunc() {
                         return new Promise(async (resolve, reject) => {
                             await client.models.userProfiles.find({}).sort(`-message_count`).exec((err, result) => {
-                                if (err) return reject(console.error(err));
+                                if (err) return reject(new client.methods.log(client, message.guild).error(err));
                                 if (!result.length) return reject(false);
                                 return resolve(result);
                             });

@@ -35,11 +35,11 @@ module.exports = class support {
                                 channel_id: channel.id,
                                 channel_reason: reason
                             });
-                            newdb.save((err) => console.error(err));
+                            newdb.save((err) => new client.methods.log(client, message.guild).error(err));
                             client.models.userProfiles.findOne({
                                 "user_id": message.author.id
                             }, (err, db) => {
-                                if (err) return console.error(err);
+                                if (err) return new client.methods.log(client, message.guild).error(err);
                                 db.open_tickets.push({
                                     reference_id: randomString
                                 });
@@ -47,7 +47,7 @@ module.exports = class support {
                                     reference_id: randomString,
                                     timestamp: new Date()
                                 });
-                                db.save((err) => console.error(err));
+                                db.save((err) => new client.methods.log(client, message.guild).error(err));
                             })
                             channel.overwritePermissions({
                                 permissionOverwrites: [{
@@ -89,10 +89,10 @@ module.exports = class support {
         client.models.userProfiles.findOne({
             "user_id": message.author.id
         }, (err, db) => {
-            if (err) return console.error(err);
+            if (err) return new client.methods.log(client, message.guild).error(err);
             if (!db.open_tickets) {
                 db.open_tickets = [];
-                db.save((err) => console.error(err));
+                db.save((err) => new client.methods.log(client, message.guild).error(err));
             } else {
                 if (db.open_tickets.length === 5) {
                     return message.channel.send(`You have too many open tickets! Try closing some before continuing.`);

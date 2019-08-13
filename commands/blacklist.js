@@ -102,7 +102,7 @@ module.exports = class blacklist {
                                                                 client.models.userProfiles.findOne({
                                                                     "user_id": user.id
                                                                 }, (err, db) => {
-                                                                    if (err) return console.error(err);
+                                                                    if (err) return new client.methods.log(client, message.guild).error(err);
                                                                     if (!db.blacklisted) db.blacklisted = true;
                                                                     let array = {
                                                                         id: id,
@@ -113,7 +113,7 @@ module.exports = class blacklist {
                                                                         duration: twoMsg.content.toLowerCase() == "perm" ? "Permanent" : twoMsg.content
                                                                     }
                                                                     db.punishment_history.push(array);
-                                                                    db.save((err) => console.error(err));
+                                                                    db.save((err) => new client.methods.log(client, message.guild).error(err));
                                                                 })
                                                             });
                                                             if (twoMsg.content.toLowerCase() !== "perm") {
@@ -126,18 +126,18 @@ module.exports = class blacklist {
                                                                         client.models.userProfiles.findOne({
                                                                             "user_id": user.id
                                                                         }, (err, db) => {
-                                                                            if (err) return console.error(err);
+                                                                            if (err) return new client.methods.log(client, message.guild).error(err);
                                                                             db.blacklisted = false;
-                                                                            db.save((err) => console.error(err));
+                                                                            db.save((err) => new client.methods.log(client, message.guild).error(err));
                                                                         })
                                                                     }).catch(err => {
-                                                                        console.error(err);
+                                                                        new client.methods.log(client, message.guild).error(err);
                                                                         client.models.userProfiles.findOne({
                                                                             "user_id": user.id
                                                                         }, (err, db) => {
-                                                                            if (err) return console.error(err);
+                                                                            if (err) return new client.methods.log(client, message.guild).error(err);
                                                                             db.blacklisted = false;
-                                                                            db.save((err) => console.error(err));
+                                                                            db.save((err) => new client.methods.log(client, message.guild).error(err));
                                                                         });
                                                                     });
                                                                 }, client.modules.ms(twoMsg.content));

@@ -102,13 +102,13 @@ module.exports = class play {
                             errors: ['time']
                         });
                     } catch (err) {
-                        console.error(err);
+                        new client.methods.log(client, message.guild).error(err);
                         return message.channel.send(`No or invalid value sent. I have cancelled the video selection.`);
                     }
                     const videoIndex = parseInt(response.first().content);
                     var video = await client.music.YouTube.getVideoByID(videos[videoIndex - 1].id);
                 } catch (err) {
-                    console.error(err);
+                    new client.methods.log(client, message.guild).error(err);
                     return message.channel.send(`${client.storage.emojiCharacters['x']} Unfortunately, I could not obtain any search results.`);
                 }
             }
