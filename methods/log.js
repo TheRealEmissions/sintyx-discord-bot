@@ -36,6 +36,7 @@ module.exports = class log {
     }
 
     async error(err) {
+        console.error(err);
         return this.send(await this.constructEmbed(null, `**An error has occurred!** Please review the error below:`, await this.constructField(`Error:`, "```" + err + "```"), true))
     }
 }
