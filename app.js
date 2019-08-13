@@ -16,7 +16,6 @@ const client = new modules.Discord.Client({
     disabledEvents: ["TYPING_START"]
 });
 
-
 /*
 HANDLERS
 */

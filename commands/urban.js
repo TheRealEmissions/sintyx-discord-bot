@@ -34,7 +34,7 @@ module.exports = class urban {
                 if (err) {
                     console.error(err);
                     client.functions.logError(client, err, `U003`)
-                    message.channel.send(client.functions.errorEmbed(`Urban Dictionary`, `U003`, message.guild.member(client.user).displayHexColor));
+                    message.channel.send(new client.functions.errorEmbed(`Urban Dictionary`, `U003`, message.guild.member(client.user).displayHexColor));
                 }
                 body = JSON.parse(body);
                 if (!body.list.length) {
@@ -61,7 +61,7 @@ module.exports = class urban {
                     msg.edit(embed).catch(err => {
                         console.error(err);
                         client.functions.logError(client, err, `U002`);
-                        msg.edit(client.functions.errorEmbed(`Urban Dictionary`, `U002`, message.guild.member(client.user).displayHexColor));
+                        msg.edit(new client.functions.errorEmbed(`Urban Dictionary`, `U002`, message.guild.member(client.user).displayHexColor));
                     });
                 }
             });

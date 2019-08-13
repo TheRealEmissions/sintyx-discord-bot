@@ -50,7 +50,7 @@ module.exports = class stats {
             if (err) {
                 console.error(err);
                 client.functions.logError(client, err, `ST001`);
-                message.channel.send(client.functions.errorEmbed(`${client.user.username} Server Statistics`, `ST001`, message.guild.member(client.user).displayHexColor));
+                message.channel.send(new client.functions.errorEmbed(`${client.user.username} Server Statistics`, `ST001`, message.guild.member(client.user).displayHexColor));
             } else {
             body = JSON.parse(body);
             let embed2 = new client.modules.Discord.MessageEmbed()
