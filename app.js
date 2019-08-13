@@ -71,5 +71,5 @@ client.music = {
 EXPORTS + LOGIN
 */
 
-client.login(storage.auth['token']);
+client.login(storage.auth['token']).catch(err => console.error(err));
 module.exports = client;
