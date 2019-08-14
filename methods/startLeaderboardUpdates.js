@@ -26,7 +26,7 @@ module.exports = class slu {
     }
 
     getCoinLeaderboard(client) {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             await client.models.userProfiles.find({}).sort(`-user_coins`).exec((err, result) => {
                 if (err) return reject(err);
                 if (!result.length) return reject(false);
@@ -37,7 +37,7 @@ module.exports = class slu {
 
     getAvgXPLeaderboard(client) {
         return new Promise((resolve, reject) => {
-            client.models.userProfiles.find({}).lean().exec0(async(err, docs) => {
+            client.models.userProfiles.find({}).lean().exec(async (err, docs) => {
                 if (err) return reject(err);
                 let obj = {
                     users: []
