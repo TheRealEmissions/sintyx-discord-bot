@@ -4,6 +4,5 @@ module.exports = {
     startTrelloCollector: require(`./functions/startTrelloCollector.js`),
     genNumberBetween: require(`./functions/genNumberBetween.js`),
     percentChance: require(`./functions/percentChance.js`),
-    startLeaderboardUpdates: require(`./functions/startLeaderboardUpdates.js`),
     inventoryCheckAmount: require(`./functions/inventoryCheckAmount`)
 }
