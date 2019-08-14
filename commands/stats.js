@@ -49,7 +49,6 @@ module.exports = class stats {
         client.modules.request(url, (err, response, body) => {
             if (err) {
                 new client.methods.log(client, message.guild).error(err);
-                client.functions.logError(client, err, `ST001`);
                 message.channel.send(new client.methods.errorEmbed(`${client.user.username} Server Statistics`, `ST001`, message.guild.member(client.user).displayHexColor));
             } else {
             body = JSON.parse(body);

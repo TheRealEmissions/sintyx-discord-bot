@@ -33,7 +33,6 @@ module.exports = class urban {
             client.modules.request(`https://api.urbandictionary.com/v0/define?${query}`, (err, response, body) => {
                 if (err) {
                     new client.methods.log(client, message.guild).error(err);
-                    client.functions.logError(client, err, `U003`)
                     message.channel.send(new client.methods.errorEmbed(`Urban Dictionary`, `U003`, message.guild.member(client.user).displayHexColor));
                 }
                 body = JSON.parse(body);
@@ -60,7 +59,6 @@ module.exports = class urban {
                         .setFooter(`Processed your result in ${time}ms`)
                     msg.edit(embed).catch(err => {
                         new client.methods.log(client, message.guild).error(err);
-                        client.functions.logError(client, err, `U002`);
                         msg.edit(new client.methods.errorEmbed(`Urban Dictionary`, `U002`, message.guild.member(client.user).displayHexColor));
                     });
                 }
