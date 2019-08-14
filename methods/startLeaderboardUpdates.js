@@ -9,10 +9,10 @@ module.exports = class slu {
     }
 
     async init(client) {
-        await this.leaderboardOne(client);
-        await this.leaderboardTwo(client);
-        await this.leaderboardThree(client);
-        await this.leaderboardFour(client);
+        await this.leaderboardOne(client).catch(err => console.error(err));
+        await this.leaderboardTwo(client).catch(err => console.error(err));
+        await this.leaderboardThree(client).catch(err => console.error(err));
+        await this.leaderboardFour(client).catch(err => console.error(err));
     }
 
     getXPLeaderboard(client) {
@@ -79,7 +79,7 @@ module.exports = class slu {
                     }
                 }
             }
-            let lb = await this.getXPLeaderboard(client);
+            let lb = await this.getXPLeaderboard(client).catch(err => reject(err));
             for (const count in lb) {
                 if (count >= 10) {
                     this.message.edit(embed);
@@ -109,7 +109,7 @@ module.exports = class slu {
                     }
                 }
             }
-            let lb = await this.getCoinLeaderboard(client);
+            let lb = await this.getCoinLeaderboard(client).catch(err => reject(err));
             for (const count in lb) {
                 if (count >= 10) {
                     this.message.edit(embed);
@@ -154,7 +154,7 @@ module.exports = class slu {
                         inline: false
                     });
                 }
-            });
+            }).catch(err => reject(err));
         });
     }
 
@@ -170,7 +170,7 @@ module.exports = class slu {
                     }
                 }
             }
-            let lb = await this.getMsgCountLeaderboard(client);
+            let lb = await this.getMsgCountLeaderboard(client).catch(err => console.error(err));
             for (const count in lb) {
                 if (count >= 10) {
                     this.message.edit(embed);
