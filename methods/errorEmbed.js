@@ -1,7 +1,7 @@
-module.exports = class error {
+module.exports = class errorEmbed {
     constructor(title, error, embedColor) {
         this.process(title, error, embedColor);
-        this.Discord = require(`discord.js`);
+        this.Discord = require(`../modules`).Discord;
     }
 
     process(title, error, embedColor) {
