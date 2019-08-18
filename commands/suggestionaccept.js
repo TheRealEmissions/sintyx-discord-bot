@@ -8,7 +8,7 @@ module.exports = class suggestionaccept {
     }
 
     async run(client, message, args) {
-        if (!message.member.roles.get(message.guild.roles.find(x => x.name == "The Lord").id)) return;
+        if (!message.member.roles.get(message.guild.roles.find(x => x.name == "Owner").id)) return;
         if (!args[1]) return;
         client.models.suggestionsData.findOne({
             "reference_id": args[1]
