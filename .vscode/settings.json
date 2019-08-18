@@ -1,2 +1,16 @@
 {
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true,
+    "workbench.editor.highlightModifiedTabs": true,
+    "explorer.sortOrder": "filesFirst",
+    "editor.cursorBlinking": "phase",
+    "files.trimFinalNewlines": true,
+    "editor.acceptSuggestionOnEnter": "smart",
+    "editor.fontSize": 12,
+    "terminal.integrated.fontSize": 15,
+    "editor.minimap.enabled": false,
+    "editor.cursorWidth": 3,
+    "editor.renderWhitespace": "boundary",
+    "files.insertFinalNewline": true,
+    "files.trimTrailingWhitespace": true,
 }
