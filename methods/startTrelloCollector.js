@@ -1,13 +1,14 @@
 module.exports = class trello {
     constructor(client, stage, card_id) {
+        this.log = require(`../methods`).log;
         this.init(client, stage, card_id);
     }
 
     init(client, stage, card_id) {
         return {
-            1: this.stageOne(client, card_id).catch(err => console.error(err)),
-            2: this.stageTwo(client, card_id).catch(err => console.error(err)),
-            3: this.stageThree(client, card_id).catch(err => console.error(err))
+            1: this.stageOne(client, card_id).catch(err => new this.log(client).error(err)),
+            2: this.stageTwo(client, card_id).catch(err => new this.log(client).error(err)),
+            3: this.stageThree(client, card_id).catch(err => new this.log(client).error(err))
         }[stage];
     }
 

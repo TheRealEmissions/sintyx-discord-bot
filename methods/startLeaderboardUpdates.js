@@ -1,6 +1,7 @@
 module.exports = class slu {
     constructor(client) {
         this.message = this.setMessage(client);
+        this.log = require(`../methods`).log;
         this.init(client);
     }
 
@@ -9,10 +10,10 @@ module.exports = class slu {
     }
 
     async init(client) {
-        await this.leaderboardOne(client).catch(err => console.error(err));
-        await this.leaderboardTwo(client).catch(err => console.error(err));
-        await this.leaderboardThree(client).catch(err => console.error(err));
-        await this.leaderboardFour(client).catch(err => console.error(err));
+        await this.leaderboardOne(client).catch(err => new this.log(client).error(err));
+        await this.leaderboardTwo(client).catch(err => new this.log(client).error(err));
+        await this.leaderboardThree(client).catch(err => new this.log(client).error(err));
+        await this.leaderboardFour(client).catch(err => new this.log(client).error(err));
     }
 
     getXPLeaderboard(client) {
@@ -170,7 +171,7 @@ module.exports = class slu {
                     }
                 }
             }
-            let lb = await this.getMsgCountLeaderboard(client).catch(err => console.error(err));
+            let lb = await this.getMsgCountLeaderboard(client).catch(err => new this.log(client).error(err));
             for (const count in lb) {
                 if (count >= 10) {
                     this.message.edit(embed);

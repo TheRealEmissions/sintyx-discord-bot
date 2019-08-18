@@ -83,13 +83,14 @@ class usernameColour {
 
 class trelloCollector {
     constructor() {
+        this.log = require(`../methods`).log;
         this.startTrelloCollector = require(`../methods`).startTrelloCollector;
     }
 
     async trelloInit(client) {
-        this.startStageOne(client).catch(err => console.error(err));
-        this.startStageTwo(client).catch(err => console.error(err));
-        this.startStageThree(client).catch(err => console.error(err));
+        this.startStageOne(client).catch(err => new this.log(client).error(err));
+        this.startStageTwo(client).catch(err => new this.log(client).error(err));
+        this.startStageThree(client).catch(err => new this.log(client).error(err));
     }
 
     startStageOne(client) {
@@ -196,7 +197,7 @@ class trelloCollector {
                                 if (err) return reject(err);
                                 db.card_stage = 4;
                                 db.message_id = message.id;
-                                db.save((err) => console.error(err));
+                                db.save((err) => reject(err));
                             });
                         });
                     });

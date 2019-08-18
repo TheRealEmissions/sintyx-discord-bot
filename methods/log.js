@@ -1,5 +1,5 @@
 module.exports = class log {
-    constructor(client, guild) {
+    constructor(client, guild = null) {
         this.client = client;
         this.guild = guild;
         this.channelID = client.storage.messageCache['logChannel'].id;
@@ -24,7 +24,7 @@ module.exports = class log {
         return new Promise((resolve, reject) => {
             let embed = {
                 embed: {
-                    color: this.guild.member(this.client.user).displayHexColor,
+                    color: this.guild !== null ? this.guild.member(this.client.user).displayHexColor : null,
                     title: title == null ? null : title,
                     description: description == null ? null : description,
                     fields: fields == {} ? [] : (fields instanceof Array ? fields : [fields]),
