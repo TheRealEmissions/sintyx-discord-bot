@@ -83,13 +83,13 @@ class usernameColour {
 
 class trelloCollector {
     constructor() {
-        this.startTrelloCollector = require(`../functions`).startTrelloCollector;
+        this.startTrelloCollector = require(`../methods`).startTrelloCollector;
     }
 
     async trelloInit(client) {
-        this.startStageOne(client);
-        this.startStageTwo(client);
-        this.startStageThree(client);
+        this.startStageOne(client).catch(err => console.error(err));
+        this.startStageTwo(client).catch(err => console.error(err));
+        this.startStageThree(client).catch(err => console.error(err));
     }
 
     startStageOne(client) {
@@ -121,7 +121,7 @@ class trelloCollector {
                                 db.message_id = message.id;
                                 db.save((err) => {
                                     if (err) return reject(err);
-                                    this.startTrelloCollector(client, 2, db.card_id);
+                                    return new this.startTrelloCollector(client, 2, db.card_id);
                                 });
                             });
                         });
@@ -160,7 +160,7 @@ class trelloCollector {
                                 db.message_id = message.id;
                                 db.save((err) => {
                                     if (err) return reject(err);
-                                    this.startTrelloCollector(client, 3, db.card_id);
+                                    return new this.startTrelloCollector(client, 3, db.card_id);
                                 });
                             });
                         });

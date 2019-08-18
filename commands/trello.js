@@ -82,7 +82,7 @@ module.exports = class trello {
                                             newCard.save(function (err) {
                                                 if (err) return new client.methods.log(client, message.guild).error(err);
                                                 msg.react(client.storage.emojiCharacters['thumbs_up']);
-                                                client.functions.startTrelloCollector(client, 1, _cardID);
+                                                new client.methods.startTrelloCollector(client, 1, _cardID);
                                             });
                                         });
                                     } else {
@@ -242,7 +242,7 @@ module.exports = class trello {
                                             setTimeout(() => {
                                                 if (typeof reaction !== null) {
                                                     msg.react(reaction);
-                                                    client.functions.startTrelloCollector(client, stageMessage.content, db.card_id);
+                                                    new client.methods.startTrelloCollector(client, stageMessage.content, db.card_id);
                                                 }
                                             }, 1000);
                                         });
