@@ -22,7 +22,7 @@ module.exports = class play {
                 serverQueue.songs.shift();
                 this.play(client, guild, serverQueue.songs[0]);
             })
-            .on('error', error => console.error(error));
+            .on('error', error => new client.methods.log(client, guild).error(error));
         dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
         serverQueue.textChannel.send(`${client.storage.emojiCharacters['music']} Now playing: **${song.title}**`);
     }
@@ -51,7 +51,7 @@ module.exports = class play {
                 queueConstruct.connection = connection;
                 this.play(client, msg.guild, queueConstruct.songs[0]);
             } catch (error) {
-                console.error(`I could not join the voice channel: ${error}`);
+                new client.methods.log(client, msg.guild).error(`I could not join the voice channel: ${error}`);
                 client.music.queue.delete(msg.guild.id);
                 return msg.channel.send(`I could not join the voice channel: ${error}`);
             }

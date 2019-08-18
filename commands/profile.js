@@ -16,7 +16,7 @@ module.exports = class profile {
                 "user_id": user.id
             }, (err2, settingsDB) => {
                 if (err) return new client.methods.log(client, message.guild).error(err);
-                if (err2) return console.error(err2);
+                if (err2) return new client.methods.log(client, message.guild).error(err2);
                 if (!profileDB) {
                     return console.log(`[ERROR] Profile database not found ${new Date()}`)
                 }

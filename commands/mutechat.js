@@ -8,23 +8,29 @@ module.exports = class mutechat {
     }
 
     setPerms(channel, role, boolean) {
-        channel.updateOverwirte(role, {
-            SEND_MESSAGES: boolean,
-            ADD_REACTIONS: boolean
-        }).catch(console.error);
+        return new Promise((resolve, reject) => {
+            channel.updateOverwirte(role, {
+                SEND_MESSAGES: boolean,
+                ADD_REACTIONS: boolean
+            }).catch(err => reject(err));
+        });
     }
 
     muteChannel(channel, guild) {
-        let roles = [guild.roles.find(x => x.name == "Analysts"), guild.roles.find(x => x.name == "@everyone")];
-        roles.forEach(role => {
-            this.setPerms(channel, role, false);
+        return new Promise((resolve, reject) => {
+            let roles = [guild.roles.find(x => x.name == "Analysts"), guild.roles.find(x => x.name == "@everyone")];
+            roles.forEach(role => {
+                this.setPerms(channel, role, false).catch(err => reject(err));
+            });
         });
     }
 
     unmuteChannel(channel, guild) {
-        let roles = [guild.roles.find(x => x.name == "Analysts"), guild.roles.find(x => x.name == "@everyone")];
-        roles.forEach(role => {
-            this.setPerms(channel, role, true);
+        return new Promise((resolve, reject) => {
+            let roles = [guild.roles.find(x => x.name == "Analysts"), guild.roles.find(x => x.name == "@everyone")];
+            roles.forEach(role => {
+                this.setPerms(channel, role, true).catch(err => reject(err));
+            });
         });
     }
 
@@ -47,7 +53,7 @@ module.exports = class mutechat {
                        muted: true
                    });
                    newdb.save((err) => new client.methods.log(client, message.guild).error(err));
-                   this.muteChannel(message.channel, message.guild);
+                   this.muteChannel(message.channel, message.guild).catch(err => new client.methods.log(client, message.guild).error(err));
                    let reason;
                    if (args[1] == (("on") || ("off")) && args[2]) {
                        reason = message.content.slice(args[0].length + args[1].length + 2);
@@ -87,7 +93,7 @@ module.exports = class mutechat {
                     }
                     if (args[1].toLowerCase() == "off") {
                         if (db.boolean == false) return;
-                        this.unmuteChannel(message.channel, message.guild);
+                        this.unmuteChannel(message.channel, message.guild).catch(err => new client.methods.log(client, message.guild).error(err));
                         message.channel.send(new client.modules.Discord.MessageEmbed()
                             .setColor(message.guild.member(client.user).displayHexColor)
                             .setDescription(`**The channel has been unmuted.** You may chat again and add reactions to messages.`)
@@ -97,7 +103,7 @@ module.exports = class mutechat {
                         return;
                     }
                     if (db.boolean == true) {
-                        this.unmuteChannel(message.channel, message.guild);
+                        this.unmuteChannel(message.channel, message.guild).catch(err => new client.methods.log(client, message.guild).error(err));
                         message.channel.send(new client.modules.Discord.MessageEmbed()
                             .setColor(message.guild.member(client.user).displayHexColor)
                             .setDescription(`**The channel has been unmuted.** You may chat again and add reactions to messages.`)
@@ -105,7 +111,7 @@ module.exports = class mutechat {
                         db.boolean = false;
                         db.save((err) => new client.methods.log(client, message.guild).error(err));
                     } else {
-                        this.muteChannel(message.channel, message.guild);
+                        this.muteChannel(message.channel, message.guild).catch(err => new client.methods.log(client, message.guild).error(err));
                         let reason = args[2] ? message.content.slice(args[0].length + args[1].length + 2) : args[1];
                         message.channel.send(new client.modules.Discord.MessageEmbed()
                          .setColor(message.guild.member(client.user).displayHexColor)
@@ -119,7 +125,7 @@ module.exports = class mutechat {
                     }
                } else {
                    if (db.boolean == true) {
-                    this.unmuteChannel(message.channel, message.guild);
+                    this.unmuteChannel(message.channel, message.guild).catch(err => new client.methods.log(client, message.guild).error(err));
                     message.channel.send(new client.modules.Discord.MessageEmbed()
                         .setColor(message.guild.member(client.user).displayHexColor)
                         .setDescription(`**The channel has been unmuted.** You may chat again and add reactions to messages.`)
@@ -127,7 +133,7 @@ module.exports = class mutechat {
                     db.boolean = false;
                     db.save((err) => new client.methods.log(client, message.guild).error(err));
                    } else {
-                    this.muteChannel(message.channel, message.guild);
+                    this.muteChannel(message.channel, message.guild).catch(err => new client.methods.log(client, message.guild).error(err));
                     message.channel.send(new client.modules.Discord.MessageEmbed()
                      .setColor(message.guild.member(client.user).displayHexColor)
                      .setTitle(`This channel is currently muted!`)
