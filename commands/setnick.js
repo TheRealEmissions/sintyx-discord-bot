@@ -8,7 +8,7 @@ module.exports = class setnick {
     }
 
     async run(client, message, args) {
-        if (message.member.roles.find(x => x.name == "Owner")) {
+        if (message.member.roles.find(x => x.name == "Management")) {
             let member = Boolean(message.mentions.members.first()) ? message.mentions.members.first() : message.guild.members.get(`${args[1]}`);
             if (!member) {
                 return message.channel.send(`I could not find that member!`);

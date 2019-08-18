@@ -8,7 +8,7 @@ module.exports = class blacklist {
     }
 
     async run(client, message, args) {
-        if (message.member.roles.find(x => x.name == "Owner")) {
+        if (message.member.roles.find(x => x.name == "Management")) {
             let random_string = require(`crypto-random-string`);
             let id = random_string({
                 length: 10,

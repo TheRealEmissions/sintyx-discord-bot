@@ -8,7 +8,7 @@ module.exports = class mentionable {
     }
 
     async run(client, message, args) {
-        if ((message.member.roles.find(x => x.name == "Owner")) || (message.member.roles.get('567441043822477322'))) {
+        if ((message.member.roles.find(x => x.name == "Management")) || (message.member.roles.get('567441043822477322'))) {
             let role = Boolean(message.mentions.roles.first()) ? message.mentions.roles.first() : message.guild.roles.get(`${args[1]}`);
             if (!role) {
                 return message.channel.send(`Please either mention a role or type its ID.`).then(msg => setTimeout(() => msg.delete(), 5000));

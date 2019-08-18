@@ -8,7 +8,7 @@ module.exports = class rolecolor {
     }
 
     async run(client, message, args) {
-        if (message.member.roles.find(x => x.name == "Owner")) {
+        if (message.member.roles.find(x => x.name == "Management")) {
             let role = Boolean(message.mentions.roles.first()) ? message.mentions.roles.first() : message.guild.roles.get(`${args[1]}`);
             if (!role) {
                 return message.channel.send(`Please either mention a role or type its ID.`).then(msg => setTimeout(() => msg.delete(), 5000));

@@ -76,7 +76,7 @@ module.exports = class punishments {
                     }
                 });
             } else {
-                if (message.member.roles.find(x => x.name == "Owner")) {
+                if (message.member.roles.find(x => x.name == "Management")) {
                     if (args[2]) {
                         client.models.userProfiles.find({
                             "user_id": message.mentions.users.first().id

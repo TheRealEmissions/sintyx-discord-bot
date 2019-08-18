@@ -8,7 +8,7 @@ module.exports = class role {
     }
 
     async run(client, message, args) {
-        if (message.member.roles.find(x => x.name == "Owner")) {
+        if (message.member.roles.find(x => x.name == "Management")) {
             if (args[1].toLowerCase() == "add") {
                 if (!args[2]) return;
                 if (!args[3]) return;

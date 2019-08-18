@@ -28,7 +28,7 @@ module.exports = class ticket {
             if (!db) {
                 return message.channel.send(`The reference ID you have provided does not match a support ticket.`);
             }
-            if ((message.member.roles.find(x => x.name == "Owner")) || (db.user_id == message.author.id)) {
+            if ((message.member.roles.find(x => x.name == "Management")) || (db.user_id == message.author.id)) {
                 let embed;
                 client.modules.fs.appendFileSync(`./commands/${db.channel_id}.json`, JSON.stringify(db.logs));
                 if (db.closure_id == null) {

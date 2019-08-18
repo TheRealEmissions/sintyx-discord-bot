@@ -8,7 +8,7 @@ module.exports = class purge {
     }
 
     async run(client, message, args) {
-        if (message.member.roles.find(x => x.name == "Owner")) {
+        if (message.member.roles.find(x => x.name == "Management")) {
             if (args[1] <= 100) {
                 message.channel.bulkDelete(args[1]).then(messages => {
                     let embed = new client.modules.Discord.MessageEmbed()

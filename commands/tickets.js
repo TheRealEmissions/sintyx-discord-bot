@@ -61,7 +61,7 @@ module.exports = class tickets {
                 }
             });
         } else {
-            if (message.member.roles.find(x => x.name == "Owner")) {
+            if (message.member.roles.find(x => x.name == "Management")) {
                 let user = Boolean(message.mentions.users.first()) ? message.mentions.users.first() : await Promise.resolve(client.users.fetch(args[1]));
                 if (user) {
                     client.models.userProfiles.find({

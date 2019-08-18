@@ -29,7 +29,7 @@ module.exports = class mutechat {
     }
 
     async run(client, message, args) {
-        if (message.member.roles.find(x => x.name == "Owner")) {
+        if (message.member.roles.find(x => x.name == "Management")) {
             /*
             Roles to deny sending messages & reactions:
 
