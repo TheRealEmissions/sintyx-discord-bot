@@ -10,6 +10,7 @@ module.exports = (client, message) => {
         if (!cmd) return;
         try {
             cmd.run(client, message, args);
+            new client.methods.log(client, message.guild).commandRan(message.author, cmd.name, message.channel.id);
         } catch (err) {
             console.error(err);
         }

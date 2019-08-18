@@ -35,8 +35,16 @@ module.exports = class log {
         });
     }
 
+    // logs
+
     async error(err) {
         console.error(err);
         return this.send(await this.constructEmbed(null, `**An error has occurred!** Please review the error below:`, await this.constructField(`Error:`, "```" + err + "```"), true))
+    }
+
+    async commandRan(author, command, channel_id) {
+        let executor = await this.constructField(`Executor:`, `${author.tag} *(${author.id})*`, true), cmd = await this.constructField(`Command:`, command, true), where = await this.constructField(`Where?`, `<#${channel_id}>`, true);
+        let fields = [executor, cmd, where]
+        return this.send(await this.constructEmbed(`Command Ran`, null, fields, true));
     }
 }

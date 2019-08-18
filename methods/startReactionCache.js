@@ -2,14 +2,7 @@ const {
     Multiple,
     Discord
 } = require(`../modules`);
-module.exports = class src extends Multiple(usernameColour, trelloCollector) {
-    constructor(client) {
-        super();
-        this.processRoleCollector(client);
-        this.trelloInit(client);
-    }
 
-}
 
 class usernameColour {
 
@@ -136,7 +129,7 @@ class trelloCollector {
         return new Promise(async(resolve, reject) => {
             client.models.trelloCards.find({
                 "card_stage": 2
-            }, (err, db) => {
+            }, async (err, db) => {
                 if (err) return reject(err);
                 if (!db) return resolve();
                 for (const count in db) {
@@ -175,7 +168,7 @@ class trelloCollector {
         return new Promise(async(resolve, reject) => {
             client.models.trelloCards.find({
                 "card_stage": 3
-            }, (err, db) => {
+            }, async (err, db) => {
                 if (err) return reject(err);
                 if (!db) return resolve();
                 for (const count in db) {
@@ -205,4 +198,12 @@ class trelloCollector {
             });
         });
     }
+}
+module.exports = class src extends Multiple(usernameColour, trelloCollector) {
+    constructor(client) {
+        super();
+        this.processRoleCollector(client);
+        this.trelloInit(client);
+    }
+
 }
