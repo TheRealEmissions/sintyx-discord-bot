@@ -8,5 +8,6 @@ module.exports = {
     querystring: require(`querystring`),
     fetch: require(`node-fetch`),
     YouTube: require(`simple-youtube-api`),
-    ytdl: require(`ytdl-core`)
+    ytdl: require(`ytdl-core`),
+    Multiple: require(`extends-classes`)
 }

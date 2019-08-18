@@ -20,6 +20,7 @@
     "crypto-random-string": "^3.0.1",
     "discord.js": "github:discordjs/discord.js",
     "djs-commands": "^1.2.2",
+    "extends-classes": "^1.0.5",
     "fs": "0.0.1-security",
     "moment": "^2.24.0",
     "mongodb": "^3.3.0",

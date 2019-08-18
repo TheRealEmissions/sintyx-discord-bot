@@ -34,7 +34,7 @@ module.exports = class test {
                 await msg.react(ec['black_heart']);
             });*/
 
-            new client.methods.log(client, message.guild).error(`test`);
+            new client.methods.startReactionCache(client);
 
         } else {
             return;

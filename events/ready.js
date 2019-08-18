@@ -53,6 +53,6 @@ module.exports = (client) => {
     }
     update();
     client.setInterval(update, 30000);
-    client.functions.startReactionCache(client);
+    new client.methods.startReactionCache(client);
     new client.methods.startLeaderboardUpdates(client);
 }

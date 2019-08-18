@@ -68,7 +68,7 @@ module.exports = class slu {
     }
 
     leaderboardOne(client) {
-        return new Promise((resolve, reject) => {
+        return new Promise(async(resolve, reject) => {
             let embed = {
                 embed: {
                     title: `**XP Leaderboard**: Top 9`,
@@ -98,7 +98,7 @@ module.exports = class slu {
     }
 
     leaderboardTwo(client) {
-        return new Promise((resolve, reject) => {
+        return new Promise(async(resolve, reject) => {
             let embed = {
                 embed: {
                     title: `**Coin Leaderboard**: Top 9`,
@@ -139,7 +139,7 @@ module.exports = class slu {
                     }
                 }
             }
-            this.getAvgXPLeaderboard(client).then(lb => {
+            this.getAvgXPLeaderboard(client).then(async(lb) => {
                 for (const count in lb.users) {
                     if (count >= 10) {
                         this.message.edit(embed);
@@ -159,7 +159,7 @@ module.exports = class slu {
     }
 
     leaderboardFour(client) {
-        return new Promise((resolve, reject) => {
+        return new Promise(async(resolve, reject) => {
             let embed = {
                 embed: {
                     title: `**Message Count Leaderboard**: Top 9`,
