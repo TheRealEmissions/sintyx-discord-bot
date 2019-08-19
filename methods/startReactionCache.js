@@ -34,7 +34,7 @@ class usernameColour {
     }
 
     checkRoles(message, user, roles) {
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             for (const count in roles) {
                 if (message.guild.member(user).roles.get(roles[count].id)) {
                     message.guild.member(user).roles.remove([roles[count].id]);
@@ -126,7 +126,7 @@ class trelloCollector {
     }
 
     startStageTwo(client) {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             client.models.trelloCards.find({
                 "card_stage": 2
             }, async (err, db) => {
@@ -165,7 +165,7 @@ class trelloCollector {
     }
 
     startStageThree(client) {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             client.models.trelloCards.find({
                 "card_stage": 3
             }, async (err, db) => {
