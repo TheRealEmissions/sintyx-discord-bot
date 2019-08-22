@@ -12,7 +12,7 @@ module.exports = (client, oldMessage, newMessage) => {
             }
             let array = {
                 number: Boolean(db.logs.find(x => x.message_id == newMessage.id).edits) ? db.logs.find(x => x.message_id == newMessage.id).edits.length + 1 : 1,
-                timestamp: new Date(),
+                timestamp: new Date().getTime(),
                 content: newMessage.content
             }
             db.logs.find(x => x.message_id == newMessage.id).edits.push(array);
