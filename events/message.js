@@ -189,7 +189,7 @@ class dbfunctions {
 
     checkSettings(setting = '') {
         return new Promise((resolve, reject) => {
-            return resolve({
+            let obj = {
                 'xp_ping': this.client.models.userSettings.findOne({
                     "user_id": this.message.author.id
                 }, (err, db) => {
@@ -202,7 +202,8 @@ class dbfunctions {
                     if (err) return reject(err);
                     return db.options.find(x => x.name == 'coin_ping').boolean == true ? resolve(true) : resolve(false);
                 })
-            } [setting]);
+            }
+            return resolve(obj[setting]);
         });
     }
 }
@@ -226,11 +227,11 @@ class handledb extends dbfunctions {
         return new Promise((resolve, reject) => {
             client.models.userProfiles.findOne({
                 "user_id": message.author.id
-            }, async (err, db) => {
+            }, (err, db) => {
                 if (err) return reject(err);
                 let plusXP = client.functions.genNumberBetween(1, 20);
                 db.user_xp += plusXP;
-                db.save((err) => {
+                db.save(async (err) => {
                     if (err) return reject(err);
                     if (await this.checkSettings('xp_ping') == true) {
                         message.channel.send(`<@${message.author.id}> **+${xpToAdd} XP**`).then(msg => setTimeout(() => msg.delete(), 1800));
@@ -245,7 +246,7 @@ class handledb extends dbfunctions {
         return new Promise(async (resolve, reject) => {
             client.models.userProfiles.findOne({
                 "user_id": message.author.id
-            }, (err, db) => {
+            }, async (err, db) => {
                 if (err) return reject(err);
                 if (await this.checkXPtoLevel(db.user_level, db.user_xp)) {
                     message.channel.send(new client.modules.Discord.MessageEmbed()

@@ -19,13 +19,13 @@ module.exports = class support {
                 message.guild.channels.create(`support-${message.author.username}-${randomString}`).then(async (channel) => {
                     let category = message.guild.channels.find(c => c.name == "Support Tickets" && c.type == "category");
                     if (!category) {
-                        startMsg.edit(` `).then(() => startMsg.edit(new client.methods.errorEmbed(`Support Ticket`, `S001`, message.guild.member(client.user).displayHexColor)));
+                        startMsg.edit(` `).then(() => startMsg.edit(new client.methods.errorEmbed().process(`Support Ticket`, `S001`, message.guild.member(client.user).displayHexColor)));
                         channel.delete();
                     } else {
                         channel.setParent(category);
                         let supportTicketManager = message.guild.roles.find(x => x.id == client.storage.roles['supportTicketManager']);
                         if (!supportTicketManager) {
-                            startMsg.edit(` `).then(() => startMsg.edit(new client.methods.errorEmbed(`Support Ticket`, `S002`, message.guild.member(client.user).displayHexColor)));
+                            startMsg.edit(` `).then(() => startMsg.edit(new client.methods.errorEmbed().process(`Support Ticket`, `S002`, message.guild.member(client.user).displayHexColor)));
                             channel.delete();
                         } else {
                             let reason = Boolean(args[1]) ? message.content.slice(args[0].length + 1) : `No reason provided`;
