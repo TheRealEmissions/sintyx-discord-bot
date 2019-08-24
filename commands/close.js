@@ -1,15 +1,15 @@
 module.exports = class close {
     constructor() {
         this.name = 'close',
-        this.alias = ["delete", "cl"],
-        this.usage = `-close [reason]`,
-        this.category = 'tickets',
-        this.description = 'Close a support ticket with an optional reason'
+            this.alias = ["delete", "cl"],
+            this.usage = `-close [reason]`,
+            this.category = 'tickets',
+            this.description = 'Close a support ticket with an optional reason'
     }
 
     async run(client, message, args) {
 
-        if (message.channel.parent.name !== "Support Tickets") {
+        if ((message.channel.parent.name !== "Support Tickets") || (message.channel.parent.name !== "Applications")) {
             return;
         } else {
             let reason = Boolean(message.content.slice(args[0].length + 1)) ? message.content.slice(args[0].length + 1) : `No reason provided`;
