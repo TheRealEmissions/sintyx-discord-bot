@@ -90,11 +90,13 @@ module.exports = class apply extends questions {
                             channel.send(new client.modules.Discord.MessageEmbed()
                                 .setColor(message.guild.member(client.user).displayHexColor)
                                 .setDescription(`Thank you for completing the application! It has been submitted to Management for review. If you would like to let us know anything else, please type below. Here are your answers to the questions:`)
+                                .setFooter(reference)
                             );
-                            let str = client.modules.Discord.splitMessage(responses.map(r => `**${client.storage.appQs[r.id]}**\n${r.content}\n * *`).join(`\n`), 2000);
+                            let str = client.modules.Discord.splitMessage(responses.map(r => `**${client.storage.appQs[r.id]}**\n${r.content}\n ** **`).join(`\n`), 2000);
                             for (const s of str) {
                                 channel.send(s);
                             }
+                            channel.send(`<@${message.guild.roles.find(x => x.name == "Management").id}>`).then(msg => setTimeout(() => msg.delete(), 10));
                         }
                     });
                 }).catch(err => new client.methods.log(client).error(err));

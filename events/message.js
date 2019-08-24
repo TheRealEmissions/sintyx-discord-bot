@@ -144,7 +144,10 @@ class suggestion {
                             reference_id: this.client.modules.random_string({
                                 length: 10,
                                 type: "base64"
-                            })
+                            }),
+                            user_id: this.message.author.id,
+                            message_id: msg.id,
+                            suggestion_desc: this.message.content
                         }).save(err => {
                             if (err) return reject(err);
                         });
