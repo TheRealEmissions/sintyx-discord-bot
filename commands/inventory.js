@@ -692,7 +692,7 @@ module.exports = class inventory {
                 .setDescription(`Are you sure you want to claim your ${this.resolveToEmbedName(id)}? Claiming this item is irreversible!`)
                 .setColor(message.guild.member(client.user).displayHexColor)
             ).then(msg => {
-                msg.react(`✅`).then(msg.react(`❌`));
+                msg.react(`✅`).then(() => msg.react(`❌`));
                 let collector = new client.modules.Discord.ReactionCollector(msg, (reaction, user) => ((reaction.emoji.name == '✅') || (reaction.emoji.name == '❌')) && user.id == message.author.id, {});
                 collector.on('collect', reaction => {
                     collector.stop();
