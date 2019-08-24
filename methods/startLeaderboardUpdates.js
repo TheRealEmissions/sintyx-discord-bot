@@ -5,7 +5,7 @@ module.exports = class slu {
         this.init(client);
     }
 
-    async setMessage() {
+    async setMessage(client) {
         return await client.channels.get(client.storage.messageCache['leaderboard'].channel).messages.fetch(client.storage.messageCache['leaderboard'].msg_id);
     }
 
@@ -73,7 +73,7 @@ module.exports = class slu {
             let embed = {
                 embed: {
                     title: `**XP Leaderboard**: Top 9`,
-                    color: message.guild.member(client.user).displayHexColor,
+                    color: this.message.guild.member(client.user).displayHexColor,
                     fields: [],
                     footer: {
                         text: `Page 1 of 4`
@@ -103,7 +103,7 @@ module.exports = class slu {
             let embed = {
                 embed: {
                     title: `**Coin Leaderboard**: Top 9`,
-                    color: message.guild.member(client.user).displayHexColor,
+                    color: this.message.guild.member(client.user).displayHexColor,
                     fields: [],
                     footer: {
                         text: `Page 2 of 4`
@@ -133,7 +133,7 @@ module.exports = class slu {
             let embed = {
                 embed: {
                     title: `**Avg. XP/msg Leaderboard**: Top 9`,
-                    color: message.guild.member(client.user).displayHexColor,
+                    color: this.message.guild.member(client.user).displayHexColor,
                     fields: [],
                     footer: {
                         text: `Page 3 of 4`
@@ -164,7 +164,7 @@ module.exports = class slu {
             let embed = {
                 embed: {
                     title: `**Message Count Leaderboard**: Top 9`,
-                    color: message.guild.member(client.user).displayHexColor,
+                    color: this.message.guild.member(client.user).displayHexColor,
                     fields: [],
                     footer: {
                         text: `Page 4 of 4`
