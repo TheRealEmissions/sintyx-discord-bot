@@ -10,6 +10,7 @@ module.exports = class slu {
     }
 
     async init(client) {
+        console.log(this.message);
         await this.leaderboardOne(client).catch(err => new this.log(client).error(err));
         await this.leaderboardTwo(client).catch(err => new this.log(client).error(err));
         await this.leaderboardThree(client).catch(err => new this.log(client).error(err));
