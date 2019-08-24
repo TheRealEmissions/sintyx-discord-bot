@@ -16,9 +16,6 @@ module.exports = mongoose.model(`staffProfiles`, new mongoose.Schema({
         timestamp: Date,
         role_id: String
     }],
-    application_log: [{
-        reference_id: String
-    }],
     role_id: {
         type: String,
         required: false,

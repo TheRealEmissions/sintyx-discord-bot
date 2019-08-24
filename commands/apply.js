@@ -91,6 +91,16 @@ module.exports = class apply extends questions {
                 collector.stop();
                 beginningMsg.delete();
                 this.questions(client, channel, message).then((responses) => {
+                    channel.updateOverwrite(message.author, {
+                        VIEW_CHANNEL: true,
+                        READ_MESSAGE_HISTORY: true,
+                        SEND_MESSAGES: true,
+                        SEND_TTS_MESSAGES: false,
+                        EMBED_LINKS: false,
+                        ATTACH_FILES: false,
+                        USE_EXTERNAL_EMOJIS: false,
+                        ADD_REACTIONS: false
+                    });
                     let db = new client.models.staffApplications({
                         user_id: message.author.id,
                         reference_id: reference,
@@ -108,6 +118,18 @@ module.exports = class apply extends questions {
                             for (const s of str) {
                                 channel.send(s);
                             }
+                            client.models.userProfiles.findOne({
+                                "user_id": message.author.id
+                            }, (err, datab) => {
+                                if (err) return new client.methods.log(client).error(err);
+                                if (!datab.application_log) datab.application_log = [];
+                                datab.application_log.push({
+                                    reference_id: reference
+                                });
+                                datab.save((err) => {
+                                    if (err) return new client.methods.log(client).error(err);
+                                });
+                            });
                             channel.send(`<@&${message.guild.roles.find(x => x.name == "Management").id}>`).then(msg => setTimeout(() => msg.delete(), 10));
                         }
                     });

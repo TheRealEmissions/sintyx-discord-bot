@@ -54,7 +54,13 @@ let userProfiles = new modules.mongoose.Schema({
         type: Boolean,
         required: false,
         default: false
-    }
+    },
+    application_log: [{
+        reference_id: {
+            type: String,
+            required: false
+        }
+    }]
 });
 
 module.exports = modules.mongoose.model(`userProfiles`, userProfiles);
