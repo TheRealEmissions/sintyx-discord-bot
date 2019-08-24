@@ -36,9 +36,9 @@ module.exports = class suggestionaccept {
             "reference_id": id
         }, async (err, db) => {
             if (err) return new client.methods.log(client, message.guild).error(err);
-            let user = await client.users.fetch(db.user_id);
-            let channel = await message.guild.channels.find(x => x.name == "suggestions");
-            let msg = await channel.messages.fetch(db.message_id).catch(err => new client.methods.log(client, message.guild).error(err));
+            const user = await client.users.fetch(db.user_id);
+            const channel = await message.guild.channels.find(x => x.name == "suggestions");
+            const msg = await channel.messages.fetch(db.message_id).catch(err => new client.methods.log(client, message.guild).error(err));
             msg.delete();
             message.guild.channels.find(x => x.name == "accepted").send(new client.modules.Discord.MessageEmbed()
                 .setColor(message.guild.member(client.user).displayHexColor)
@@ -59,6 +59,18 @@ module.exports = class suggestionaccept {
                 comment: comment
             });
             db.save((err) => new client.methods.log(client, message.guild).error(err));
+            this.giveCoins(client, user);
         })
+    }
+
+    giveCoins(client, user) {
+        client.models.userProfiles.findOne({
+            "user_id": user.id
+        }, (err, db) => {
+            if (err) return new client.methods.log(client).error(err);
+            let coins = client.functions.genNumberBetween(10, 30);
+            db.user_coins += coins;
+            db.save((err) => new client.methods.log(client).error(err));
+        });
     }
 }
