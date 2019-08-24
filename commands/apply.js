@@ -11,13 +11,27 @@ class questions {
         return new Promise((resolve, reject) => {
             c.send(this.embed(cl, c, cl.storage.appQs[qn])).then(msg => {
                 c.updateOverwrite(u, {
-                    SEND_MESSAGES: true
+                    VIEW_CHANNEL: true,
+                    READ_MESSAGE_HISTORY: true,
+                    SEND_MESSAGES: true,
+                    SEND_TTS_MESSAGES: false,
+                    EMBED_LINKS: false,
+                    ATTACH_FILES: false,
+                    USE_EXTERNAL_EMOJIS: false,
+                    ADD_REACTIONS: false
                 });
                 let co = new cl.modules.Discord.MessageCollector(c, m => m.author.id == u.id, {});
                 co.on('collect', async m => {
                     co.stop();
                     await c.updateOverwrite(u, {
-                        SEND_MESSAGES: false
+                        VIEW_CHANNEL: true,
+                        READ_MESSAGE_HISTORY: true,
+                        SEND_MESSAGES: false,
+                        SEND_TTS_MESSAGES: false,
+                        EMBED_LINKS: false,
+                        ATTACH_FILES: false,
+                        USE_EXTERNAL_EMOJIS: false,
+                        ADD_REACTIONS: false
                     });
                     await msg.delete();
                     await m.delete();
@@ -30,13 +44,11 @@ class questions {
     reactionCollectorBoolean(cl, c, u, qn, e = ['✔', '❌']) {
         return new Promise((resolve, reject) => {
             c.send(this.embed(cl, c, cl.storage.appQs[qn])).then(msg => {
-                // allow reacting
                 for (const em of e) {
                     msg.react(em);
                 }
                 let co = new cl.modules.Discord.ReactionCollector(msg, (reaction, user) => reaction.emoji.name !== '🤦‍' && user.id == u.id, {});
                 co.on('collect', async reaction => {
-                    // deny reacting
                     await msg.delete();
                     if (reaction.emoji.name == e[0]) return resolve(true);
                     else return resolve(false);
@@ -96,7 +108,7 @@ module.exports = class apply extends questions {
                             for (const s of str) {
                                 channel.send(s);
                             }
-                            channel.send(`<@${message.guild.roles.find(x => x.name == "Management").id}>`).then(msg => setTimeout(() => msg.delete(), 10));
+                            channel.send(`<@&${message.guild.roles.find(x => x.name == "Management").id}>`).then(msg => setTimeout(() => msg.delete(), 10));
                         }
                     });
                 }).catch(err => new client.methods.log(client).error(err));
@@ -106,18 +118,21 @@ module.exports = class apply extends questions {
 
     handleAppCreation(message, reference, category) {
         return new Promise((resolve, reject) => {
-            message.guild.channels.create(`app-${message.author.username}-${reference}`).then(channel => {
-                channel.setParent(category);
-                channel.overwritePermissions({
-                    permissionOverwrities: [{
-                        id: message.author.id,
-                        allow: ['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY'],
-                        deny: ['SEND_MESSAGES', 'SEND_TTS_MESSAGES', 'EMBED_LINKS', 'ATTACH_FILES', 'USE_EXTERNAL_EMOJIS', 'ADD_REACTIONS']
-                    }, {
-                        id: message.guild.roles.find(x => x.name == '@everyone').id,
-                        deny: ['VIEW_CHANNEL', 'SEND_MESSAGES']
-                    }],
-                    reason: 'Needed to change permissions'
+            message.guild.channels.create(`app-${message.author.username}-${reference}`).then(async channel => {
+                await channel.setParent(category);
+                await channel.updateOverwrite(message.author, {
+                    VIEW_CHANNEL: true,
+                    READ_MESSAGE_HISTORY: true,
+                    SEND_MESSAGES: false,
+                    SEND_TTS_MESSAGES: false,
+                    EMBED_LINKS: false,
+                    ATTACH_FILES: false,
+                    USE_EXTERNAL_EMOJIS: false,
+                    ADD_REACTIONS: false
+                });
+                await channel.updateOverwrite(message.guild.roles.find(x => x.name == "@everyone"), {
+                    VIEW_CHANNEL: false,
+                    SEND_MESSAGES: false
                 });
                 return resolve(channel);
             });
