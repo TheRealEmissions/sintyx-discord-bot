@@ -43,8 +43,10 @@ module.exports = class log {
     }
 
     async commandRan(author, command, channel_id) {
-        let executor = await this.constructField(`Executor:`, `${author.tag} *(${author.id})*`, true), cmd = await this.constructField(`Command:`, command, true), where = await this.constructField(`Where?`, `<#${channel_id}>`, true);
+        let executor = await this.constructField(`Executor:`, `<@${author.id}> *(${author.id})*`, true),
+            cmd = await this.constructField(`Command:`, command, true),
+            where = await this.constructField(`Where?`, `<#${channel_id}>`, true);
         let fields = [executor, cmd, where]
-        return this.send(await this.constructEmbed(`Command Ran`, null, fields, true));
+        return this.send(await this.constructEmbed(`**Command Ran**`, null, fields, true));
     }
 }
