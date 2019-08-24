@@ -6,5 +6,7 @@ module.exports = {
     memberGreetings: require(`./models/memberGreetings.js`),
     channelMutes: require(`./models/channelMutes.js`),
     userInventories: require(`./models/userInventories.js`),
-    suggestionsData: require(`./models/suggestionsData`)
+    suggestionsData: require(`./models/suggestionsData`),
+    staffApplications: require(`./models/staffApplications`),
+    staffProfiles: require(`./models/staffProfiles`)
 }

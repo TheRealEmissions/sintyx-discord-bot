@@ -1,0 +1,21 @@
+module.exports = {
+    0: 'What is your Minecraft username?',
+    1: 'Do you have any previous Minecraft usernames?',
+    2: 'What is your timezone? (Please state in UTC format)',
+    3: 'What is your age? (Please note you must be 15 or over to apply)',
+    4: 'Do you have access to a working microphone?',
+    5: 'Do you have the ability to record videos on Minecraft?',
+    6: 'Are you multilingual?',
+    7: 'Where are you most active on Sintyx?',
+    8: 'How much time can you contribute to the role?',
+    9: 'Have you ever been punished on our servers? If so, please state reference IDs or links.',
+    10: 'SCENARIO: If we suppose it is your first day being a helper for Sintyx and you mute a well-paying player for the server (contributed most for the month) and players begin spamming for him/her to be unmuted and calling you a terrible helper. What do you do?',
+    11: 'What are your best moments on Sintyx?',
+    12: 'Tell us about a mistake you made within the last year. How did you deal with it and what did you learn from it?',
+    13: 'If you have any, what hobbies or interests do you have outside of Minecraft?',
+    14: 'Do you have any previous server moderation or leadership experience?',
+    15: 'SCENARIO: Does this sound familiar to you? "You come home from school/work and you have a lot of homework/work to finish, you think to yourself I\'ll just take a 5-minute break before I start and play on Sintyx. The next thing you know 2 hours have passed and you\'ve been on the server all that time."',
+    16: 'SCENARIO: You\'re busy on Sintyx as a helper, questions are bombarding you, you can just about keep up. You\'re getting messaged by 2 different players both asking you to get them a moderator for a hacker, someone then pings you on Discord stating someone is "ear-raping" in a voice channel. What do you do?',
+    17: 'Have you made any previous applications, if so how many and what is the date of your last application?',
+    18: 'Is there anything else we should know?'
+}

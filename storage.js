@@ -5,5 +5,6 @@ module.exports = {
     roles: require(`./storage/roles.js`),
     helpInfo: require(`./storage/helpInfo.js`),
     messageCache: require(`./storage/messageCache.js`),
-    inventoryItems: require(`./storage/inventoryItems.js`)
+    inventoryItems: require(`./storage/inventoryItems.js`),
+    appQs: require(`./storage/appQs`)
 }
