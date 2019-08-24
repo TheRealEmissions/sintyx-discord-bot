@@ -274,7 +274,7 @@ class handledb extends dbfunctions {
                     db.user_xp += plusXP;
                     db.save(async err => {
                         if (err) return reject(err);
-                        if ((await this.checkSettings("xp_ping")) == true) {
+                        if (await this.checkSettings("xp_ping")) {
                             message.channel
                                 .send(`<@${message.author.id}> **+${xpToAdd} XP**`)
                                 .then(msg => setTimeout(() => msg.delete(), 1800));
