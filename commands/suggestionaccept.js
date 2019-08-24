@@ -17,7 +17,8 @@ module.exports = class suggestionaccept {
             if (!db) return message.channel.send(`The suggestion with the reference ID **${args[1]}** does not exist!`);
             message.channel.send(new client.modules.Discord.MessageEmbed()
                 .setColor(message.guild.member(client.user).displayHexColor)
-                .setDescription(`> You are accepting **${args[1]}** - what is your comment for this suggestion?`)
+                .setDescription(`> You are accepting **${args[1]}** - what is your comment for this suggestion?
+                ${db.suggestion_desc}`)
             ).then(msg => {
                 let collector = new client.modules.Discord.MessageCollector(message.channel, m => m.author.id == message.author.id, {});
                 collector.on('collect', async (comment) => {
@@ -45,7 +46,7 @@ module.exports = class suggestionaccept {
                 .setDescription(db.suggestion_desc)
                 .addField(`Comment from **${message.author.tag}**:`, comment)
                 .setTimestamp()
-                .setThumbnail(message.author.avatarURL())
+                .setThumbnail(user.avatarURL())
                 .setFooter(id)
             );
             if (db.suggestion_info.length > 0) {
