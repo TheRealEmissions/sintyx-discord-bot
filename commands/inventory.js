@@ -1,11 +1,11 @@
 module.exports = class inventory {
     constructor() {
         this.name = 'inventory',
-        this.alias = ["inv"],
-        this.usage = '-inventory',
-        this.category = 'user',
-        this.description = 'Manage your inventory',
-        this.items = require(`../storage`).inventoryItems
+            this.alias = ["inv"],
+            this.usage = '-inventory',
+            this.category = 'user',
+            this.description = 'Manage your inventory',
+            this.items = require(`../storage`).inventoryItems
     }
 
     resolveToName(id) {
@@ -38,7 +38,7 @@ module.exports = class inventory {
                 ONE - use item
                 TWO - send item
                 THREE - delete item(s)
-        
+
         ONE =>
             send inventory, add reactions based on items that are usable and X reaction to close menu
             click reaction to use item, runs confirmation, removes 1x amount - if amount reaches 0 reaction is removed and embed is updated
@@ -115,13 +115,13 @@ module.exports = class inventory {
             if (reaction.emoji.name == '1⃣') {
                 msg.delete();
                 let embed = {
-                    embed: {
-                        color: message.guild.member(client.user).displayHexColor,
-                        title: `${message.author.username}${message.author.username.endsWith(`s`) ? `'` : `'`} Inventory: **Use an item**`,
-                        description: `> Please respond with the ID of the item to use\n** ** `,
-                        fields: []
-                    }
-                },
+                        embed: {
+                            color: message.guild.member(client.user).displayHexColor,
+                            title: `${message.author.username}${message.author.username.endsWith(`s`) ? `'` : `'`} Inventory: **Use an item**`,
+                            description: `> Please respond with the ID of the item to use\n** ** `,
+                            fields: []
+                        }
+                    },
                     i = 0,
                     inv = db.inventory,
                     fields = [];
@@ -176,13 +176,13 @@ module.exports = class inventory {
                 */
                 msg.delete();
                 let embed = {
-                    embed: {
-                        color: message.guild.member(client.user).displayHexColor,
-                        title: `${message.author.username}${message.author.username.endsWith(`s`) ? `'` : `'`} Inventory: **Send an item**`,
-                        description: `> Please respond with the ID of the item you wish to send to another user\n** ** `,
-                        fields: []
-                    }
-                },
+                        embed: {
+                            color: message.guild.member(client.user).displayHexColor,
+                            title: `${message.author.username}${message.author.username.endsWith(`s`) ? `'` : `'`} Inventory: **Send an item**`,
+                            description: `> Please respond with the ID of the item you wish to send to another user\n** ** `,
+                            fields: []
+                        }
+                    },
                     i = 0,
                     inv = db.inventory,
                     fields = [];
@@ -232,13 +232,13 @@ module.exports = class inventory {
                 */
                 msg.delete();
                 let embed = {
-                    embed: {
-                        color: message.guild.member(client.user).displayHexColor,
-                        title: `${message.author.username}${message.author.username.endsWith(`s`) ? `'` : `'`} Inventory: **Delete an item**`,
-                        description: `> Please respond with the ID of the item you wish to delete\n** ** `,
-                        fields: []
-                    }
-                },
+                        embed: {
+                            color: message.guild.member(client.user).displayHexColor,
+                            title: `${message.author.username}${message.author.username.endsWith(`s`) ? `'` : `'`} Inventory: **Delete an item**`,
+                            description: `> Please respond with the ID of the item you wish to delete\n** ** `,
+                            fields: []
+                        }
+                    },
                     i = 0,
                     inv = db.inventory,
                     fields = [];
@@ -293,14 +293,14 @@ module.exports = class inventory {
                     client.models.userInventories.findOne({
                         "user_id": message.author.id
                     }, (err, db) => {
-                       if (err) return new client.methods.log(client, message.guild).error(err);
-                       db.inventory.find(x => x.id).amount = db.inventory.find(x => x.id).amount - amount;
-                       db.save((err) => new client.methods.log(client, message.guild).error(err));
-                       client.functions.inventoryCheckAmount(client, id, message.author.id);
-                       message.channel.send(new client.modules.Discord.MessageEmbed()
+                        if (err) return new client.methods.log(client, message.guild).error(err);
+                        db.inventory.find(x => x.id).amount = db.inventory.find(x => x.id).amount - amount;
+                        db.save((err) => new client.methods.log(client, message.guild).error(err));
+                        client.functions.inventoryCheckAmount(client, id, message.author.id);
+                        message.channel.send(new client.modules.Discord.MessageEmbed()
                             .setColor(message.guild.member(client.user).displayHexColor)
                             .setDescription(`Deleted ${amount}x ${this.resolveToEmbedName(id)} from your inventory`)
-                       );
+                        );
                     });
                 } else {
                     return;
@@ -423,8 +423,8 @@ module.exports = class inventory {
             }, (err, db) => {
                 if (err) return reject(err);
                 message.channel.send(new client.modules.Discord.MessageEmbed()
-                .setColor(message.guild.member(client.user).displayHexColor)
-                .setDescription(`> You currently have ${db.inventory.find(x => x.id == id).amount} ${this.resolveToEmbedName(id)}\nHow many of this item do you wish to send?`)
+                    .setColor(message.guild.member(client.user).displayHexColor)
+                    .setDescription(`> You currently have ${db.inventory.find(x => x.id == id).amount} ${this.resolveToEmbedName(id)}\nHow many of this item do you wish to send?`)
                 ).then(msg => {
                     let collector = new client.modules.Discord.MessageCollector(message.channel, m => m.author.id == message.author.id, {});
                     collector.on('collect', amount => {
@@ -496,14 +496,14 @@ module.exports = class inventory {
                             "user_id": message.author.id
                         }, (err, db) => {
                             if (err) return new client.methods.log(client, message.guild).error(err);
-                            message.channel.send(new client.modules.Discord.MessageEmbed()
-                                .setColor(message.guild.member(client.user).displayHexColor)
-                                .setDescription(`> Claimed [${this.resolveToName(id)}](https://sintyx.com "${this.resolveToDesc(id)}")\nYou have been awarded the ${this.items.find(x => x.id == id).rewards[0].role_name} role!\nYou have ${parseInt(db.inventory.find(x => x.id == id).amount) - 1} of this item left in your inventory.`)
-                            );
                             db.inventory.find(x => x.id == id).amount = parseInt(db.inventory.find(x => x.id == id).amount) - 1;
                             db.save((err) => {
                                 if (err) return new client.methods.log(client, message.guild).error(err);
                                 client.functions.inventoryCheckAmount(client, id, message.author.id);
+                                message.channel.send(new client.modules.Discord.MessageEmbed()
+                                    .setColor(message.guild.member(client.user).displayHexColor)
+                                    .setDescription(`> Claimed [${this.resolveToName(id)}](https://sintyx.com "${this.resolveToDesc(id)}")\nYou have been awarded the ${this.items.find(x => x.id == id).rewards[0].role_name} role!\nYou have ${parseInt(db.inventory.find(x => x.id == id).amount) - 1} of this item left in your inventory.`)
+                                );
                             });
                         });
                     }).catch(err => {
@@ -547,14 +547,32 @@ module.exports = class inventory {
             "user_id": message.author.id
         }, (err, db) => {
             if (err) return new client.methods.log(client, message.guild).error(err);
-            message.channel.send(new client.modules.Discord.MessageEmbed()
-                .setColor(message.guild.member(client.user).displayHexColor)
-                .setDescription(`> Claimed ${this.resolveToEmbedName(id)}\nYou have been awarded ${this.items.find(x => x.id == id).reward[0].amount} ${type == 'COIN' ? (this.items.find(x => x.id == id).reward[0].amount > 1 ? 'Coins' : 'Coin') : 'XP'}\nYou have ${parseInt(db.inventory.find(x => x.id == id).amount) - 1} of this item left in your inventory.`)
-            );
             db.inventory.find(x => x.id == id).amount = parseInt(db.inventory.find(x => x.id == id).amount) - 1;
             db.save((err) => {
                 if (err) return new client.methods.log(client, message.guild).error(err);
                 client.functions.inventoryCheckAmount(client, id, message.author.id);
+                message.channel.send(new client.modules.Discord.MessageEmbed()
+                    .setColor(message.guild.member(client.user).displayHexColor)
+                    .setDescription(`> Claimed ${this.resolveToEmbedName(id)}\nYou have been awarded ${this.items.find(x => x.id == id).reward[0].amount} ${type == 'COIN' ? (this.items.find(x => x.id == id).reward[0].amount > 1 ? 'Coins' : 'Coin') : 'XP'}\nYou have ${parseInt(db.inventory.find(x => x.id == id).amount)} of this item left in your inventory.${db.inventory.find(x => x.id == id).amount > 0 ? `\n ** ** \n:white_check_mark: **Claim another ${this.resolveToEmbedName(id)}**` : ''}`)
+                ).then(msg => {
+                    client.models.userInventories.findOne({
+                        "user_id": message.author.id
+                    }, (err, db) => {
+                        if (err) return new client.methods.log(client, message.guild).error(err);
+                        if (!db.inventory.find(x => x.id == id)) return;
+                        if (db.inventory.find(x => x.id == id).amount > 0) {
+                            msg.react(client.storage.emojiCharacters['white_check_mark']);
+                            let collector = new client.modules.Discord.ReactionCollector(msg, (reaction, user) => reaction.emoji.name == client.storage.emojiCharacters['white_check_mark'] && user.id == message.author.id, {
+                                time: 120000
+                            });
+                            collector.on('collect', reaction => {
+                                collector.stop();
+                                msg.delete();
+                                this.handleUseItem(client, message, id);
+                            });
+                        }
+                    });
+                });
             });
             client.models.userProfiles.findOne({
                 "user_id": message.author.id
@@ -617,13 +635,6 @@ module.exports = class inventory {
                     "user_id": message.author.id
                 }, (err, db) => {
                     if (err) return new client.methods.log(client, message.guild).error(err);
-                    message.channel.send(new client.modules.Discord.MessageEmbed()
-                        .setColor(message.guild.member(client.user).displayHexColor)
-                        .setDescription(`> You opened a ${this.resolveToEmbedName(id)} and received: **${rewards.find(x => x.id == reaction.emoji.name).reward} ${type == 'COIN' ? (rewards.find(x => x.id == reaction.emoji.name).reward > 1 ? 'Coins' : 'Coin') : 'XP'}**
-                        ${rewards.filter(x => x.id !== reaction.emoji.name).map(i => `${i.id} - ${i.reward} XP`).join(`\n`)}
-
-                        You have ${db.inventory.find(x => x.id == id).amount - 1} of this item left`)
-                    );
                     client.models.userProfiles.findOne({
                         "user_id": message.author.id
                     }, (err, db) => {
@@ -634,20 +645,48 @@ module.exports = class inventory {
                         if (type == 'COIN') {
                             db.user_coins += rewards.find(x => x.id == reaction.emoji.name).reward;
                         }
-                        db.save((err) => new client.methods.log(client, message.guild).error(err));
+                        db.save((err) => {
+                            if (err) return new client.methods.log(client, message.guild).error(err);
+                        });
                     });
                     db.inventory.find(x => x.id == id).amount = db.inventory.find(x => x.id == id).amount - 1;
                     db.save((err) => {
                         if (err) return new client.methods.log(client, message.guild).error(err);
                         client.functions.inventoryCheckAmount(client, id, message.author.id);
+                        message.channel.send(new client.modules.Discord.MessageEmbed()
+                            .setColor(message.guild.member(client.user).displayHexColor)
+                            .setDescription(`> You opened a ${this.resolveToEmbedName(id)} and received: **${rewards.find(x => x.id == reaction.emoji.name).reward} ${type == 'COIN' ? (rewards.find(x => x.id == reaction.emoji.name).reward > 1 ? 'Coins' : 'Coin') : 'XP'}**
+                        ${rewards.filter(x => x.id !== reaction.emoji.name).map(i => `${i.id} - ${i.reward} XP`).join(`\n`)}
+
+                        You have ${db.inventory.find(x => x.id == id).amount} of this item left
+                        ${db.inventory.find(x => x.id == id).amount > 0 ? `** **\n:white_check_mark: **Claim another ${this.resolveToEmbedName(id)}**` : ''}`)
+                        ).then(msg => {
+                            client.models.userInventories.findOne({
+                                "user_id": message.author.id
+                            }, (err, db) => {
+                                if (err) return new client.methods.log(client).error(err);
+                                if (!db.inventory.find(x => x.id == id)) return;
+                                if (db.inventory.find(x => x.id == id).amount > 0) {
+                                    msg.react(client.storage.emojiCharacters['white_check_mark']);
+                                    let collector = new client.modules.Discord.ReactionCollector(msg, (reaction, user) => reaction.emoji.name == client.storage.emojiCharacters['white_check_mark'] && user.id == message.author.id, {
+                                        time: 120000
+                                    });
+                                    collector.on('collect', reaction => {
+                                        collector.stop();
+                                        msg.delete();
+                                        this.handleUseItem(client, message, id);
+                                    });
+                                }
+                            });
+                        });
                     });
-                })
-            })
-        })
+                });
+            });
+        });
     }
 
     confirmUseItem(client, message, id) {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             message.channel.send(new client.modules.Discord.MessageEmbed()
                 .setTitle(`Confirmation...`)
                 .setDescription(`Are you sure you want to claim your ${this.resolveToEmbedName(id)}? Claiming this item is irreversible!`)
