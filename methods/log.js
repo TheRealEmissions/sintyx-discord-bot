@@ -42,10 +42,10 @@ module.exports = class log {
         return this.send(await this.constructEmbed(null, `**An error has occurred!** Please review the error below:`, await this.constructField(`Error:`, "```" + err + "```"), true))
     }
 
-    async commandRan(author, command, channel_id) {
-        let executor = await this.constructField(`Executor:`, `<@${author.id}> *(${author.id})*`, true),
+    async commandRan(author, command, message) {
+        let executor = await this.constructField(`Executor:`, `<@${message.author.id}> *(${message.author.id})*`, true),
             cmd = await this.constructField(`Command:`, command, true),
-            where = await this.constructField(`Where?`, `<#${channel_id}>`, true);
+            where = await this.constructField(`Where?`, `<#${message.channel.id}> [here](https://discordapp.com/channels/${message.guild.id}/${message.channel.id}/${message.id})`, true);
         let fields = [executor, cmd, where]
         return this.send(await this.constructEmbed(`**Command Ran**`, null, fields, true));
     }

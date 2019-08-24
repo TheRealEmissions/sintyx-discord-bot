@@ -377,7 +377,7 @@ module.exports = (client, message) => {
             return new client.methods.log(client, message.guild).commandRan(
                 message.author,
                 cmd.name,
-                message.channel.id
+                message
             );
         } catch (err) {
             return new client.methods.log(client).error(err);
