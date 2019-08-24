@@ -6,7 +6,8 @@ module.exports = class slu {
     }
 
     async setMessage(client) {
-        return await client.channels.get(client.storage.messageCache['leaderboard'].channel).messages.fetch(client.storage.messageCache['leaderboard'].msg_id);
+        let message = await client.channels.get(client.storage.messageCache['leaderboard'].channel).messages.fetch(client.storage.messageCache['leaderboard'].msg_id);
+        return message;
     }
 
     async init(client) {

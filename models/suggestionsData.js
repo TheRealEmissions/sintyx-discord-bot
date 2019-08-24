@@ -1,4 +1,6 @@
-const { mongoose } = require(`../modules`);
+const {
+    mongoose
+} = require(`../modules`);
 module.exports = mongoose.model(`suggestionsData`, new mongoose.Schema({
     reference_id: {
         type: String,
@@ -18,7 +20,8 @@ module.exports = mongoose.model(`suggestionsData`, new mongoose.Schema({
     },
     suggestion_timestamp: {
         type: Date,
-        required: true
+        required: false,
+        default: new Date()
     },
     suggestion_info: [{
         type: {

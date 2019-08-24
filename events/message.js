@@ -115,7 +115,7 @@ class suggestion {
 
     init() {
         return new Promise((resolve, reject) => {
-            if (suggestionCooldown.has(message.author.id)) {
+            if (suggestionCooldown.has(this.message.author.id)) {
                 this.message.delete();
                 this.message.author.send(
                     `Your recent message in #suggestions has been removed as you are on cooldown. The cooldown lasts 30 seconds. Here is your suggestion in case you need it:\n \`\`\`${
@@ -124,35 +124,37 @@ class suggestion {
                 );
                 return resolve();
             } else {
-                suggestionCooldown.add(message.author.id);
+                suggestionCooldown.add(this.message.author.id);
+                var reference_id = this.client.modules.random_string({
+                    length: 10,
+                    type: "base64"
+                })
                 this.message.channel
                     .send(
-                        new client.modules.Discord.MessageEmbed()
-                        .setColor(this.message.guild.member(this.client).displayHexColor)
+                        new this.client.modules.Discord.MessageEmbed()
+                        .setColor(this.message.guild.me.displayHexColor)
                         .setTitle(`Suggestion from **${this.message.author.tag}**:`)
-                        .setThumbnail(this.message.author.avatarURL)
+                        .setThumbnail(this.message.author.avatarURL())
                         .setDescription(this.message.content)
                         .setTimestamp()
-                        .setFooter(id)
+                        .setFooter(reference_id)
                     )
                     .then(msg => {
                         this.message.delete();
                         msg
-                            .react(client.storage.emojiCharacters["white_check_mark"])
-                            .then(() => msg.react(client.storage.emojiCharacters["x"]));
-                        new this.client.models.suggestionsData({
-                            reference_id: this.client.modules.random_string({
-                                length: 10,
-                                type: "base64"
-                            }),
+                            .react(this.client.storage.emojiCharacters["white_check_mark"])
+                            .then(() => msg.react(this.client.storage.emojiCharacters["x"]));
+                        let db = new this.client.models.suggestionsData({
+                            reference_id: reference_id,
                             user_id: this.message.author.id,
                             message_id: msg.id,
                             suggestion_desc: this.message.content
-                        }).save(err => {
+                        })
+                        db.save(err => {
                             if (err) return reject(err);
                         });
                         setTimeout(() => {
-                            suggestionCooldown.delete(message.author.id);
+                            suggestionCooldown.delete(this.message.author.id);
                         }, 30000);
                         return resolve();
                     });

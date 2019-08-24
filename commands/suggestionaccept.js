@@ -1,10 +1,10 @@
 module.exports = class suggestionaccept {
     constructor() {
         this.name = 'suggestionaccept',
-        this.alias = ['suggestaccept', 'sa', 'suggesta', 'suggestiona', 'saccept'],
-        this.usage = '-suggestionaccept <ID>',
-        this.category = 'administration',
-        this.description = 'Accept a suggestion!'
+            this.alias = ['suggestaccept', 'sa', 'suggesta', 'suggestiona', 'saccept'],
+            this.usage = '-suggestionaccept <ID>',
+            this.category = 'administration',
+            this.description = 'Accept a suggestion!'
     }
 
     async run(client, message, args) {
@@ -20,7 +20,7 @@ module.exports = class suggestionaccept {
                 .setDescription(`> You are accepting **${args[1]}** - what is your comment for this suggestion?`)
             ).then(msg => {
                 let collector = new client.modules.Discord.MessageCollector(message.channel, m => m.author.id == message.author.id, {});
-                collector.on('collect', async(comment) => {
+                collector.on('collect', async (comment) => {
                     msg.delete();
                     comment.delete();
                     collector.stop();
@@ -45,6 +45,7 @@ module.exports = class suggestionaccept {
                 .setDescription(db.suggestion_desc)
                 .addField(`Comment from **${message.author.tag}**:`, comment)
                 .setTimestamp()
+                .setThumbnail(message.author.avatarURL())
                 .setFooter(id)
             );
             if (db.suggestion_info.length > 0) {
