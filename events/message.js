@@ -276,7 +276,7 @@ class handledb extends dbfunctions {
                         if (err) return reject(err);
                         if (await this.checkSettings("xp_ping")) {
                             message.channel
-                                .send(`<@${message.author.id}> **+${xpToAdd} XP**`)
+                                .send(`<@${message.author.id}> **+${plusXP} XP**`)
                                 .then(msg => setTimeout(() => msg.delete(), 1800));
                         }
                         return resolve();
