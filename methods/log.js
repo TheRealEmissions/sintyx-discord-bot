@@ -49,4 +49,8 @@ module.exports = class log {
         let fields = [executor, cmd, where]
         return this.send(await this.constructEmbed(`**Command Ran**`, null, fields, true));
     }
+
+    async levelUp(author, level) {
+        return this.send(await this.constructEmbed(`**Level Up**`, null, [await this.constructField(`User:`, `<@${author.id}> *(${author.id})*`, true), await this.constructField(`Previous Level:`, level - 1, true), await this.constructField(`Current Level:`, level, true)], true));
+    }
 }
