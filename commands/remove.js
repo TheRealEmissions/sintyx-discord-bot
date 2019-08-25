@@ -1,10 +1,10 @@
 module.exports = class remove {
     constructor() {
         this.name = 'remove',
-        this.alias = [],
-        this.usage = 'remove <@user> [reason]',
-        this.category = 'tickets',
-        this.description = 'Remove a user from a Support Ticket'
+            this.alias = [],
+            this.usage = '-remove <@user> [reason]',
+            this.category = 'tickets',
+            this.description = 'Remove a user from a Support Ticket'
     }
 
     async run(client, message, args) {
