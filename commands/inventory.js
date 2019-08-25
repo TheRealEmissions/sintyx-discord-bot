@@ -83,7 +83,7 @@ module.exports = class inventory {
                             description: `** ** \n:one: Use item\n:two: Send an item to another user\n:three: Delete an item\n** ** `,
                             fields: [{
                                 name: `Item:`,
-                                value: items.map(i => `[${i.name}](https://sintyx.com "${i.desc}")`).join(`\n`),
+                                value: items.map(i => `${i.name}`).join(`\n`),
                                 inline: true
                             }, {
                                 name: `Amount:`,
@@ -132,7 +132,7 @@ module.exports = class inventory {
                     if (this.checkItemUsable(inv[count].id) == true) {
                         fields.push({
                             id: count,
-                            item: `[${this.resolveToName(inv[count].id)}](https://sintyx.com/ "${this.resolveToDesc(inv[count].id)}")`,
+                            item: `${this.resolveToName(inv[count].id)}`,
                             amount: inv[count].amount,
                             name: this.resolveToName(inv[count].id)
                         });
@@ -192,7 +192,7 @@ module.exports = class inventory {
                     }
                     fields.push({
                         id: count,
-                        item: `${this.resolveToEmbedName(inv[count].id)}`,
+                        item: `${this.resolveToName(inv[count].id)}`,
                         amount: inv[count].amount,
                         name: this.resolveToName(inv[count].id)
                     });
@@ -248,7 +248,7 @@ module.exports = class inventory {
                     }
                     fields.push({
                         id: count,
-                        item: `${this.resolveToEmbedName(inv[count].id)}`,
+                        item: `${this.resolveToName(inv[count].id)}`,
                         amount: inv[count].amount,
                         name: this.resolveToName(inv[count].id)
                     });
