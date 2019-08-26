@@ -23,18 +23,18 @@ module.exports = class trello {
             let task = new this.modules.Discord.MessageEmbed()
                 .setDescription(`What is this task of this card?`)
             let trello = this;
-            message.channel.send(await main).then(async (origMsg) => {
+            message.channel.send(main).then(async (origMsg) => {
                 // title
-                message.channel.send(await title).then(async function (wizardMsg) {
+                message.channel.send(title).then(async function (wizardMsg) {
                     let titleCollector = new trello.modules.Discord.MessageCollector(message.channel, m => m.author.id == message.author.id, {
                         max: 1
                     });
                     titleCollector.on('collect', async function (titleMessage) {
                         titleCollector.stop();
                         titleMessage.delete();
-                        origMsg.edit(await main.addField(`Title`, titleMessage, true));
+                        origMsg.edit(main.addField(`Title`, titleMessage, true));
                         // description
-                        wizardMsg.edit(await description);
+                        wizardMsg.edit(description);
                         let descCollector = new trello.modules.Discord.MessageCollector(message.channel, m => m.author.id == message.author.id, {
                             max: 1
                         });
@@ -207,7 +207,6 @@ module.exports = class trello {
                                     });
                                     msgCollector.on('collect', async (stageMessage) => {
                                         stageMessage.content = parseInt(stageMessage.content);
-                                        console.log(typeof stageMessage.content);
                                         if (stageMessage.content == db.card_stage) {
                                             let embed = new client.modules.Discord.MessageEmbed()
                                                 .setDescription(`${client.storage.emojiCharacters['x']} You cannot edit the stage to the stage it is already at!`)
@@ -229,7 +228,7 @@ module.exports = class trello {
                                         let origMessage = await client.channels.find(x => x.id == (Boolean(db.card_stage == 1) ? client.storage.messageCache['trelloChannels'].stageOne : (Boolean(db.card_stage == 2) ? client.storage.messageCache['trelloChannels'].stageTwo : (Boolean(db.card_stage == 3) ? client.storage.messageCache['trelloChannels'].stageThree : client.storage.messageCache['trelloChannels'].stageFour)))).messages.fetch(db.message_id);
                                         origMessage.delete();
                                         db.card_stage = stageMessage.content;
-                                        db.save((err) => new client.methods.log(client, message.guild).error(err));
+                                        await db.save((err) => new client.methods.log(client, message.guild).error(err));
                                         let channel = await client.channels.find(x => x.id == (Boolean(stageMessage.content == 1) ? client.storage.messageCache['trelloChannels'].stageOne : (Boolean(stageMessage.content == 2) ? client.storage.messageCache['trelloChannels'].stageTwo : (Boolean(stageMessage.content == 3) ? client.storage.messageCache['trelloChannels'].stageThree : client.storage.messageCache['trelloChannels'].stageFour))));
                                         let embed = new client.modules.Discord.MessageEmbed()
                                             .setTitle(`**${db.card_id}** - ${db.embed_title}`)

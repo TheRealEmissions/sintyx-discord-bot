@@ -9,7 +9,7 @@ module.exports = class trello {
             1: this.stageOne(client, card_id).catch(err => new this.log(client).error(err)),
             2: this.stageTwo(client, card_id).catch(err => new this.log(client).error(err)),
             3: this.stageThree(client, card_id).catch(err => new this.log(client).error(err))
-        }[stage];
+        } [stage];
     }
 
     stageOne(client, card_id) {
@@ -30,7 +30,7 @@ module.exports = class trello {
                         .setTitle(`**${db.card_id}** - ${db.embed_title}`)
                         .setDescription(db.embed_desc)
                         .addField(`Task:`, db.embed_task)
-                    client.channels.get(client.storage.messageCache['trelloChannels'].stageThree).send(embed).then(message => {
+                    client.channels.get(client.storage.messageCache['trelloChannels'].stageTwo).send(embed).then(message => {
                         db.card_stage = 2;
                         db.message_id = message.id;
                         db.save((err) => {
@@ -49,7 +49,7 @@ module.exports = class trello {
             client.models.trelloCards.findOne({
                 "card_stage": 2,
                 "card_id": card_id
-            }, async(err, db) => {
+            }, async (err, db) => {
                 if (err) return reject(err);
                 if (!db) return reject(`Could not initiate TRELLO COLLECTOR, no DATABASE ENTRY found`);
                 let msg = await client.channels.get(client.storage.messageCache['trelloChannels'].stageTwo).messages.fetch(db.message_id);
@@ -81,7 +81,7 @@ module.exports = class trello {
             client.models.trelloCards.findOne({
                 "card_stage": 3,
                 "card_id": card_id
-            }, async(err, db) => {
+            }, async (err, db) => {
                 if (err) return reject(err);
                 if (!db) return reject(`Could not initiate TRELLO COLLECTOR, no DATABASE ENTRY found`);
                 let msg = await client.channels.get(client.storage.messageCache['trelloChannels'].stageThree).messages.fetch(db.message_id);
