@@ -73,8 +73,8 @@ class app {
         });
     }
 
-    async collectDenyReason(client, message) {
-        return new Promise((resolve, reject) => {
+    collectDenyReason(client, message) {
+        return new Promise(async (resolve, reject) => {
             const msg = await message.channel.send(new client.modules.Discord.MessageEmbed()
                 .setColor(message.guild.me.displayHexColor)
                 .setDescription(`What is the reason of rejection for this applicant?`)

@@ -366,7 +366,7 @@ module.exports = (client, message) => {
     if (message.author.id == client.user.id) return;
     if (message.author.bot) return;
     new checkdb(client, message);
-    if (message.content.toString().startsWith("-")) {
+    if (message.content.toString().startsWith(client.commandHandler.prefix[0])) {
         if (message.channel.name == "suggestions") return message.delete();
         let args = message.content.split(" ");
         let command = args[0];

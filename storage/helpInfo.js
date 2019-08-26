@@ -1,7 +1,7 @@
 function getAliases(command) {
     let file = require(`../commands/${command}`);
     let cmd = new file();
-    let aliases = cmd.aliases.length > 0 ? cmd.aliases.join(`\n`) : `No aliases currently`;
+    let aliases = cmd.alias.length > 0 ? cmd.alias.join(`\n`) : `No aliases currently`;
     return aliases;
 }
 

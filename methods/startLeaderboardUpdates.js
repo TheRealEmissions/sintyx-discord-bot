@@ -1,17 +1,17 @@
 module.exports = class slu {
     constructor(client) {
-        this.message = this.setMessage(client);
         this.log = require(`../methods`).log;
         this.init(client);
     }
 
     async setMessage(client) {
-        let message = await client.channels.get(client.storage.messageCache['leaderboard'].channel).messages.fetch(client.storage.messageCache['leaderboard'].msg_id);
+        const message = await client.channels.get(client.storage.messageCache['leaderboard'].channel).messages.fetch(client.storage.messageCache['leaderboard'].msg_id);
         return message;
     }
 
     async init(client) {
-        console.log(this.message);
+        const message = await this.setMessage(client);
+        this.message = message;
         await this.leaderboardOne(client).catch(err => new this.log(client).error(err));
         await this.leaderboardTwo(client).catch(err => new this.log(client).error(err));
         await this.leaderboardThree(client).catch(err => new this.log(client).error(err));
@@ -54,7 +54,7 @@ module.exports = class slu {
                         user_id: docs[count].user_id,
                         avg_msg_xp: parseFloat((docs[count].user_xp / docs[count].message_count).toFixed(2))
                     });
-                    obj.users = obj.users.sort((a, b) => b.avg_msg_xp - a.avg.msg.xp);
+                    obj.users = obj.users.sort((a, b) => b.avg_msg_xp - a.avg_msg_xp);
                 }
             });
         });
@@ -89,10 +89,10 @@ module.exports = class slu {
                     setTimeout(() => resolve(), 15000);
                     break;
                 }
-                let userid = lb[count].user_id,
+                let userid = await lb[count].user_id,
                     user = await client.users.fetch(userid);
                 embed.embed.fields.push({
-                    name: "`" + `#${i}` + "`" + ` ${user.username}#${user.discriminator} || *Level ${lb[count].user_level}*`,
+                    name: "`" + `#${count}` + "`" + ` ${user.username}#${user.discriminator} || *Level ${lb[count].user_level}*`,
                     value: `${lb[count].user_xp} / ${Number(lb[count].user_level) * 1000}`,
                     inline: false
                 });
@@ -119,10 +119,10 @@ module.exports = class slu {
                     setTimeout(() => resolve(), 15000);
                     break;
                 }
-                let userid = this.lb[count].user_id;
+                let userid = await lb[count].user_id;
                 let user = await client.users.fetch(userid);
                 embed.embed.fields.push({
-                    name: "`" + `#${i}` + "`" + ` ${user.username}#${user.discriminator}`,
+                    name: "`" + `#${count}` + "`" + ` ${user.username}#${user.discriminator}`,
                     value: `${lb[count].user_coins}`,
                     inline: false
                 });
@@ -152,7 +152,7 @@ module.exports = class slu {
                     let userid = await lb.users[count].user_id;
                     let user = await client.users.fetch(userid);
                     embed.embed.fields.push({
-                        name: "`" + `#${i}` + "`" + ` ${user.username}#${user.discriminator}`,
+                        name: "`" + `#${count}` + "`" + ` ${user.username}#${user.discriminator}`,
                         value: `${obj.users[count].avg_msg_xp}`,
                         inline: false
                     });
@@ -186,7 +186,7 @@ module.exports = class slu {
                 let userid = await lb[count].user_id;
                 let user = await client.users.fetch(userid);
                 embed.embed.fields.push({
-                    name: "`" + `#${i}` + "`" + ` ${user.username}#${user.discriminator}`,
+                    name: "`" + `#${count}` + "`" + ` ${user.username}#${user.discriminator}`,
                     value: `${lb[count].message_count}`,
                     inline: false
                 });

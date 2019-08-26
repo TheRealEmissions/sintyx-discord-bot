@@ -22,7 +22,10 @@ HANDLERS
 */
 
 let url = `mongodb+srv://user:Hd5V1v3UiOhBMS3S@emissions-fmfww.mongodb.net/sintyx?retryWrites=true&w=majority`;
-modules.mongoose.connect(url, { useNewUrlParser: true, useFindAndModify: false });
+modules.mongoose.connect(url, {
+    useNewUrlParser: true,
+    useFindAndModify: false
+});
 modules.mongoose.connection.on('error', console.error.bind(console, '[ERROR] Connection error:'));
 modules.mongoose.connection.once('open', () => {
     console.log(`[LOG] Connected to the database.`);
@@ -40,10 +43,13 @@ modules.fs.readdir(`./events/`, (err, files) => {
     });
 });
 
-const { CommandHandler } = require(`djs-commands`);
+
+const {
+    CommandHandler
+} = require(`djs-commands`);
 let cmdHandler = new CommandHandler({
     folder: __dirname + `/commands/`,
-    prefix: ["-"]
+    prefix: Boolean(storage.auth['developer']) ? "=" : "-"
 });
 
 /*
