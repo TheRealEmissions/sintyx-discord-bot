@@ -1,10 +1,10 @@
 module.exports = class profile {
     constructor() {
         this.name = 'profile',
-        this.alias = [],
-        this.usage = '-profile [@user]',
-        this.category = 'user',
-        this.description = 'View your profile or another user\'s profile!'
+            this.alias = [],
+            this.usage = '-profile [@user]',
+            this.category = 'user',
+            this.description = 'View your profile or another user\'s profile!'
     }
 
     async run(client, message, args) {
@@ -39,6 +39,7 @@ module.exports = class profile {
                             let xpPerMsg = parseFloat(average.toFixed(2));
                             let embed = new client.modules.Discord.MessageEmbed()
                                 .setTitle(`**${user.username}${Boolean(user.username.endsWith('s')) ? `'`: `'s`}** Profile - **General Information**`)
+                                .setThumbnail(user.avatarURL())
                                 .addField(`Message Count`, profileDB.message_count, true)
                                 .addField(`XP`, profileDB.user_xp, true)
                                 .addField(`Average XP/msg`, xpPerMsg, true)
