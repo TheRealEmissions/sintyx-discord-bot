@@ -11,18 +11,14 @@ module.exports = mongoose.model(`staffProfiles`, new mongoose.Schema({
         required: false,
         default: true
     },
-    position_log: [{
-        type: String, // i.e. Accepted, Removed, Demoted, Promoted
-        timestamp: Date,
-        role_id: String
-    }],
+    position_log: Array,
     role_id: {
         type: String,
         required: false,
         default: null
     },
-    punishments: [{
-        user_id: String,
-        reference_id: String
-    }]
+    punishments: Array
+    // ^^
+    // user_id: String
+    // reference_id: String
 }));

@@ -52,23 +52,30 @@ class app {
                 db.status = 'ACCEPTED';
                 let newdb = new client.models.staffProfiles({
                     user_id: db.user_id,
-                    position_log: [{
-                        type: 'ACCEPTED',
-                        timestamp: new Date(),
-                        role_id: role.id
-                    }],
-                    role_id: role.id,
-                    punishments: []
+                    role_id: role.id
                 });
                 newdb.save((err) => {
                     if (err) return reject(err);
+                    else client.models.staffProfiles.findOne({
+                        "user_id": db.user_id
+                    }, (err, datab) => {
+                        if (err) return reject(err);
+                        datab.position_log.push({
+                            type: "ACCEPTED",
+                            timestamp: new Date(),
+                            role_id: role.id
+                        });
+                        datab.save((err) => {
+                            if (err) return reject(err);
+                        });
+                    });
                 });
                 db.save((err) => {
                     if (err) return reject(err);
                 });
                 message.guild.members.get(db.user_id).roles.add([role.id]);
                 message.channel.send(`**:wave: Hey <@${message.guild.members.get(db.user_id).user.id}>!** You have been accepted as a staff member for Sintyx! You have been awarded ${role}.`);
-                return resolve();
+                resolve();
             });
         });
     }
@@ -97,7 +104,7 @@ class app {
                 if (err) return reject(err);
                 const user = await message.guild.members.get(db.user_id).user;
                 const reason = await this.collectDenyReason(client, message);
-                message.channel.send(`**:wave: Hey <@${user}!** Unfortunately, we have decided to reject your application. This is the reason we have provided:\n\`\`\`${reason}\`\`\``)
+                message.channel.send(`**:wave: Hey ${user}!** Unfortunately, we have decided to reject your application. This is the reason we have provided:\n\`\`\`${reason}\`\`\``)
                 return resolve();
             });
         });

@@ -163,50 +163,6 @@ class suggestion {
     }
 }
 
-class ticket {
-    constructor(client, message) {
-        this.client = client;
-        this.message = message;
-    }
-
-    init() {
-        return new Promise((resolve, reject) => {
-            this.client.models.supportTickets.findOne({
-                    channel_id: this.message.channel.id
-                },
-                (err, db) => {
-                    if (err) return reject(err);
-                    if (!db)
-                        return reject(
-                            `User typing in channel found in SUPPORT TICKETS but no SUPPORT TICKET DATABASE ENTRY can be found! (${
-                this.message.channel.name
-              } ${this.message.channel.id})`
-                        );
-                    if (
-                        db.options.find(x => x.name == "ticket_mentioning").boolean == true
-                    ) {
-                        if (this.message.author.id == db.user_id) return resolve();
-                        if (this.message.mentions.users.first().id == db.user_id)
-                            return resolve();
-                        this.message.channel
-                            .send(`<@${db.user_id}>`)
-                            .then(msg => setTimeout(() => msg.delete(), 10));
-                    }
-                    db.logs.push({
-                        user_id: this.message.author.id,
-                        message_id: this.message.id,
-                        message_content: this.message.content,
-                        timestamp: this.message.createdTimestamp
-                    });
-                    db.save(err => {
-                        return reject(err);
-                    });
-                }
-            );
-        });
-    }
-}
-
 class dbfunctions {
     constructor(client, message) {
         this.client = client;
@@ -240,6 +196,52 @@ class dbfunctions {
     }
 }
 
+class ticket extends dbfunctions {
+    constructor(client, message) {
+        super(client, message);
+        this.client = client;
+        this.message = message;
+    }
+
+    init() {
+        return new Promise((resolve, reject) => {
+            this.client.models.supportTickets.findOne({
+                    channel_id: this.message.channel.id
+                },
+                async (err, db) => {
+                    if (err) return reject(err);
+                    if (!db)
+                        return reject(
+                            `User typing in channel found in SUPPORT TICKETS but no SUPPORT TICKET DATABASE ENTRY can be found! (${
+                this.message.channel.name
+              } ${this.message.channel.id})`
+                        );
+                    if (
+                        await this.checkSettings('ticket_mentioning')
+                    ) {
+                        if (this.message.author.id == db.user_id) return resolve();
+                        if (this.message.mentions.users.first().id == db.user_id)
+                            return resolve();
+                        this.message.channel
+                            .send(`<@${db.user_id}>`)
+                            .then(msg => setTimeout(() => msg.delete(), 10));
+                    }
+                    db.logs.push({
+                        user_id: this.message.author.id,
+                        message_id: this.message.id,
+                        message_content: this.message.content,
+                        timestamp: this.message.createdTimestamp
+                    });
+                    db.save(err => {
+                        if (err) return reject(err);
+                    });
+                    return resolve();
+                }
+            );
+        });
+    }
+}
+
 class handledb extends dbfunctions {
     constructor(client, message) {
         super(client, message);
@@ -262,7 +264,7 @@ class handledb extends dbfunctions {
             "user_id": message.author.id
         }, (err, db) => {
             if (err) return new client.methods.log(client).error(err);
-            db.user_xp = xp;
+            db.user_xp += xp;
             db.user_level = level == true ? db.user_level + 1 : db.user_level;
             db.user_coins = coins == false ? db.user_coins : coins;
             db.message_count += 1;
