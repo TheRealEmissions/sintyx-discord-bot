@@ -49,7 +49,7 @@ const {
 } = require(`djs-commands`);
 let cmdHandler = new CommandHandler({
     folder: __dirname + `/commands/`,
-    prefix: Boolean(storage.auth['developer']) ? "=" : "-"
+    prefix: (storage.auth['developer'] == true) ? "=" : "-"
 });
 
 /*
