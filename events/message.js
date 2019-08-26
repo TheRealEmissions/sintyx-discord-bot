@@ -249,40 +249,45 @@ class handledb extends dbfunctions {
     }
 
     async run(client, message) {
-        this.addXP(client, message).catch(err =>
+        const xp = await this.addXP(client).catch(err =>
             new client.methods.log(client).error(err)
         );
-        this.checkLevel(client, message).catch(err =>
+        const level = await this.checkLevel(client, message).catch(err =>
             new client.methods.log(client).error(err)
         );
-        this.addCoins(client, message).catch(err =>
+        const coins = await this.addCoins(client, message).catch(err =>
             new client.methods.log(client).error(err)
         );
-        this.addMessageCount(client, message).catch(err =>
-            new client.methods.log(client).error(err)
-        );
+        client.models.userProfiles.findOne({
+            "user_id": message.author.id
+        }, (err, db) => {
+            if (err) return new client.methods.log(client).error(err);
+            db.user_xp = xp;
+            db.user_level = level == true ? db.user_level + 1 : db.user_level;
+            db.user_coins = coins == false ? db.user_coins : coins;
+            db.message_count += 1;
+            db.save((err) => {
+                if (err) return new client.methods.log(client).error(err);
+            });
+        });
+        if (await this.checkSettings("xp_ping")) {
+            message.channel
+                .send(`<@${message.author.id}> **+${xp} XP**`)
+                .then(msg => setTimeout(() => msg.delete(), 1800));
+
+        }
+        if (await this.checkSettings('coin_ping')) {
+            if (coins !== false) {
+                message.channel
+                    .send(`<@${message.author.id}> **+${coins} Coins**`)
+                    .then(msg => setTimeout(() => msg.delete(), 1800));
+            }
+        }
     }
 
-    addXP(client, message) {
+    addXP(client) {
         return new Promise((resolve, reject) => {
-            client.models.userProfiles.findOne({
-                    user_id: message.author.id
-                },
-                (err, db) => {
-                    if (err) return reject(err);
-                    let plusXP = client.functions.genNumberBetween(1, 20);
-                    db.user_xp += plusXP;
-                    db.save(async err => {
-                        if (err) return reject(err);
-                        if (await this.checkSettings("xp_ping")) {
-                            message.channel
-                                .send(`<@${message.author.id}> **+${plusXP} XP**`)
-                                .then(msg => setTimeout(() => msg.delete(), 1800));
-                        }
-                        return resolve();
-                    });
-                }
-            );
+            return resolve(client.functions.genNumberBetween(1, 20));
         });
     }
 
@@ -297,22 +302,11 @@ class handledb extends dbfunctions {
                         message.channel.send(
                             new client.modules.Discord.MessageEmbed()
                             .setColor(message.guild.member(client.user).displayHexColor)
-                            .setDescription(
-                                `<@${message.author.id}>! You have reached **${db.user_level *
-                    1000} XP** and have ranked up to **Level ${
-                    db.user_level
-                  }**!`
-                            )
+                            .setDescription(`<@${message.author.id}>! You have reached **${db.user_level * 1000} XP** and have ranked up to **Level ${db.user_level + 1}**!`)
                         );
-                        db.user_level += 1;
-                        db.save(err => {
-                            if (err) return reject(err);
-                            else {
-                                new client.methods.log(client, message.guild).levelUp(message.author, db.user_level);
-                                return resolve();
-                            }
-                        });
-                    } else return resolve();
+                        new client.methods.log(client, message.guild).levelUp(message.author, db.user_level);
+                        return resolve(true);
+                    } else return resolve(false);
                 }
             );
         });
@@ -327,34 +321,8 @@ class handledb extends dbfunctions {
                     if (err) return reject(err);
                     if (client.functions.percentChance(35)) {
                         let coin = client.functions.genNumberBetween(1, 10);
-                        db.user_coins += coin;
-                        if (await this.checkSettings("coin_ping")) {
-                            message.channel
-                                .send(`<@${message.author.id}> **+${coin} Coins**`)
-                                .then(msg => setTimeout(() => msg.delete(), 1800));
-                        }
-                        db.save(err => {
-                            if (err) return reject(err);
-                            else return resolve();
-                        });
-                    }
-                }
-            );
-        });
-    }
-
-    addMessageCount(client, message) {
-        return new Promise((resolve, reject) => {
-            client.models.userProfiles.findOne({
-                    user_id: message.author.id
-                },
-                (err, db) => {
-                    if (err) return reject(err);
-                    db.message_count += 1;
-                    db.save(err => {
-                        if (err) return reject(err);
-                        else return resolve();
-                    });
+                        return resolve(coin);
+                    } else return resolve(false);
                 }
             );
         });
