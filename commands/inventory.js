@@ -502,7 +502,7 @@ module.exports = class inventory {
                                 client.functions.inventoryCheckAmount(client, id, message.author.id);
                                 message.channel.send(new client.modules.Discord.MessageEmbed()
                                     .setColor(message.guild.member(client.user).displayHexColor)
-                                    .setDescription(`> Claimed [${this.resolveToName(id)}](https://sintyx.com "${this.resolveToDesc(id)}")\nYou have been awarded the ${this.items.find(x => x.id == id).rewards[0].role_name} role!\nYou have ${parseInt(db.inventory.find(x => x.id == id).amount) - 1} of this item left in your inventory.`)
+                                    .setDescription(`> Claimed [${this.resolveToName(id)}](https://sintyx.com "${this.resolveToDesc(id)}")\nYou have been awarded the ${this.items.find(x => x.id == id).reward[0].role_name} role!\nYou have ${parseInt(db.inventory.find(x => x.id == id).amount)} of this item left in your inventory.`)
                                 );
                             });
                         });

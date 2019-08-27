@@ -267,7 +267,7 @@ class handledb extends dbfunctions {
             if (err) return new client.methods.log(client).error(err);
             db.user_xp += xp;
             db.user_level = level == true ? db.user_level + 1 : db.user_level;
-            db.user_coins = coins == false ? db.user_coins : coins;
+            db.user_coins = coins == false ? db.user_coins : db.user_coins + coins;
             db.message_count += 1;
             db.save((err) => {
                 if (err) return new client.methods.log(client).error(err);

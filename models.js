@@ -8,5 +8,6 @@ module.exports = {
     userInventories: require(`./models/userInventories.js`),
     suggestionsData: require(`./models/suggestionsData`),
     staffApplications: require(`./models/staffApplications`),
-    staffProfiles: require(`./models/staffProfiles`)
+    staffProfiles: require(`./models/staffProfiles`),
+    shopData: require(`./models/shopData`)
 }
