@@ -19,7 +19,7 @@ module.exports = class tickets {
                     if (term === 1) return "Feb."
                     if (term === 2) return "Mar."
                     if (term === 3) return "Apr."
-                    if (term === 4) return "Mar."
+                    if (term === 4) return "May"
                     if (term === 5) return "Jun."
                     if (term === 6) return "Jul."
                     if (term === 7) return "Aug."

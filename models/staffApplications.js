@@ -17,7 +17,7 @@ module.exports = mongoose.model(`staffApplications`, new mongoose.Schema({
     timestamp: {
         type: Date,
         required: false,
-        default: new Date().getTime()
+        default: new Date()
     },
     status: { // PENDING, DENIED, ACCEPTED
         type: String,

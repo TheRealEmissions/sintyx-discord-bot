@@ -60,6 +60,11 @@ let userProfiles = new modules.mongoose.Schema({
         reference_id: {
             type: String,
             required: false
+        },
+        timestamp: {
+            type: Date,
+            required: false,
+            default: new Date()
         }
     }]
 });
