@@ -261,10 +261,15 @@ module.exports = class shop {
         return new Promise((resolve, reject) => {
             client.models.shopData.find({}).lean().exec(async (err, docs) => {
                 if (err) return reject(err);
+                let items = [];
+                for (const count in docs) {
+                    const name = await this.getInventoryItemName(docs[count].inventory_id);
+                    items.push(`\`${docs[count].item_id}\` ${name}`);
+                }
                 message.channel.send(new client.modules.Discord.MessageEmbed()
                     .setColor(message.guild.me.displayHexColor)
                     .setDescription(`What item do you want to remove?`)
-                    .addField(`Items:`, docs.map(doc => `\`${doc.item_id}\` ${await this.getInventoryItemName(doc.inventory_id)}`).join(`\n`))
+                    .addField(`Items:`, items.join(`\n`))
                 ).then(msg => {
                     let collector = new client.modules.Discord.MessageCollector(message.channel, m => m.author.id == message.author.id, {});
                     collector.on('collect', item => {
