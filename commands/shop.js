@@ -103,7 +103,7 @@ module.exports = class shop {
                                         await this.addToInventory(db.inventory_id, db.item_amount, client, message).catch(err => reject(err));
                                         message.channel.send(new client.modules.Discord.MessageEmbed()
                                             .setColor(message.guild.me.displayHexColor)
-                                            .setDescription(`> Purchased ${db.item_amount}x ${await this.getInventoryItemName(db.inventory_id)} for ${db.item_price} Coins\nYou have ${this.getCoins(client, message.author.id)} Coins remaining in your balance.`)
+                                            .setDescription(`> Purchased **${db.item_amount}x ${await this.getInventoryItemName(db.inventory_id)}** for **${db.item_price} Coins**\nYou have ${this.getCoins(client, message.author.id)} Coins remaining in your balance.`)
                                         );
                                     } else return;
                                 });
@@ -295,6 +295,7 @@ module.exports = class shop {
             }, (err, db) => {
                 if (err) return new client.methods.log(client).error(err);
                 message.channel.send(`Removed shop item ID ${item}!`);
+                this.sortDocs(client);
             });
         });
     }
