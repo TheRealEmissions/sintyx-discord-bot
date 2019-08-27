@@ -10,7 +10,6 @@ module.exports = class setslogan {
     checkFilter(term, filter, message) {
         return new Promise((resolve, reject) => {
             term = term.toLowerCase().split(" ").join("");
-            console.log(term);
             for (const word of filter) {
                 if (term.includes(word)) {
                     message.channel.send(`:x: Your slogan cannot contain banned terms! Found term: \`${word}\``).then(msg => {
