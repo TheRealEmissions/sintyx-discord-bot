@@ -40,6 +40,7 @@ module.exports = class profile {
                             let embed = new client.modules.Discord.MessageEmbed()
                                 .setTitle(`**${user.username}${Boolean(user.username.endsWith('s')) ? `'`: `'s`}** Profile - **General Information**`)
                                 .setThumbnail(user.avatarURL())
+                                .setDescription(`${profileDB.user_slogan ? profileDB.user_slogan : ':x: No slogan currently set - set your slogan with `-setslogan <slogan>`'}`)
                                 .addField(`Message Count`, profileDB.message_count, true)
                                 .addField(`XP`, profileDB.user_xp, true)
                                 .addField(`Average XP/msg`, xpPerMsg, true)

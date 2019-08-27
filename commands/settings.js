@@ -19,8 +19,7 @@ module.exports = class settings {
                 return new client.modules.Discord.MessageEmbed()
                     .setTitle(`Settings for **${message.author.tag}**:`)
                     .setColor(message.guild.member(client.user).displayHexColor)
-                    .addField(`Reaction`, `${ec[1]}\n${ec[2]}\n${ec[3]}`, true)
-                    .addField(`Setting`, `XP Ping\nCoin Ping\nTicket Mentioning`, true)
+                    .addField(`Setting`, `${ec[1]} XP Ping\n${ec[2]} Coin Ping\n${ec[3]} Ticket Mentioning`, true)
                     .addField(`Status`, `${xp == true ? ec['white_check_mark'] : ec['x']}\n${coin == true ? ec['white_check_mark'] : ec['x']}\n${tm == true ? ec['white_check_mark'] : ec['x']}`, true)
             }
 

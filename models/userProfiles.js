@@ -5,6 +5,7 @@ let userProfiles = new modules.mongoose.Schema({
     user_xp: Number,
     user_level: Number,
     user_coins: Number,
+    user_slogan: String,
     message_count: {
         type: Number,
         required: true,

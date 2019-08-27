@@ -24,6 +24,7 @@ class checkdb {
                             user_xp: 0,
                             user_level: 1,
                             user_coins: 0,
+                            user_slogan: ':x: No slogan currently set - set your slogan with `-setslogan <slogan>`',
                             message_count: 0
                         });
                         newdb.save(err => {
