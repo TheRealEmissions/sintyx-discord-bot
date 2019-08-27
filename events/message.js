@@ -217,15 +217,20 @@ class ticket extends dbfunctions {
                 this.message.channel.name
               } ${this.message.channel.id})`
                         );
-                    if (
-                        await this.checkSettings('ticket_mentioning')
-                    ) {
-                        if (this.message.author.id == db.user_id) return resolve();
-                        if (this.message.mentions.users.first().id == db.user_id)
-                            return resolve();
-                        this.message.channel
-                            .send(`<@${db.user_id}>`)
-                            .then(msg => setTimeout(() => msg.delete(), 10));
+                    if (await this.checkSettings('ticket_mentioning')) {
+                        if (this.message.author.id !== db.user_id) {
+                            if (this.message.mentions.users.first()) {
+                                if (this.message.mentions.users.first().id !== db.user_id) {
+                                    this.message.channel
+                                        .send(`<@${db.user_id}>`)
+                                        .then(msg => setTimeout(() => msg.delete(), 10));
+                                }
+                            } else {
+                                this.message.channel
+                                    .send(`<@${db.user_id}>`)
+                                    .then(msg => setTimeout(() => msg.delete(), 10));
+                            }
+                        }
                     }
                     db.logs.push({
                         user_id: this.message.author.id,
@@ -355,11 +360,11 @@ module.exports = (client, message) => {
         }
     } else {
         if (message.channel.name == "suggestions") {
-            return new suggestion(client, message)
+            new suggestion(client, message)
                 .init()
                 .catch(err => new client.methods.log(client).error(err));
         }
-        if (message.channel.parentID == "590285807265251339") {
+        if (message.channel.parent.name == "Support Tickets") {
             new ticket(client, message)
                 .init()
                 .catch(err => new client.methods.log(client).error(err));

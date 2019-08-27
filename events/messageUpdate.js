@@ -2,6 +2,7 @@ module.exports = (client, oldMessage, newMessage) => {
     if (newMessage.channel.type !== "text") return;
     if (newMessage.author.id == client.user.id) return;
     if (newMessage.author.bot) return;
+    if (newMessage.content.startsWith(client.commandHandler.prefix[0])) return;
     if (newMessage.channel.parentID == "590285807265251339") {
         client.models.supportTickets.findOne({
             "channel_id": newMessage.channel.id,
