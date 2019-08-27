@@ -46,7 +46,7 @@ module.exports = class tickets {
                         return term;
                     }
                 }
-                if (docs[0].ticket_history) {
+                if (docs[0].ticket_history[0]) {
                     docs[0].ticket_history = docs[0].ticket_history.sort((a, b) => {
                         return new Date(b.timestamp) - new Date(a.timestamp);
                     });
