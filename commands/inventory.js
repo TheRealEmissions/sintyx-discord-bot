@@ -540,6 +540,125 @@ module.exports = class inventory {
                 }
             })
         }
+        // BOOSTER HANDLER
+        if (this.items.find(x => x.id == id).type == 4) {
+            this.confirmUseItem(client, message, id).then(b => {
+                if (b == true) {
+                    this.handleBooster(client, message, id, this.items.find(x => x.id == id).reward[0].type);
+                }
+            });
+        }
+    }
+
+    handleBooster(client, message, id, type) {
+        client.models.guildSettings.findOne({
+            "guild_id": message.guild.id
+        }, (err, db) => {
+            if (err) return new client.methods.log(client, message.guild).error(err);
+            this.boosterUpdateInventory(client, message, id);
+            const uniqueID = client.modules.random_string({
+                length: 10,
+                type: 'base64'
+            });
+            if (type == 'XP') {
+                db.xp_booster.push({
+                    id: uniqueID,
+                    percent: this.items.find(x => x.id == id).reward[0].percent,
+                    user_id: message.author.id,
+                    inventory_id: id
+                });
+            }
+            if (type == 'COIN') {
+                db.coin_booster.push({
+                    id: uniqueID,
+                    percent: this.items.find(x => x.id == id).reward[0].percent,
+                    user_id: message.author.id,
+                    inventory_id: id
+                });
+            }
+            db.save((err) => {
+                if (err) return new client.methods.log(client).error(err);
+                else {
+                    setTimeout(() => {
+                        this.removeBooster(client, message, id, type, uniqueID);
+                    }, this.items.find(x => x.id == id).reward[0].time)
+                }
+            });
+        });
+    }
+
+    removeBooster(client, message, id, type, uid) {
+        if (type == 'XP') {
+            client.models.guildSettings.update({
+                "guild_id": message.guild.id
+            }, {
+                "$pull": {
+                    "xp_booster": {
+                        "id": uid,
+                        "percent": this.items.find(x => x.id == id).reward[0].percent,
+                        "user_id": message.author.id,
+                        "inventory_id": id
+                    }
+                }
+            }, {
+                safe: true,
+                multi: false
+            }, (err, obj) => {
+                if (err) return new client.methods.log(client).error(err);
+            });
+        }
+        if (type == 'COIN') {
+            client.models.guildSettings.update({
+                "guild_id": message.guild.id
+            }, {
+                "$pull": {
+                    "coin_booster": {
+                        "id": uid,
+                        "percent": this.items.find(x => x.id == id).reward[0].percent,
+                        "user_id": message.author.id,
+                        "inventory_id": id
+                    }
+                }
+            }, {
+                safe: true,
+                multi: false
+            }, (err, obj) => {
+                if (err) return new client.methods.log(client).error(err);
+            });
+        }
+    }
+
+    boosterUpdateInventory(client, message, id) {
+        client.models.userInventories.findOne({
+            "user_id": message.author.id
+        }, (err, db) => {
+            if (err) return new client.methods.log(client).error(err);
+            db.inventory.find(x => x.id == id).amount = parseInt(db.inventory.find(x => x.id == id).amount) - 1;
+            db.save((err) => {
+                if (err) return new client.methods.log(client).error(err);
+                client.functions.inventoryCheckAmount(client, id, message.author.id);
+                message.channel.send(new client.modules.Discord.MessageEmbed()
+                    .setColor(message.guild.me.displayHexColor)
+                    .setDescription(`> Claimed ${this.resolveToEmbedName(id)}\nYou have awarded the guild with a ${this.items.find(x => x.id == id).reward[0].percent}% ${this.items.find(x => x.id == id).reward[0].type} Booster!\nYou have ${parseInt(db.inventory.find(x => x.id == id).amount)} of this item left in your inventory.${db.inventory.find(x => x.id == id).amount > 0 ? `\n ** ** \n:white_check_mark: **Claim another ${this.resolveToEmbedName(id)}**` : ''}`)
+                ).then(msg => {
+                    client.models.userInventories.findOne({
+                        "user_id": message.author.id
+                    }, (err, db) => {
+                        if (err) return new client.methods.log(client).error(err);
+                        if (!db.inventory.find(x => x.id == id)) return;
+                        if (db.inventory.find(x => x.id == id).amount > 0) {
+                            msg.react(client.storage.emojiCharacters['white_check_mark']);
+                            let collector = new client.modules.Discord.ReactionCollector(msg, (reaction, user) => reaction.emoji.name == client.storage.emojiCharacters['white_check_mark'] && user.id == message.author.id, {});
+                            collector.on('collect', reaction => {
+                                collector.stop();
+                                msg.delete();
+                                this.handleUseItem(client, message, id);
+                            });
+                        }
+                    });
+                });
+            });
+        });
     }
 
     handlePouch(client, message, id, type) {

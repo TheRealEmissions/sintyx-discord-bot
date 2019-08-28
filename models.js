@@ -9,5 +9,6 @@ module.exports = {
     suggestionsData: require(`./models/suggestionsData`),
     staffApplications: require(`./models/staffApplications`),
     staffProfiles: require(`./models/staffProfiles`),
-    shopData: require(`./models/shopData`)
+    shopData: require(`./models/shopData`),
+    guildSettings: require(`./models/guildSettings`)
 }

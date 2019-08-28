@@ -55,4 +55,19 @@ module.exports = (client) => {
     client.setInterval(update, 30000);
     new client.methods.startReactionCache(client);
     new client.methods.startLeaderboardUpdates(client);
+    client.models.guildSettings.find({}, (err, docs) => {
+        if (err) return new client.methods.log(client).error(err);
+        for (let doc of docs) {
+            client.models.guildSettings.findOne({
+                "guild_id": doc.guild_id
+            }, (err, db) => {
+                if (err) return new client.methods.log(client).error(err);
+                db.xp_booster = [];
+                db.coin_booster = [];
+                db.save((err) => {
+                    if (err) return new client.methods.log(client).error(err);
+                });
+            });
+        }
+    });
 }

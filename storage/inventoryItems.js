@@ -5,11 +5,12 @@
 // usable - boolean
 // type - number
 // reward - object in array (IF APPLICABLE TO ITEM) -- THIS IS NOT READ IF USABLE IS FALSE
-// 
+//
 // Available types:
 // 1 => Role
 // 2 => Pouch
 // 3 => Crate
+// 4 => Booster
 module.exports = [{
     id: 1,
     name: 'VIP Role',
@@ -375,5 +376,49 @@ module.exports = [{
         type: 'COIN',
         low: 1,
         high: 1000
+    }]
+}, {
+    id: 36,
+    name: 'XP Booster - +2.5% (15 min)',
+    desc: 'When claimed, the whole guild will receive +2.5% XP per message',
+    usable: true,
+    type: 4,
+    reward: [{
+        type: 'XP',
+        percent: 5,
+        time: 900000
+    }]
+}, {
+    id: 37,
+    name: 'XP Booster - +5% (15 min)',
+    desc: 'When claimed, the whole guild will receive +5% XP per message',
+    usable: true,
+    type: 4,
+    reward: [{
+        type: 'XP',
+        percent: 5,
+        time: 900000
+    }]
+}, {
+    id: 38,
+    name: 'XP Booster - +7.5% (15 min)',
+    desc: 'When claimed, the whole guild will receive +7.5% XP per message',
+    usable: true,
+    type: 4,
+    reward: [{
+        type: 'XP',
+        percent: 7.5,
+        time: 900000
+    }]
+}, {
+    id: 39,
+    name: 'XP Booster - +10% (15 min)',
+    desc: 'When claimed, the whole guild will receieve +10% per message',
+    usable: true,
+    type: 4,
+    reward: [{
+        type: 'XP',
+        percent: 10,
+        time: 900000
     }]
 }]

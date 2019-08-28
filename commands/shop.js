@@ -101,9 +101,10 @@ module.exports = class shop {
                                     if (b) {
                                         await this.takeCoins(client, message.author.id, db.item_price).catch(err => reject(err));
                                         await this.addToInventory(db.inventory_id, db.item_amount, client, message).catch(err => reject(err));
+                                        const coinsLeft = await this.getCoins(client, message.author.id);
                                         message.channel.send(new client.modules.Discord.MessageEmbed()
                                             .setColor(message.guild.me.displayHexColor)
-                                            .setDescription(`> Purchased **${db.item_amount}x ${await this.getInventoryItemName(db.inventory_id)}** for **${db.item_price} Coins**\nYou have ${this.getCoins(client, message.author.id)} Coins remaining in your balance.`)
+                                            .setDescription(`> Purchased **${db.item_amount}x ${await this.getInventoryItemName(db.inventory_id)}** for **${db.item_price} Coins**\nYou have ${coinsLeft} Coins remaining in your balance.`)
                                         );
                                     } else return;
                                 });
@@ -167,6 +168,7 @@ module.exports = class shop {
                 msg.react(client.storage.emojiCharacters['white_check_mark']).then(() => msg.react(client.storage.emojiCharacters['x']));
                 let collector = new client.modules.Discord.ReactionCollector(msg, (reaction, user) => ((reaction.emoji.name == client.storage.emojiCharacters['white_check_mark']) || (reaction.emoji.name == client.storage.emojiCharacters['x'])) && user.id == message.author.id, {});
                 collector.on('collect', reaction => {
+                    msg.delete();
                     if (reaction.emoji.name == client.storage.emojiCharacters['white_check_mark']) {
                         return resolve(true);
                     } else {

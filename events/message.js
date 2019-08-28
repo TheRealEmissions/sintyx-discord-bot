@@ -9,12 +9,13 @@ class checkdb {
         this.userProfiles(client, message);
         this.userSettings(client, message);
         this.userInventories(client, message);
+        this.guildSettings(client, message);
     }
 
     userProfiles(client, message) {
         return new Promise((resolve, reject) => {
             client.models.userProfiles.findOne({
-                    user_id: message.author.id
+                    "user_id": message.author.id
                 },
                 (err, db) => {
                     if (err) return reject(err);
@@ -40,7 +41,7 @@ class checkdb {
     userSettings(client, message) {
         return new Promise((resolve, reject) => {
             client.models.userSettings.findOne({
-                    user_id: message.author.id
+                    "user_id": message.author.id
                 },
                 (err, db) => {
                     if (err) return reject(err);
@@ -88,7 +89,7 @@ class checkdb {
     userInventories(client, message) {
         return new Promise((resolve, reject) => {
             client.models.userInventories.findOne({
-                    user_id: message.author.id
+                    "user_id": message.author.id
                 },
                 (err, db) => {
                     if (err) return reject(err);
@@ -104,6 +105,25 @@ class checkdb {
                     } else return resolve();
                 }
             );
+        });
+    }
+
+    guildSettings(client, message) {
+        return new Promise((resolve, reject) => {
+            client.models.guildSettings.findOne({
+                "guild_id": message.guild.id
+            }, (err, db) => {
+                if (err) return reject(err);
+                if (!db) {
+                    let newdb = new client.models.guildSettings({
+                        guild_id: message.guild.id
+                    });
+                    newdb.save((err) => {
+                        if (err) return reject(err);
+                        else return resolve();
+                    });
+                } else return resolve();
+            });
         });
     }
 }
@@ -270,7 +290,7 @@ class handledb extends dbfunctions {
             "user_id": message.author.id
         }, (err, db) => {
             if (err) return new client.methods.log(client).error(err);
-            db.user_xp += xp;
+            db.user_xp += xp.xp;
             db.user_level = level == true ? db.user_level + 1 : db.user_level;
             db.user_coins = coins == false ? db.user_coins : db.user_coins + coins;
             db.message_count += 1;
@@ -280,22 +300,39 @@ class handledb extends dbfunctions {
         });
         if (await this.checkSettings("xp_ping")) {
             message.channel
-                .send(`<@${message.author.id}> **+${xp} XP**`)
-                .then(msg => setTimeout(() => msg.delete(), 1800));
+                .send(`<@${message.author.id}> **+${xp.xp} XP** ${xp.boost !== 0 ? `*(+${(xp.boost * 100) / 100} XP from ${xp.boostperc}% boost!)*` : ''}`)
+                .then(msg => setTimeout(() => msg.delete(), 2500));
 
         }
         if (await this.checkSettings('coin_ping')) {
             if (coins !== false) {
                 message.channel
                     .send(`<@${message.author.id}> **+${coins} Coins**`)
-                    .then(msg => setTimeout(() => msg.delete(), 1800));
+                    .then(msg => setTimeout(() => msg.delete(), 2500));
             }
         }
     }
 
     addXP(client) {
         return new Promise((resolve, reject) => {
-            return resolve(client.functions.genNumberBetween(1, 20));
+            let xp = client.functions.genNumberBetween(1, 20);
+            let boost = 0;
+            client.models.guildSettings.findOne({
+                "guild_id": this.message.guild.id
+            }, (err, db) => {
+                if (err) return reject(err);
+                if (db.xp_booster.length > 0) {
+                    for (const no of db.xp_booster) {
+                        boost += no.percent;
+                    }
+                    let boostamount = xp * (boost / 100);
+                    return resolve({
+                        xp: xp + boostamount,
+                        boost: boostamount,
+                        boostperc: boost
+                    });
+                }
+            });
         });
     }
 

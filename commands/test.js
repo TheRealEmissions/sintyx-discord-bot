@@ -34,7 +34,11 @@ module.exports = class test {
                 await msg.react(ec['black_heart']);
             });*/
 
-            new client.methods.startReactionCache(client);
+            client.models.userProfiles.findOne({
+                "user_id": message.author.id
+            }, (err, db) => {
+                console.log(db);
+            })
 
         } else {
             return;
