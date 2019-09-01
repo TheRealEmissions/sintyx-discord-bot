@@ -2,13 +2,28 @@ image: node:latest
 
 stages:
   - build
+  - deploy
+
+cache:
+  paths:
+    - node_modules/
 
 reinstall:
   stage: build
+  artifacts:
+    paths:
+      - builds/sintyx/discord-bot/
   script:
-    - pkill -f node
-    - pkill -f nodejs
-    - git checkout master
+    - pm2 stop app
     - git pull origin master
-    - node .
-    - exit
+    - npm update
+  only:
+    - master
+
+deploy:
+  stage: deploy
+  artifacts:
+    paths:
+      - builds/sintyx/discord-bot/
+  script:
+    - pm2 start app
