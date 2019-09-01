@@ -7,7 +7,7 @@ stages:
 testing:
   stage: first
   script:
-    - ls /home/
+    - ls /home/node/
 
 reinstall:
   stage: build
