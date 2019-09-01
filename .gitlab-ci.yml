@@ -7,7 +7,7 @@ stages:
 testing:
   stage: first
   script:
-    - htop
+    - ps -A
 
 reinstall:
   stage: build
