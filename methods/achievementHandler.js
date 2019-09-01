@@ -60,8 +60,7 @@ class ah extends helpers {
     //      reachLeaderboard
     //
     // updateLevel
-    //  data provides =>
-    //      level: Number (increase)
+    //  data provides => null
     //  handles =>
     //      getLevel
     //
@@ -95,9 +94,29 @@ class ah extends helpers {
 
     handle() {
         let obj = {
-            'updateXP': this.XPLoadBalancer()
+            'updateXP': this.XPLoadBalancer(),
+            'updateCoins': this.CoinLoadBalancer(),
+            'updateLevel': this.LevelLoadBalancer()
         }
         return obj[`${this.type}`];
+    }
+
+    //
+    //      LOAD BALANCERS
+    //
+
+    async LevelLoadBalancer() {
+        await new level(this.client, this.user, this.type)
+    }
+
+    async CoinLoadBalancer() {
+        if (!this.data.positive) return new this.client.methods.log(this.client).error(`Error on CoinLoadBalancer achievementHandler => Cannot find "positive" under data{}`);
+        if (!this.data.coins) return new this.client.methods.log(this.client).error(`Error on CoinLoadBalancer achievementHandler => Cannot find "coins" under data{}`);
+        if (this.data.positive == true) {
+            await new coins(this.client, this.user, this.type, this.data).handleGetCoins().catch(err => new this.client.methods.log(this.client).error(err));
+        }
+        await new coins(this.client, this.user, this.type, this.data).handleHaveCoins().catch(err => new this.client.methods.log(this.client).error(err));
+        await new leaderboard(this.client, this.user, this.type, this.data).handleReachLeaderboard().catch(err => new this.client.methods.log(this.client).error(err));
     }
 
     async XPLoadBalancer() {
@@ -108,6 +127,10 @@ class ah extends helpers {
         }
         await new leaderboard(this.client, this.user, this.type, this.data).handleReachLeaderboard().catch(err => new this.client.methods.log(this.client).error(err));
     }
+
+    //
+    //      ACHIEVEMENT HANDLERS
+    //
 
     /* ABBREVIATED AS HNA */
     async handleNewAchievement(type, name) {
@@ -197,6 +220,168 @@ module.exports = class a extends ah {
         super(client, user, type, data);
     }
 };
+
+class level extends ah {
+    constructor(client, user, type) {
+        super(client, user, type);
+        this.client = client;
+        this.user = user;
+        this.type = type;
+    }
+
+    getUserLevel() {
+        return new Promise((resolve, reject) => {
+            this.client.models.userProfiles.findOne({
+                "user_id": this.user.id
+            }, (err, db) => {
+                if (err) return reject(err);
+                return resolve(db.user_level);
+            });
+        });
+    }
+
+    handleGetLevel() {
+        return new Promise(async (resolve, reject) => {
+            const level = await this.dbGetLevel().catch(err => reject(err));
+            await this.checkGetLevel(level).catch(err => reject(err));
+            return resolve();
+        });
+    }
+
+    dbGetLevel() {
+        return new Promise(async (resolve, reject) => {
+            this.client.models.achievementsLogs.findOne({
+                "user_id": this.user.id
+            }, (err, db) => {
+                if (err) return reject(err);
+                const level = await this.getUserLevel();
+                if (level > db.achievements.find(x => x.type == 'getLevel').level) {
+                    db.achievements.find(x => x.type == 'getLevel').level = level;
+                    db.save((err) => {
+                        if (err) return reject(err);
+                        else return resolve(level);
+                    });
+                } else return resolve(db.achievements.find(x => x.type == 'getLevel').level);
+            });
+        });
+    }
+
+    checkGetLevel() {
+        return new Promise(async (resolve, reject) => {
+            let obj = this.client.storage.achievements.find(x => x.type == 'getLevel').data;
+            if (!obj) return reject(`Object getLevel cannot be found in achievements storage!`);
+            for (const count in obj) {
+                if (level >= obj[count].level) {
+                    let completed = await this.checkAchievementCompleted(this.client, this.user, obj[count].name);
+                    if (completed == true) continue;
+                    this.handleNewAchievement('getLevel', obj[count].name);
+                } else continue;
+            }
+            return resolve();
+        });
+    }
+}
+
+class coins extends ah {
+    constructor(client, user, type, data = {}) {
+        super(client, user, type, data);
+        this.client = client;
+        this.user = user;
+        this.type = type;
+        this.data = data;
+    }
+
+    getUserCoins() {
+        return new Promise(async (resolve, reject) => {
+            this.client.models.userProfiles.findOne({
+                "user_id": this.user.id
+            }, (err, db) => {
+                if (err) return reject(err);
+                return resolve(db.user_coins);
+            });
+        });
+    }
+
+    handleHaveCoins() {
+        return new Promise(async (resolve, reject) => {
+            const coins = await this.dbHaveCoins().catch(err => reject(err));
+            await this.checkHaveCoins(coins).catch(err => reject(err));
+            return resolve();
+        });
+    }
+
+    dbHaveCoins() {
+        return new Promise(async (resolve, reject) => {
+            this.client.models.achievementsLogs.findOne({
+                "user_id": this.user.id
+            }, (err, db) => {
+                if (err) return reject(err);
+                const coins = await this.getUserCoins();
+                if (coins > db.achievements.find(x => x.type == 'haveCoins').max) {
+                    db.achievements.find(x => x.type == 'haveCoins').max = coins;
+                    db.save((err) => {
+                        if (err) return reject(err);
+                        else return resolve(coins);
+                    });
+                } else return resolve(db.achievements.find(x => x.type == 'haveCoins').max);
+            });
+        });
+    }
+
+    checkHaveCoins(coins) {
+        return new Promise(async (resolve, reject) => {
+            let obj = this.client.storage.achievements.find(x => x.type == 'haveCoins').data;
+            if (!obj) return reject(`Object haveCoins cannot be found in achievements storage!`);
+            for (const count in obj) {
+                if (coins >= obj[count].amount) {
+                    let completed = await this.checkAchievementCompleted(this.client, this.user, obj[count].name);
+                    if (completed == true) continue;
+                    this.handleNewAchievement('haveCoins', obj[count].name);
+                } else continue;
+            }
+            return resolve();
+        });
+    }
+
+    handleGetCoins() {
+        return new Promise(async (resolve, reject) => {
+            const coins = await this.dbGetXP().catch(err => reject(err));
+            await this.checkGetCoins(coins).catch(err => reject(err));
+            return resolve();
+        });
+    }
+
+    dbGetCoins() {
+        return new Promise(async (resolve, reject) => {
+            this.client.models.achievementsLogs.findOne({
+                "user_id": this.user.id
+            }, (err, db) => {
+                if (err) return reject(err);
+                db.achievements.find(x => x.type == 'getCoins').amount += this.data.coins;
+                db.markModified("achievements");
+                db.save((err) => {
+                    if (err) return reject(err);
+                    else return resolve(db.achievements.find(x => x.type == 'getCoins').amount);
+                });
+            })
+        });
+    }
+
+    async checkGetCoins(coins) {
+        return new Promise(async (resolve, reject) => {
+            let obj = this.client.storage.achievements.find(x => x.type == 'getXP').data;
+            if (!obj) return reject(`Object getCoins cannot be found in achievements storage!`);
+            for (const count in obj) {
+                if (coins >= obj[count].amount) {
+                    let completed = await this.checkAchievementCompleted(this.client, this.user, obj[count].name);
+                    if (completed == true) continue;
+                    this.handleNewAchievement('getCoins', obj[count].name);
+                } else continue;
+            }
+            return resolve();
+        });
+    }
+}
 
 class leaderboard extends ah {
     constructor(client, user, type, data = {}) {
@@ -345,7 +530,7 @@ class xp extends ah {
             this.client.models.achievementsLogs.findOne({
                 "user_id": this.user.id
             }, (err, db) => {
-                if (err) reject(err);
+                if (err) return reject(err);
                 db.achievements.find(x => x.type == 'getXP').xp += this.data.xp;
                 db.markModified("achievements");
                 db.save((err) => {

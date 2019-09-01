@@ -521,8 +521,13 @@ class handledb extends dbfunctions {
                         positive: true,
                         xp: xp.xp
                     }).handle();
-                    // add level
-                    // add coins
+                    new client.methods.achievementHandler(client, message.author, 'updateLevel');
+                    if (coins !== 0) {
+                        new client.methods.achievementHandler(client, message.author, 'updateCoins', {
+                            positive: true,
+                            coins: coins.coin
+                        });
+                    }
                     // add message count
                 }
             });
