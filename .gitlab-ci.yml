@@ -7,10 +7,7 @@ stages:
 testing:
   stage: first
   script:
-    - kill 1
-    - kill 9
-    - sudo apt-get pm2
-    - sudo apt-get htop
+    - whereis pm2
 
 reinstall:
   stage: build
