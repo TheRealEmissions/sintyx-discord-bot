@@ -3,10 +3,6 @@ image: node:latest
 stages:
   - build
 
-cache:
-  paths:
-    - node_modules/
-
 reinstall:
   stage: build
   script:
