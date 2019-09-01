@@ -18,14 +18,14 @@ class usernameColour {
             .setColor(color)
     }
 
-    processRole(message, user, role, roles, client) {
+    async processRole(message, user, role, roles, client) {
         if (message.guild.member(user).roles.find(x => x.id == role.id)) {
-            this.checkRoles(message, user, roles);
+            await this.checkRoles(message, user, roles);
             message.channel.send(this.constructRemoveRoleEmbed(user, message.guild.member(client.user).displayHexColor)).then(msg => {
                 setTimeout(() => msg.delete(), 5000);
             });
         } else {
-            this.checkRoles(message, user, roles);
+            await this.checkRoles(message, user, roles);
             message.guild.member(user).roles.add([role.id]);
             message.channel.send(this.constructAddRoleEmbed(user, role, message.guild.member(client.user).displayHexColor)).then(msg => {
                 setTimeout(() => msg.delete(), 5000);
@@ -35,9 +35,9 @@ class usernameColour {
 
     checkRoles(message, user, roles) {
         return new Promise(async (resolve, reject) => {
-            for (const count in roles) {
-                if (message.guild.member(user).roles.get(roles[count].id)) {
-                    message.guild.member(user).roles.remove([roles[count].id]);
+            for (const role of roles) {
+                if (message.guild.member(user).roles.has(role.id)) {
+                    message.guild.member(user).roles.remove([role.id]);
                 }
             }
             resolve();

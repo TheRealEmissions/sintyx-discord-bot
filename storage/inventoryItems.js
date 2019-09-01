@@ -421,4 +421,48 @@ module.exports = [{
         percent: 10,
         time: 900000
     }]
+}, {
+    id: 40,
+    name: 'Coin Booster - +2.5% (15 min)',
+    desc: 'When claimed, the whole guild will receive +2.5% coins when given from a message',
+    usable: true,
+    type: 4,
+    reward: [{
+        type: 'COIN',
+        percent: 2.5,
+        time: 900000
+    }]
+}, {
+    id: 41,
+    name: 'Coin Booster - +5% (15 min)',
+    desc: 'When claimed, the whole guild will receive +5% coins when given from a message',
+    usable: true,
+    type: 4,
+    reward: [{
+        type: 'COIN',
+        percent: 5,
+        time: 900000
+    }]
+}, {
+    id: 42,
+    name: 'Coin Booster - +7.5% (15 min)',
+    desc: 'When claimed, the whole guild will receive +7.5% coins when given from a message',
+    usable: true,
+    type: 4,
+    reward: [{
+        type: 'COIN',
+        percent: 7.5,
+        time: 900000
+    }]
+}, {
+    id: 43,
+    name: 'Coin Booster - +10% (15 min)',
+    desc: 'When claimed, the whole guild will receive +10% coins when given from a message',
+    usable: true,
+    type: 4,
+    reward: [{
+        type: 'COIN',
+        percent: 10,
+        time: 900000
+    }]
 }]

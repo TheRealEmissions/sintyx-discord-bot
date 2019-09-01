@@ -1,4 +1,5 @@
 let suggestionCooldown = new Set();
+let xpCooldown = new Set();
 
 class checkdb {
     constructor(client, message) {
@@ -6,10 +7,214 @@ class checkdb {
     }
 
     async dbInit(client, message) {
-        this.userProfiles(client, message);
-        this.userSettings(client, message);
-        this.userInventories(client, message);
-        this.guildSettings(client, message);
+        this.userProfiles(client, message).catch(err => new client.methods.log(client).error(err));
+        this.userSettings(client, message).catch(err => new client.methods.log(client).error(err));
+        this.userInventories(client, message).catch(err => new client.methods.log(client).error(err));
+        this.guildSettings(client, message).catch(err => new client.methods.log(client).error(err));
+        this.achievements(client, message).catch(err => new client.methods.log(client).error(err));
+        this.achievementsLogs(client, message).catch(err => new client.methods.log(client).error(err));
+    }
+
+    achievementReturnObj(type) {
+        let obj = {
+            'getXP': {
+                type: 'getXP',
+                xp: 0
+            },
+            'getLevel': {
+                type: 'getLevel',
+                level: 1
+            },
+            'getCrates': {
+                type: 'getCrates',
+                data: [{
+                    type: 'null',
+                    amount: 0
+                }, {
+                    type: 'XP',
+                    amount: 0
+                }, {
+                    type: 'COIN',
+                    amount: 0
+                }]
+            },
+            'getPouches': {
+                type: 'getPouches',
+                data: [{
+                    type: 'null',
+                    amount: 0
+                }, {
+                    type: 'XP',
+                    amount: 0
+                }, {
+                    type: 'COIN',
+                    amount: 0
+                }]
+            },
+            'getBoosters': {
+                type: 'getBoosters',
+                data: [{
+                    type: 'null',
+                    amount: 0
+                }, {
+                    type: 'XP',
+                    amount: 0
+                }, {
+                    type: 'COIN',
+                    amount: 0
+                }]
+            },
+            'getCoins': {
+                type: 'getCoins',
+                amount: 0
+            },
+            'haveCoins': {
+                type: 'haveCoins',
+                max: 0
+            },
+            'activeBoosts': {
+                type: 'activeBoosts',
+                data: [{
+                    type: 'null',
+                    amount: 0
+                }, {
+                    type: 'XP',
+                    amount: 0
+                }, {
+                    type: 'COIN',
+                    amount: 0
+                }]
+            },
+            'getMessageCount': {
+                type: 'getMessageCount',
+                amount: 0
+            },
+            'reachLeaderboard': {
+                type: 'reachLeaderboard',
+                data: [{
+                    type: 'XP',
+                    hoist: 0
+                }, {
+                    type: 'COIN',
+                    hoist: 0
+                }, {
+                    type: 'AVGXP',
+                    hoist: 0
+                }, {
+                    type: 'MC',
+                    hoist: 0
+                }, {
+                    type: 'null',
+                    max_hoist: 0
+                }]
+            },
+            'firstApplication': {
+                type: 'firstApplication',
+                id: null
+            }
+        }
+        return obj[`${type}`];
+    }
+
+    achievementsLogs(client, message) {
+        return new Promise((resolve, reject) => {
+            client.models.achievementsLogs.findOne({
+                "user_id": message.author.id
+            }, (err, db) => {
+                if (err) return reject(err);
+                if (!db) {
+                    let newdb = new client.models.achievementsLogs({
+                        user_id: message.author.id
+                    });
+                    newdb.save((err) => {
+                        if (err) return reject(err);
+                        else {
+                            client.models.achievementsLogs.findOne({
+                                "user_id": message.author.id
+                            }, (err, db) => {
+                                if (err) return reject(err);
+                                for (const achievementObj of client.storage.achievements) {
+                                    db.achievements.push(this.achievementReturnObj(achievementObj.type));
+                                }
+                                db.save((err) => {
+                                    if (err) return reject(err);
+                                    else return resolve();
+                                });
+                            });
+                        }
+                    });
+                } else {
+                    for (const achievement of client.storage.achievements) {
+                        if (!db.achievements.find(x => x.type == achievement.type)) {
+                            db.achievements.push(this.achievementReturnObj(achievement.type));
+                        }
+                    }
+                    db.save((err) => {
+                        if (err) return reject(err);
+                        else return resolve();
+                    });
+                }
+            });
+        });
+    }
+
+    achievements(client, message) {
+        return new Promise((resolve, reject) => {
+            client.models.achievements.findOne({
+                "user_id": message.author.id
+            }, (err, db) => {
+                if (err) return reject(err);
+                if (!db) {
+                    let newdb = new client.models.achievements({
+                        user_id: message.author.id
+                    });
+                    newdb.save((err) => {
+                        if (err) return reject(err);
+                        else {
+                            client.models.achievements.findOne({
+                                "user_id": message.author.id
+                            }, (err, db) => {
+                                if (err) return reject(err);
+                                for (const achievementObj of client.storage.achievements) {
+                                    for (const achievement of achievementObj.data) {
+                                        db.achievements.push({
+                                            name: achievement.name,
+                                            completed: false,
+                                            timestamp: null
+                                        });
+                                    }
+                                }
+                                db.save((err) => {
+                                    if (err) return reject(err);
+                                    else return resolve();
+                                });
+                            });
+                        }
+                    });
+                } else {
+                    client.models.achievements.findOne({
+                        "user_id": message.author.id
+                    }, (err, db) => {
+                        if (err) return reject(err);
+                        for (const achievementObj of client.storage.achievements) {
+                            for (const achievement of achievementObj.data) {
+                                if (!db.achievements.find(x => x.name == achievement.name)) {
+                                    db.achievements.push({
+                                        name: achievement.name,
+                                        completed: false,
+                                        timestamp: null
+                                    });
+                                }
+                            }
+                        }
+                        db.save((err) => {
+                            if (err) return reject(err);
+                            else return resolve();
+                        });
+                    })
+                }
+            });
+        });
     }
 
     userProfiles(client, message) {
@@ -47,24 +252,31 @@ class checkdb {
                     if (err) return reject(err);
                     if (!db) {
                         let newdb = new client.models.userSettings({
-                            user_id: message.author.idd,
-                            options: [{
-                                    name: "coin_ping",
-                                    boolean: false
-                                },
-                                {
-                                    name: "xp_ping",
-                                    boolean: false
-                                },
-                                {
-                                    name: "ticket_mentioning",
-                                    boolean: false
-                                }
-                            ]
+                            user_id: message.author.id,
+                            options: []
                         });
                         newdb.save(err => {
                             if (err) return reject(err);
-                            else return resolve();
+                            else {
+                                client.models.userSettings.findOne({
+                                    "user_id": message.author.id
+                                }, (err, db) => {
+                                    if (err) return reject(err);
+                                    let options = ["coin_ping", "xp_ping", "ticket_mentioning"];
+                                    for (const option of options) {
+                                        if (!db.options.find(x => x.name == option)) {
+                                            db.options.push({
+                                                name: option,
+                                                boolean: false
+                                            });
+                                        }
+                                    }
+                                    db.save((err) => {
+                                        if (err) return reject(err);
+                                        else return resolve();
+                                    });
+                                });
+                            }
                         });
                     } else {
                         let options = ["coin_ping", "xp_ping", "ticket_mentioning"];
@@ -204,6 +416,7 @@ class dbfunctions {
                 },
                 (err, db) => {
                     if (err) return reject(err);
+                    if (!db) return reject(`No database found while checking settings`)
                     if (!db.options.find(x => x.name == setting))
                         return reject(
                             `Attempted to find setting ${setting} in message.js event but failed`
@@ -283,32 +496,46 @@ class handledb extends dbfunctions {
         const level = await this.checkLevel(client, message).catch(err =>
             new client.methods.log(client).error(err)
         );
-        const coins = await this.addCoins(client, message).catch(err =>
+        const coins = await this.addCoins(client).catch(err =>
             new client.methods.log(client).error(err)
         );
         client.models.userProfiles.findOne({
             "user_id": message.author.id
         }, (err, db) => {
             if (err) return new client.methods.log(client).error(err);
-            db.user_xp += xp.xp;
+            db.user_xp += xpCooldown.has(message.author.id) ? 0 : xp.xp;
             db.user_level = level == true ? db.user_level + 1 : db.user_level;
-            db.user_coins = coins == false ? db.user_coins : db.user_coins + coins;
+            db.user_coins += coins == 0 ? 0 : coins.coin;
             db.message_count += 1;
             db.save((err) => {
                 if (err) return new client.methods.log(client).error(err);
+                else {
+                    xpCooldown.add(message.author.id);
+                    setTimeout(() => {
+                        xpCooldown.delete(message.author.id);
+                    }, client.functions.genNumberBetween(10000, 20000))
+                    new client.methods.achievementHandler(client, message.author, 'updateXP', {
+                        positive: true,
+                        xp: xp.xp
+                    }).handle();
+                    // add level
+                    // add coins
+                    // add message count
+                }
             });
         });
         if (await this.checkSettings("xp_ping")) {
+            if (xpCooldown.has(message.author.id)) return;
             message.channel
                 .send(`<@${message.author.id}> **+${xp.xp} XP** ${xp.boost !== 0 ? `*(+${(xp.boost * 100) / 100} XP from ${xp.boostperc}% boost!)*` : ''}`)
-                .then(msg => setTimeout(() => msg.delete(), 2500));
+                .then(msg => setTimeout(() => msg.delete(), xp.boost !== 0 ? 5000 : 2500));
 
         }
         if (await this.checkSettings('coin_ping')) {
-            if (coins !== false) {
+            if (coins !== 0) {
                 message.channel
-                    .send(`<@${message.author.id}> **+${coins} Coins**`)
-                    .then(msg => setTimeout(() => msg.delete(), 2500));
+                    .send(`<@${message.author.id}> **+${coins.coin} Coins** ${coins.boost !== 0 ? `*(+${(coins.boost * 100) / 100} Coins from ${coins.boostperc}% boost!)*` : ''}`)
+                    .then(msg => setTimeout(() => msg.delete(), coins.boost !== 0 ? 5000 : 2500));
             }
         }
     }
@@ -325,13 +552,17 @@ class handledb extends dbfunctions {
                     for (const no of db.xp_booster) {
                         boost += no.percent;
                     }
-                    let boostamount = xp * (boost / 100);
+                    let boostamount = parseFloat((xp * (boost / 100)).toFixed(2));
                     return resolve({
                         xp: xp + boostamount,
                         boost: boostamount,
                         boostperc: boost
                     });
-                }
+                } else return resolve({
+                    xp: xp,
+                    boost: 0,
+                    boostperc: 0
+                });
             });
         });
     }
@@ -357,28 +588,43 @@ class handledb extends dbfunctions {
         });
     }
 
-    addCoins(client, message) {
+    addCoins(client) {
         return new Promise((resolve, reject) => {
-            client.models.userProfiles.findOne({
-                    user_id: message.author.id
-                },
-                async (err, db) => {
-                    if (err) return reject(err);
-                    if (client.functions.percentChance(35)) {
-                        let coin = client.functions.genNumberBetween(1, 10);
-                        return resolve(coin);
-                    } else return resolve(false);
-                }
-            );
+            let coin = 0;
+            let boost = 0;
+            if (client.functions.percentChance(35)) {
+                coin = client.functions.genNumberBetween(1, 10);
+            }
+            client.models.guildSettings.findOne({
+                "guild_id": this.message.guild.id
+            }, (err, db) => {
+                if (err) return reject(err);
+                if (db.coin_booster.length > 0) {
+                    for (const no of db.coin_booster) {
+                        boost += no.percent;
+                    }
+                    let boostamount = parseFloat((coin * (boost / 100)).toFixed(2));
+                    if (boostamount == 0) return resolve(false);
+                    return resolve({
+                        coin: coin + boostamount,
+                        boost: boostamount,
+                        boostperc: boost
+                    });
+                } else return resolve({
+                    coin: coin,
+                    boost: 0,
+                    boostperc: 0
+                });
+            });
         });
     }
 }
 
-module.exports = (client, message) => {
+module.exports = async (client, message) => {
     if (message.channel.type !== "text") return;
     if (message.author.id == client.user.id) return;
     if (message.author.bot) return;
-    new checkdb(client, message);
+    await new checkdb(client, message);
     if (message.content.toString().startsWith(client.commandHandler.prefix[0])) {
         if (message.channel.name == "suggestions") return message.delete();
         let args = message.content.split(" ");

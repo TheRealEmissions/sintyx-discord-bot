@@ -6,5 +6,6 @@ module.exports = {
     helpInfo: require(`./storage/helpInfo.js`),
     messageCache: require(`./storage/messageCache.js`),
     inventoryItems: require(`./storage/inventoryItems.js`),
-    appQs: require(`./storage/appQs`)
+    appQs: require(`./storage/appQs`),
+    achievements: require(`./storage/achievements`)
 }

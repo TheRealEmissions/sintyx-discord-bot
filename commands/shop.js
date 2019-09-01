@@ -99,7 +99,7 @@ module.exports = class shop {
                             if (await this.getCoins(client, message.author.id) >= db.item_price) {
                                 this.confirmPurchase(client, message, db).then(async b => {
                                     if (b) {
-                                        await this.takeCoins(client, message.author.id, db.item_price).catch(err => reject(err));
+                                        await this.takeCoins(client, message.author, db.item_price).catch(err => reject(err));
                                         await this.addToInventory(db.inventory_id, db.item_amount, client, message).catch(err => reject(err));
                                         const coinsLeft = await this.getCoins(client, message.author.id);
                                         message.channel.send(new client.modules.Discord.MessageEmbed()
@@ -118,16 +118,22 @@ module.exports = class shop {
         });
     }
 
-    takeCoins(client, id, coins) {
+    takeCoins(client, user, coins) {
         return new Promise((resolve, reject) => {
             client.models.userProfiles.findOne({
-                "user_id": id
+                "user_id": user.id
             }, (err, db) => {
                 if (err) return reject(err);
                 db.user_coins -= coins;
                 db.save((err) => {
                     if (err) return reject(err);
-                    else return resolve();
+                    else {
+                        resolve();
+                        new client.methods.achievementHandler(client, user, 'updateCoins', {
+                            positive: false,
+                            coins: coins
+                        }).handle()
+                    }
                 });
             });
         });

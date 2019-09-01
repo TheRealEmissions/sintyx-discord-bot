@@ -125,6 +125,7 @@ module.exports = class staff extends Multiple(profile, app) {
     }
 
     async run(client, message, args) {
+        if (message.member.roles.get(message.guild.roles.find(x => x.name == "Management").id)) return;
         if (args[1].toLowerCase() == "accept") {
             if (!args[2]) return message.channel.send(`You must specify an ID to accept!`).then((msg) => setTimeout(() => {
                 message.delete();

@@ -1,10 +1,10 @@
 module.exports = class xp {
     constructor() {
         this.name = 'xp',
-        this.alias = ['exp'],
-        this.usage = '-xp [@user]',
-        this.category = 'user',
-        this.description = 'View yours or another\'s XP balance'
+            this.alias = ['exp'],
+            this.usage = '-xp [@user]',
+            this.category = 'user',
+            this.description = 'View yours or another\'s XP balance'
     }
 
     async run(client, message, args) {
@@ -24,6 +24,7 @@ module.exports = class xp {
             });
         } else {
             let user = Boolean(message.mentions.users.first()) ? message.mentions.users.first() : message.guild.members.find(x => x.id == args[1].toString());
+            if (!user) return;
             client.models.userProfiles.findOne({
                 "user_id": user.id
             }, (err, db) => {

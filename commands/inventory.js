@@ -582,6 +582,7 @@ module.exports = class inventory {
                     setTimeout(() => {
                         this.removeBooster(client, message, id, type, uniqueID);
                     }, this.items.find(x => x.id == id).reward[0].time)
+                    // add achievementHandler
                 }
             });
         });
@@ -703,9 +704,20 @@ module.exports = class inventory {
                 if (type == 'COIN') {
                     db.user_coins += this.items.find(x => x.id == id).reward[0].amount;
                 }
-                db.save((err) => new client.methods.log(client, message.guild).error(err));
+                db.save((err) => {
+                    if (err) return new client.methods.log(client, message.guild).error(err);
+                    else {
+                        new client.methods.achievementHandler(client, message.author, type == 'XP' ? 'updateXP' : (type == 'COIN' ? 'updateCoins' : null), type == 'XP' ? {
+                            positive: true,
+                            xp: this.items.find(x => x.id == id).reward[0].amount
+                        } : (type == 'COIN' ? {
+                            positive: true,
+                            coins: this.items.find(x => x.id == id).reward[0].amount
+                        } : null)).handle()
+                    }
+                });
             });
-        })
+        });
     }
 
     handleCrate(client, message, id) {
@@ -766,6 +778,15 @@ module.exports = class inventory {
                         }
                         db.save((err) => {
                             if (err) return new client.methods.log(client, message.guild).error(err);
+                            else {
+                                new client.methods.achievementHandler(client, message.author, type == 'XP' ? 'updateXP' : (type == 'COIN' ? 'updateCoins' : null), type == 'XP' ? {
+                                    positive: true,
+                                    xp: rewards.find(x => x.id == reaction.emoji.name).reward
+                                } : (type == 'COIN' ? {
+                                    positive: true,
+                                    coins: rewards.find(x => x.id == reaction.emoji.name).reward
+                                } : null)).handle()
+                            }
                         });
                     });
                     db.inventory.find(x => x.id == id).amount = db.inventory.find(x => x.id == id).amount - 1;

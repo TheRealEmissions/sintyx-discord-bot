@@ -10,5 +10,7 @@ module.exports = {
     staffApplications: require(`./models/staffApplications`),
     staffProfiles: require(`./models/staffProfiles`),
     shopData: require(`./models/shopData`),
-    guildSettings: require(`./models/guildSettings`)
+    guildSettings: require(`./models/guildSettings`),
+    achievements: require(`./models/achievements`),
+    achievementsLogs: require(`./models/achievementsLogs`)
 }

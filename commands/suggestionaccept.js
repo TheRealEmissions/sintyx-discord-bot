@@ -70,7 +70,15 @@ module.exports = class suggestionaccept {
             if (err) return new client.methods.log(client).error(err);
             let coins = client.functions.genNumberBetween(10, 30);
             db.user_coins += coins;
-            db.save((err) => new client.methods.log(client).error(err));
+            db.save((err) => {
+                if (err) return new client.methods.log(client).error(err);
+                else {
+                    new client.methods.achievementHandler(client, user, 'updateCoins', {
+                        positive: true,
+                        coins: coins
+                    }).handle()
+                }
+            });
         });
     }
 }
