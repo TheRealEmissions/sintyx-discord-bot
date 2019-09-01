@@ -12,6 +12,6 @@ deploy_QA:
     - eval $(ssh-agent -s)
     - '[[ -f /.dockerenv ]] && echo -e "Host */n/tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
   script:
-    - ssh-add <(echo "$PRIVATE_KEY")
+    - ssh-add <(echo "$PRIVATE_KEY" | base64 -d)
     - ssh -o StrictHostKeyChecking=no root@"$QA_SERVER" 'cd /home/ && ls'
     - scp -P22 -r . ubuntu@"$QA_SERVER":/home/
