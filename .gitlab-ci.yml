@@ -6,8 +6,9 @@ stages:
 reinstall:
   stage: build
   script:
-    - pm2 stop app
+    - pkill -f node
+    - pkill -f nodejs
     - git checkout master
     - git pull origin master
-    - pm2 start app
+    - node .
     - exit
