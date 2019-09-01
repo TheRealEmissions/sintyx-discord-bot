@@ -7,7 +7,7 @@ stages:
 testing:
   stage: first
   script:
-    - whereis pm2
+    - ls /home/
 
 reinstall:
   stage: build
