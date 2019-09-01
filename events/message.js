@@ -2,17 +2,20 @@ let suggestionCooldown = new Set();
 let xpCooldown = new Set();
 
 class checkdb {
-    constructor(client, message) {
-        this.dbInit(client, message);
-    }
+    constructor() {}
 
     async dbInit(client, message) {
-        this.userProfiles(client, message).catch(err => new client.methods.log(client).error(err));
-        this.userSettings(client, message).catch(err => new client.methods.log(client).error(err));
-        this.userInventories(client, message).catch(err => new client.methods.log(client).error(err));
-        this.guildSettings(client, message).catch(err => new client.methods.log(client).error(err));
-        this.achievements(client, message).catch(err => new client.methods.log(client).error(err));
-        this.achievementsLogs(client, message).catch(err => new client.methods.log(client).error(err));
+        return new Promise(async (resolve, reject) => {
+            await Promise.all([
+                this.userProfiles(client, message).catch(err => new client.methods.log(client).error(err)),
+                this.userSettings(client, message).catch(err => new client.methods.log(client).error(err)),
+                this.userInventories(client, message).catch(err => new client.methods.log(client).error(err)),
+                this.guildSettings(client, message).catch(err => new client.methods.log(client).error(err)),
+                this.achievements(client, message).catch(err => new client.methods.log(client).error(err)),
+                this.achievementsLogs(client, message).catch(err => new client.methods.log(client).error(err)),
+            ])
+            return resolve();
+        });
     }
 
     achievementReturnObj(type) {
@@ -548,6 +551,7 @@ class handledb extends dbfunctions {
                 "guild_id": this.message.guild.id
             }, (err, db) => {
                 if (err) return reject(err);
+                if (!db) return;
                 if (db.xp_booster.length > 0) {
                     for (const no of db.xp_booster) {
                         boost += no.percent;
@@ -624,7 +628,7 @@ module.exports = async (client, message) => {
     if (message.channel.type !== "text") return;
     if (message.author.id == client.user.id) return;
     if (message.author.bot) return;
-    await new checkdb(client, message);
+    await new checkdb(client, message).dbInit(client, message);
     if (message.content.toString().startsWith(client.commandHandler.prefix[0])) {
         if (message.channel.name == "suggestions") return message.delete();
         let args = message.content.split(" ");

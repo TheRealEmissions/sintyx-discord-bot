@@ -3,13 +3,13 @@ class helpers {
 
     getAchievementObject(client, type) {
         return new Promise((resolve, reject) => {
-            return resolve(client.storage.achievements.find(x => x.name == type));
+            return resolve(client.storage.achievements.find(x => x.type == type));
         });
     }
 
     getAchievementData(client, type, name) {
         return new Promise((resolve, reject) => {
-            return resolve(client.storage.achievements.find(x => x.name == type).data.find(x => x.name == name));
+            return resolve(client.storage.achievements.find(x => x.type == type).data.find(x => x.name == name));
         });
     }
 
@@ -26,9 +26,6 @@ class helpers {
     }
 }
 
-const {
-    Multiple
-} = require(`../modules`);
 class ah extends helpers {
     constructor(client, user, type, data = {}) {
         super();
@@ -107,15 +104,14 @@ class ah extends helpers {
         if (!this.data.positive) return new this.client.methods.log(this.client).error(`Error on XPLoadBalancer achievementHandler => Cannot find "positive" under data{}`);
         if (!this.data.xp) return new this.client.methods.log(this.client).error(`Error on XPLoadBalancer achievementHandler => Cannot find "xp" under data{}`);
         if (this.data.positive == true) {
-            console.log('1');
             await new xp(this.client, this.user, this.type, this.data).handleGetXP().catch(err => new this.client.methods.log(this.client).error(err));
         }
-        //await new leaderboard(this.client, this.user, this.type, this.data).handleReachLeaderboard().catch(err => new this.client.methods.log(this.client).error(err));
+        await new leaderboard(this.client, this.user, this.type, this.data).handleReachLeaderboard().catch(err => new this.client.methods.log(this.client).error(err));
     }
 
     /* ABBREVIATED AS HNA */
-    handleNewAchievement(type, name) {
-        const data = this.getAchievementData(this.client, type, name);
+    async handleNewAchievement(type, name) {
+        const data = await this.getAchievementData(this.client, type, name);
         if (!data) return new this.client.methods.log(this.client).error(`Error on handleNewAchievement achievementHandler => Assumed wrong information provided, data NOT found`);
         this.HNAUpdateDB(name);
         this.HNAHandleRewards(data);
@@ -130,6 +126,7 @@ class ah extends helpers {
             if (err) return new this.client.methods.log(this.client).error(err);
             db.achievements.find(x => x.name == name).completed = true;
             db.achievements.find(x => x.name == name).timestamp = new Date();
+            db.markModified("achievements");
             db.save((err) => {
                 if (err) return new this.client.methods.log(this.client).error(err);
             });
@@ -137,7 +134,7 @@ class ah extends helpers {
     }
 
     HNAHandleRewards(data) {
-        this.client.mdoels.userProfiles.findOne({
+        this.client.models.userProfiles.findOne({
             "user_id": this.user.id
         }, (err, db) => {
             if (err) return new this.client.methods.log(this.client).error(err);
@@ -149,6 +146,20 @@ class ah extends helpers {
             }
             db.save((err) => {
                 if (err) return new this.client.methods.log(this.client).error(err);
+                else {
+                    if (data.reward.xp !== null) {
+                        new this.client.methods.achievementHandler(this.client, this.user, 'updateXP', {
+                            positive: true,
+                            xp: data.reward.xp
+                        });
+                    }
+                    if (data.reward.coins !== null) {
+                        new this.client.methods.achievementHandler(this.client, this.user, 'updateCoins', {
+                            positive: true,
+                            coins: data.reward.coins
+                        });
+                    }
+                }
             });
         });
         if (data.reward.inventoryID !== null) {
@@ -176,7 +187,7 @@ class ah extends helpers {
     HNANotify(data) {
         let embed = new this.client.modules.Discord.MessageEmbed()
             .setTitle(`:tada: **Achievement Unlocked** :tada:`)
-            .setDescription(`** **\nUnlocked: \`[${data.name}](${data.description})\`\n** **${data.reward.message !== null ? `\nReward:\n${data.reward.message}\n** **` : ''}`)
+            .setDescription(`** **\nUnlocked: [${data.name}](https://sintyx.com/ "${data.description}")\n** **${data.reward.message !== null ? `\nReward:\n${data.reward.message}\n** **` : ''}`)
             .setTimestamp()
         this.user.send(embed);
     }
@@ -202,7 +213,7 @@ class leaderboard extends ah {
                 if (err) return reject(err);
                 for (const c in result) {
                     if (result[c].user_id == this.user.id) {
-                        resolve(c + 1);
+                        resolve(parseInt(c) + 1);
                         break;
                     } else continue;
                 }
@@ -216,7 +227,7 @@ class leaderboard extends ah {
                 if (err) return reject(err);
                 for (const c in result) {
                     if (result[c].user_id == this.user.id) {
-                        resolve(c + 1);
+                        resolve(parseInt(c) + 1);
                         break;
                     } else continue;
                 }
@@ -240,7 +251,7 @@ class leaderboard extends ah {
                 obj.users = obj.users.sort((a, b) => b.avg_msg_xp - a.avg_msg_xp);
                 for (const c in obj.users) {
                     if (obj.users[c].user_id == this.user.id) {
-                        resolve(c + 1);
+                        resolve(parseInt(c) + 1);
                         break;
                     } else continue;
                 }
@@ -254,7 +265,7 @@ class leaderboard extends ah {
                 if (err) return reject(err);
                 for (const c in result) {
                     if (result[c].user_id == this.user.id) {
-                        resolve(c + 1);
+                        resolve(parseInt(c) + 1);
                         break;
                     } else continue;
                 }
@@ -271,14 +282,14 @@ class leaderboard extends ah {
             const MCIndex = await this.rlMessageCountLeaderboard().catch(err => reject(err));
             let array = [xpIndex, coinIndex, AvgXPIndex, MCIndex];
             array.sort((a, b) => b - a);
-            const hoist = await this.dbReachLeaderboard(xpIndex, coinIndex, AvgXPIndex, MCIndex, array);
+            const hoist = await this.dbReachLeaderboard(xpIndex, coinIndex, AvgXPIndex, MCIndex, array[0]);
             this.checkReachLeaderboard(hoist);
         });
     }
 
     dbReachLeaderboard(xpIndex, coinIndex, AvgXPIndex, MCIndex, max_hoist) {
         return new Promise((resolve, reject) => {
-            this.client.models.achievements.findOne({
+            this.client.models.achievementsLogs.findOne({
                 "user_id": this.user.id
             }, (err, db) => {
                 if (err) return reject(err);
@@ -287,6 +298,7 @@ class leaderboard extends ah {
                 db.achievements.find(x => x.type == 'reachLeaderboard').data.find(x => x.type == 'AVGXP').hoist = AvgXPIndex;
                 db.achievements.find(x => x.type == 'reachLeaderboard').data.find(x => x.type == 'MC').hoist = MCIndex;
                 db.achievements.find(x => x.type == 'reachLeaderboard').data.find(x => x.type == 'null').max_hoist = max_hoist;
+                db.markModified("achievements");
                 db.save((err) => {
                     if (err) return reject(err);
                     else return resolve(db.achievements.find(x => x.type == 'reachLeaderboard').data.find(x => x.type == 'null').max_hoist);
@@ -297,17 +309,13 @@ class leaderboard extends ah {
 
     async checkReachLeaderboard(hoist) {
         return new Promise(async (resolve, reject) => {
-            const dataArray = this.getAchievementObject(this.client, 'reachLeaderboard').data;
+            let dataArray = await this.getAchievementObject(this.client, 'reachLeaderboard');
             if (!dataArray) return reject(`Object reachLeaderboard cannot be found in achievements storage!`);
+            dataArray = dataArray.data;
             for (const count in dataArray) {
                 if (hoist <= dataArray[count].hoist) {
-                    this.client.models.achievements.findOne({
-                        "user_id": this.user.id
-                    }, (err, db) => {
-                        if (err) return reject(err);
-                        if (db.achievements.find(x => x.name == dataArray[count].name).completed == true) continue;
-                        this.handleNewAchievement('reachLeaderboard', db.achievements.find(x => x.name == dataArray[count].name));
-                    });
+                    if (await this.checkAchievementCompleted(this.client, this.user, dataArray[count].name) == true) continue;
+                    this.handleNewAchievement('reachLeaderboard', dataArray[count].name);
                 } else continue;
             }
             return resolve();

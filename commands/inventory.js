@@ -796,7 +796,7 @@ module.exports = class inventory {
                         message.channel.send(new client.modules.Discord.MessageEmbed()
                             .setColor(message.guild.member(client.user).displayHexColor)
                             .setDescription(`> You opened a ${this.resolveToEmbedName(id)} and received: **${rewards.find(x => x.id == reaction.emoji.name).reward} ${type == 'COIN' ? (rewards.find(x => x.id == reaction.emoji.name).reward > 1 ? 'Coins' : 'Coin') : 'XP'}**
-                        ${rewards.filter(x => x.id !== reaction.emoji.name).map(i => `${i.id} - ${i.reward} Coins`).join(`\n`)}
+                        ${rewards.filter(x => x.id !== reaction.emoji.name).map(i => `${i.id} - ${i.reward} ${type == 'XP' ? 'XP' : 'Coins'}`).join(`\n`)}
 
                         You have ${db.inventory.find(x => x.id == id).amount} of this item left
                         ${db.inventory.find(x => x.id == id).amount > 0 ? `** **\n:white_check_mark: **Claim another ${this.resolveToEmbedName(id)}**` : ''}`)

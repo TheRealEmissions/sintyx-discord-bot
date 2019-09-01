@@ -84,6 +84,16 @@ module.exports = [{
             inventoryID: null
         }
     }, {
+        name: 'Into the thousands!',
+        description: 'Gain a total of 1000 XP!',
+        amount: 1000,
+        reward: {
+            message: '10x Coins',
+            xp: null,
+            coins: 10,
+            inventoryID: null
+        }
+    }, {
         name: 'Adding zeros are we?',
         description: 'Reach a total of 5000 XP!',
         amount: 5000,
@@ -92,6 +102,46 @@ module.exports = [{
             xp: null,
             coins: null,
             inventoryID: [30]
+        }
+    }, {
+        name: 'The tens of thousands range',
+        description: 'Reach a total of 10,000 XP!',
+        amount: 10000,
+        reward: {
+            message: '1x Coin Pouch - 50 Coins',
+            xp: null,
+            coins: null,
+            inventoryID: [21]
+        }
+    }, {
+        name: 'Half a hundred thousand???',
+        description: 'Reach a total of 50,000 XP!',
+        amount: 50000,
+        reward: {
+            message: '1x XP Booster - +5% (15 min)',
+            xp: null,
+            coins: null,
+            inventoryID: [37]
+        }
+    }, {
+        name: 'The ludicrous 100K',
+        description: 'Reach a total of 100,000 XP!',
+        amount: 100000,
+        reward: {
+            message: '1x XP Booster - +10% (15 min)\n1x Coin Booster - +10% (15 min)\n200 Coins\n2000 XP',
+            xp: 2000,
+            coins: 200,
+            inventoryID: [39, 43]
+        }
+    }, {
+        name: 'The Goddess of Experience',
+        description: 'Reach a total of 500,000 XP!',
+        amount: 500000,
+        reward: {
+            message: '3x Coin Booster - +10% (15 min)\n3x XP Booster - +10% (15 min)\n5x XP Booster - +2.5% (15 min)\n1x Coin Crate - 500-1000 Coins\n3x XP Crate - 1000-2000 XP\n1x XP Crate - 10-2000 XP',
+            xp: null,
+            coins: null,
+            inventoryID: [43, 43, 43, 39, 39, 39, 36, 36, 36, 36, 36, 34, 14, 14, 14, 15]
         }
     }]
 }, {
@@ -105,6 +155,26 @@ module.exports = [{
             xp: null,
             coins: null,
             inventoryID: [4]
+        }
+    }, {
+        name: 'Double diggerydoos',
+        description: 'Reach Level 10',
+        level: 10,
+        reward: {
+            message: '60 Coins',
+            xp: null,
+            coins: 60,
+            inventoryID: null
+        }
+    }, {
+        name: 'A double dozen of levels',
+        description: 'Reach Level 24',
+        level: 24,
+        reward: {
+            message: '1x Coin Crate - 100-200 Coins',
+            xp: null,
+            coins: null,
+            inventoryID: [32]
         }
     }]
 }, {

@@ -1,9 +1,15 @@
-deploy_staging:
-  type: deploy
-  environment:
-    name: staging
-    url: 158.69.218.138
+image: node:latest
+
+stages:
+  - build
+  - test
+
+reinstall:
+  stage: build
   script:
-    - ssh root@158.69.218.138 "cd home/Sintyx/discord-bot/ && pm2 stop app && git checkout master && git pull origin master && pm2 start app && exit"
-  only:
-    - master
+    - cd home/Sintyx/discord-bot/
+    - pm2 stop app
+    - git checkout master
+    - git pull origin master
+    - pm2 start app
+    - exit
