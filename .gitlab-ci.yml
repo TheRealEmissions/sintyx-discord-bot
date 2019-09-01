@@ -2,7 +2,6 @@ image: node:latest
 
 stages:
   - build
-  - deploy
 
 cache:
   paths:
@@ -10,18 +9,8 @@ cache:
 
 reinstall:
   stage: build
-  artifacts:
-    paths:
-      - builds/sintyx/discord-bot/
   script:
     - pm2 stop app
     - git pull origin master
     - npm update
-
-deploy:
-  stage: deploy
-  artifacts:
-    paths:
-      - builds/sintyx/discord-bot/
-  script:
     - pm2 start app
