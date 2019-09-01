@@ -2,12 +2,10 @@ image: node:latest
 
 stages:
   - build
-  - test
 
 reinstall:
   stage: build
   script:
-    - cd home/Sintyx/discord-bot/
     - pm2 stop app
     - git checkout master
     - git pull origin master
