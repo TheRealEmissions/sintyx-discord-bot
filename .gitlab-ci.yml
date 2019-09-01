@@ -6,9 +6,10 @@ stages:
 before_script:
   - apt-get update -qq
   - apt-get install -qq git
+  - cat my_private_key | base64 -W0
   - "which ssh-agent || ( apt-get install -qq openssh-client )"
   - eval $(ssh-agent -s)
-  - ssh-add <(echo "$SSH_PRIVATE_KEY" | base64 --decode)
+  - ssh-add <(echo "$SSH_PRIVATE_KEY" | base64 -d)
   - mkdir -p ~/.ssh
   - '[[ -f /.dockerenv ]] && echo -e "Host */n/tStrictHostKeyChecking no/n/n" > ~/.ssh/config'
 
