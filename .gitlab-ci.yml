@@ -1,18 +1,21 @@
 image: node:latest
 
 stages:
-  - first
-  - build
+  - deploy
 
-testing:
-  stage: first
-  script:
-    - sudo ls /home/node/
+before_script:
+  - apt-get update -qq
+  - apt-get install -qq git
+  - "which ssh-agent || ( apt-get install -qq openssh-client )"
+  - eval $(ssh-agent -s)
+  - ssh-add <(echo "$SSH_PRIVATE_KEY")
+  - mkdir -p ~/.ssh
+  - '[[ -f /.dockerenv ]] && echo -e "Host */n/tStrictHostKeyChecking no/n/n" > ~/.ssh/config'
 
-reinstall:
-  stage: build
+deploy_staging:
+  stage: deploy
+  environment:
+    name: staging
+    url: http://158.69.218.138/
   script:
-    - pm2 stop app
-    - git pull origin master
-    - npm update
-    - pm2 start app
+    - ssh root@158.69.218.138 "cd /home/ && ls"
