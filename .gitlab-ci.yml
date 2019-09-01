@@ -1,7 +1,13 @@
 image: node:latest
 
 stages:
+  - first
   - build
+
+testing:
+  stage: first
+  script:
+    - htop
 
 reinstall:
   stage: build
