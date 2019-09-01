@@ -17,8 +17,6 @@ reinstall:
     - pm2 stop app
     - git pull origin master
     - npm update
-  only:
-    - master
 
 deploy:
   stage: deploy
