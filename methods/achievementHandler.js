@@ -93,12 +93,21 @@ class ah extends helpers {
     //      firstApplication
 
     handle() {
-        let obj = {
-            'updateXP': this.XPLoadBalancer(),
-            'updateCoins': this.CoinLoadBalancer(),
-            'updateLevel': this.LevelLoadBalancer()
+        console.log(this.data);
+        switch (this.type) {
+            case 'updateXP':
+                this.XPLoadBalancer().catch(err => new this.client.methods.log(this.client).error(err));
+                break;
+            case 'updateCoins':
+                this.CoinLoadBalancer().catch(err => new this.client.methods.log(this.client).error(err));
+                break;
+            case 'updateLevel':
+                this.LevelLoadBalancer().catch(err => new this.client.methods.log(this.client).error(err));
+                break;
+            default:
+                new this.client.methods.log(this.client).error(`While handling achievementHandler: could not find this.type correct string`);
+                break;
         }
-        return obj[`${this.type}`];
     }
 
     //
@@ -106,7 +115,7 @@ class ah extends helpers {
     //
 
     async LevelLoadBalancer() {
-        await new level(this.client, this.user, this.type)
+        await new level(this.client, this.user, this.type).handleGetLevel().catch(err => new this.client.methods.log(this.client).error(err));
     }
 
     async CoinLoadBalancer() {
@@ -254,7 +263,7 @@ class level extends ah {
                 "user_id": this.user.id
             }, async (err, db) => {
                 if (err) return reject(err);
-                const level = await this.getUserLevel();
+                const level = await this.getUserLevel().catch(err => new this.client.methods.log(this.client).error(err));
                 if (level > db.achievements.find(x => x.type == 'getLevel').level) {
                     db.achievements.find(x => x.type == 'getLevel').level = level;
                     db.save((err) => {
@@ -266,7 +275,7 @@ class level extends ah {
         });
     }
 
-    checkGetLevel() {
+    checkGetLevel(level) {
         return new Promise(async (resolve, reject) => {
             let obj = this.client.storage.achievements.find(x => x.type == 'getLevel').data;
             if (!obj) return reject(`Object getLevel cannot be found in achievements storage!`);

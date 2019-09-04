@@ -54,25 +54,25 @@ module.exports = class ach {
         let ra;
         switch (date) {
             case 0:
-                ra = "Sunday";
+                ra = "Sun.";
                 break;
             case 1:
-                ra = "Monday";
+                ra = "Mon.";
                 break;
             case 2:
-                ra = "Tuesday";
+                ra = "Tue.";
                 break;
             case 3:
-                ra = "Wednesday";
+                ra = "Wed.";
                 break;
             case 4:
-                ra = "Thursday";
+                ra = "Thu.";
                 break;
             case 5:
-                ra = "Friday";
+                ra = "Fri.";
                 break;
             case 6:
-                ra = "Saturday";
+                ra = "Sat.";
                 break;
         }
         return ra;

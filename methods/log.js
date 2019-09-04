@@ -7,7 +7,7 @@ module.exports = class log {
 
     async send(message) {
         let channel = await this.client.channels.get(this.channelID);
-        channel.send(message);
+        channel.send(message).catch(err => console.error(err));
     }
 
     constructField(name, value, inline = false) {
