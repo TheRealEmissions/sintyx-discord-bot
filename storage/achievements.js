@@ -241,6 +241,22 @@ module.exports = [{
                 amount: 2
             }]
         }
+    }, {
+        name: 'BTEC Level God',
+        description: 'Reach Level 500',
+        level: 500,
+        reward: {
+            message: '500x Coins\n1x XP Crate - 1000-2000 XP\n1x Coin Booster - +5% (15 min)',
+            xp: null,
+            coins: 500,
+            inventoryID: [{
+                id: 41,
+                amount: 1
+            }, {
+                id: 14,
+                amount: 1
+            }]
+        }
     }]
 }, {
     type: 'getCrates',

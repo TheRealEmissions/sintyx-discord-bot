@@ -65,8 +65,7 @@ class ah extends helpers {
     //      getLevel
     //
     // updateMC
-    //  data provides =>
-    //      count: (increase)
+    //  data provides => null
     //  handles =>
     //      getMessageCount
     //      reachLeaderboard
@@ -104,6 +103,9 @@ class ah extends helpers {
             case 'updateLevel':
                 this.LevelLoadBalancer().catch(err => new this.client.methods.log(this.client).error(err));
                 break;
+            case 'updateMC':
+                this.MCLoadBalancer().catch(err => new this.client.methods.log(this.client).error(err));
+                break;
             default:
                 new this.client.methods.log(this.client).error(`While handling achievementHandler: could not find this.type correct string`);
                 break;
@@ -113,6 +115,11 @@ class ah extends helpers {
     //
     //      LOAD BALANCERS
     //
+
+    async MCLoadBalancer() {
+        await new mc(this.client, this.user, this.type).handleGetMessageCount().catch(err => new this.client.methods.log(this.client).error(err));
+        await new leaderboard(this.client, this.user, this.type).handleReachLeaderboard().catch(err => new this.client.methods.log(this.client).error(err));
+    }
 
     async LevelLoadBalancer() {
         await new level(this.client, this.user, this.type).handleGetLevel().catch(err => new this.client.methods.log(this.client).error(err));
@@ -230,6 +237,67 @@ module.exports = class a extends ah {
         super(client, user, type, data);
     }
 };
+
+class mc extends ah {
+    constructor(client, user, type) {
+        super(client, user, type);
+        this.client = client;
+        this.user = user;
+        this.type = type;
+    }
+
+    handleGetMessageCount() {
+        return new Promise(async (resolve, reject) => {
+            const count = await this.dbGetMessageCount().catch(err => reject(err));
+            await this.checkGetMessageCount(count).catch(err => reject(err));
+            return resolve();
+        });
+    }
+
+    checkGetMessageCount(count) {
+        return new Promise((resolve, reject) => {
+            let obj = this.client.storage.achievements.find(x => x.type == 'getMessageCount').data;
+            if (!obj) return reject(`Object getMessageCount cannot be found in achievements storage!`);
+            for (const n in obj) {
+                if (count >= obj[n].amount) {
+                    let completed = await this.checkAchievementCompleted(this.client, this.user, obj[n].name);
+                    if (completed == true) continue;
+                    this.handleNewAchievement('getMessageCount', obj[n].name);
+                } else continue;
+            }
+            return resolve();
+        });
+    }
+
+    getUserMessageCount() {
+        return new Promise((resolve, reject) => {
+            this.client.models.userProfiles.findOne({
+                "user_id": this.user.id
+            }, (err, db) => {
+                if (err) return reject(err);
+                return resolve(db.message_count);
+            });
+        });
+    }
+
+    dbGetMessageCount() {
+        return new Promise((resolve, reject) => {
+            this.client.models.achievementsLogs.findOne({
+                "user_id": this.user.id
+            }, (err, db) => {
+                if (err) return reject(err);
+                const count = await this.getUserMessageCount().catch(err => reject(err));
+                if (count > db.achievements.find(x => x.type == 'getMessageCount').amount) {
+                    db.achievements.find(x => x.type == 'getMessageCount').amount = count;
+                    db.save((err) => {
+                        if (err) return reject(err);
+                        else return resolve(count);
+                    });
+                }
+            });
+        });
+    }
+}
 
 class level extends ah {
     constructor(client, user, type) {
@@ -479,6 +547,7 @@ class leaderboard extends ah {
             array.sort((a, b) => b - a);
             const hoist = await this.dbReachLeaderboard(xpIndex, coinIndex, AvgXPIndex, MCIndex, array[0]);
             this.checkReachLeaderboard(hoist);
+            return resolve();
         });
     }
 
