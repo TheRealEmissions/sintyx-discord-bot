@@ -101,7 +101,10 @@ module.exports = [{
             message: '1x Coin Crate - 25-50 Coins',
             xp: null,
             coins: null,
-            inventoryID: [30]
+            inventoryID: [{
+                id: 30,
+                amount: 1
+            }]
         }
     }, {
         name: 'The tens of thousands range',
@@ -111,7 +114,10 @@ module.exports = [{
             message: '1x Coin Pouch - 50 Coins',
             xp: null,
             coins: null,
-            inventoryID: [21]
+            inventoryID: [{
+                id: 21,
+                amount: 1
+            }]
         }
     }, {
         name: 'Half a hundred thousand???',
@@ -121,7 +127,10 @@ module.exports = [{
             message: '1x XP Booster - +5% (15 min)',
             xp: null,
             coins: null,
-            inventoryID: [37]
+            inventoryID: [{
+                id: 37,
+                amount: 1
+            }]
         }
     }, {
         name: 'The ludicrous 100K',
@@ -131,7 +140,13 @@ module.exports = [{
             message: '1x XP Booster - +10% (15 min)\n1x Coin Booster - +10% (15 min)\n200 Coins\n2000 XP',
             xp: 2000,
             coins: 200,
-            inventoryID: [39, 43]
+            inventoryID: [{
+                id: 39,
+                amount: 1
+            }, {
+                id: 43,
+                amount: 1
+            }]
         }
     }, {
         name: 'The Goddess of Experience',
@@ -141,7 +156,25 @@ module.exports = [{
             message: '3x Coin Booster - +10% (15 min)\n3x XP Booster - +10% (15 min)\n5x XP Booster - +2.5% (15 min)\n1x Coin Crate - 500-1000 Coins\n3x XP Crate - 1000-2000 XP\n1x XP Crate - 10-2000 XP',
             xp: null,
             coins: null,
-            inventoryID: [43, 43, 43, 39, 39, 39, 36, 36, 36, 36, 36, 34, 14, 14, 14, 15]
+            inventoryID: [{
+                id: 43,
+                amount: 3
+            }, {
+                id: 39,
+                amount: 3
+            }, {
+                id: 36,
+                amount: 5
+            }, {
+                id: 34,
+                amount: 1
+            }, {
+                id: 14,
+                amount: 3
+            }, {
+                id: 15,
+                amount: 1
+            }]
         }
     }]
 }, {
@@ -154,7 +187,10 @@ module.exports = [{
             message: '1x XP Pouch - 100 XP',
             xp: null,
             coins: null,
-            inventoryID: [4]
+            inventoryID: [{
+                id: 4,
+                amount: 1
+            }]
         }
     }, {
         name: 'Double diggerydoos',
@@ -174,7 +210,36 @@ module.exports = [{
             message: '1x Coin Crate - 100-200 Coins',
             xp: null,
             coins: null,
-            inventoryID: [32]
+            inventoryID: [{
+                id: 32,
+                amount: 2
+            }]
+        }
+    }, {
+        name: 'Level Mania',
+        description: 'Reach Level 50',
+        level: 50,
+        reward: {
+            message: '2x Coin Crate - 100-200 Coins',
+            xp: null,
+            coins: null,
+            inventoryID: [{
+                id: 32,
+                amount: 2
+            }]
+        }
+    }, {
+        name: 'Levelling obsession',
+        description: 'Reach Level 100',
+        level: 100,
+        reward: {
+            message: '2x Coin Crate - 100-200 Coins',
+            xp: null,
+            coins: null,
+            inventoryID: [{
+                id: 32,
+                amount: 2
+            }]
         }
     }]
 }, {
@@ -202,7 +267,10 @@ module.exports = [{
             message: '1x Coin Crate - 10-25 Coins',
             xp: null,
             coins: null,
-            inventoryID: [29]
+            inventoryID: [{
+                id: 29,
+                amount: 1
+            }]
         }
     }]
 }, {
@@ -216,7 +284,10 @@ module.exports = [{
             message: '50 Coins\n1x XP Pouch - 50 XP',
             xp: null,
             coins: 50,
-            inventoryID: [3]
+            inventoryID: [{
+                id: 3,
+                amount: 1
+            }]
         }
     }]
 }, {
@@ -229,7 +300,10 @@ module.exports = [{
             message: '1x Coin Booster - +2.5% (15 min)',
             xp: null,
             coins: null,
-            inventoryID: [40]
+            inventoryID: [{
+                id: 40,
+                amount: 1
+            }]
         }
     }]
 }, {
@@ -256,7 +330,10 @@ module.exports = [{
             message: '1x Coin Crate - 100-200 Coins',
             xp: null,
             coins: null,
-            inventoryID: [32]
+            inventoryID: [{
+                id: 32,
+                amount: 1
+            }]
         }
     }]
 }, {
@@ -269,7 +346,13 @@ module.exports = [{
             message: '1x XP Booster - +5% (15 min)\n1x XP Pouch - 500 XP',
             xp: null,
             coins: null,
-            inventoryID: [6, 37]
+            inventoryID: [{
+                id: 6,
+                amount: 1
+            }, {
+                id: 37,
+                amount: 1
+            }]
         }
 
     }]

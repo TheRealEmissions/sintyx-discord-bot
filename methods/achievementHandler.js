@@ -199,13 +199,13 @@ class ah extends helpers {
                 "user_id": this.user.id
             }, (err, db) => {
                 if (err) return new this.client.methods.log(this.client).error(err);
-                for (const id of data.reward.inventoryID) {
-                    if (db.inventory.find(x => x.id == id)) {
-                        db.inventory.find(x => x.id == id).amount += 1;
+                for (const obj of data.reward.inventoryID) {
+                    if (db.inventory.find(x => x.id == obj.id)) {
+                        db.inventory.find(x => x.id == obj.id).amount += obj.amount;
                     } else {
                         db.inventory.push({
-                            id: id,
-                            amount: 1
+                            id: obj.id,
+                            amount: obj.amount
                         });
                     }
                 }
@@ -219,6 +219,7 @@ class ah extends helpers {
     HNANotify(data) {
         let embed = new this.client.modules.Discord.MessageEmbed()
             .setTitle(`:tada: **Achievement Unlocked** :tada:`)
+            .setColor(this.user.guild.me.displayHexColor)
             .setDescription(`** **\nUnlocked: [${data.name}](https://sintyx.com/ "${data.description}")\n** **${data.reward.message !== null ? `\nReward:\n${data.reward.message}\n** **` : ''}`)
             .setTimestamp()
         this.user.send(embed);
