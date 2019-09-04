@@ -249,10 +249,10 @@ class level extends ah {
     }
 
     dbGetLevel() {
-        return new Promise(async (resolve, reject) => {
+        return new Promise((resolve, reject) => {
             this.client.models.achievementsLogs.findOne({
                 "user_id": this.user.id
-            }, (err, db) => {
+            }, async (err, db) => {
                 if (err) return reject(err);
                 const level = await this.getUserLevel();
                 if (level > db.achievements.find(x => x.type == 'getLevel').level) {
@@ -311,10 +311,10 @@ class coins extends ah {
     }
 
     dbHaveCoins() {
-        return new Promise(async (resolve, reject) => {
+        return new Promise((resolve, reject) => {
             this.client.models.achievementsLogs.findOne({
                 "user_id": this.user.id
-            }, (err, db) => {
+            }, async (err, db) => {
                 if (err) return reject(err);
                 const coins = await this.getUserCoins();
                 if (coins > db.achievements.find(x => x.type == 'haveCoins').max) {

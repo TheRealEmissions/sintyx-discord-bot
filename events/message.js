@@ -521,12 +521,12 @@ class handledb extends dbfunctions {
                         positive: true,
                         xp: xp.xp
                     }).handle();
-                    new client.methods.achievementHandler(client, message.author, 'updateLevel');
-                    if (coins !== 0) {
+                    new client.methods.achievementHandler(client, message.author, 'updateLevel').handle();
+                    if (coins.coin !== 0) {
                         new client.methods.achievementHandler(client, message.author, 'updateCoins', {
                             positive: true,
                             coins: coins.coin
-                        });
+                        }).handle();
                     }
                     // add message count
                 }
@@ -540,7 +540,7 @@ class handledb extends dbfunctions {
 
         }
         if (await this.checkSettings('coin_ping')) {
-            if (coins !== 0) {
+            if (coins.coin !== 0) {
                 message.channel
                     .send(`<@${message.author.id}> **+${coins.coin} Coins** ${coins.boost !== 0 ? `*(+${(coins.boost * 100) / 100} Coins from ${coins.boostperc}% boost!)*` : ''}`)
                     .then(msg => setTimeout(() => msg.delete(), coins.boost !== 0 ? 5000 : 2500));
