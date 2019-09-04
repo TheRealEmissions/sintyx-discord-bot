@@ -71,28 +71,37 @@ class ah extends helpers {
     //      reachLeaderboard
     //
     // claimCrate
+    //  data provides =>
+    //      inventory_id: Number
     //  handles =>
     //      getCrates
     //
     // claimPouch
+    //  data provides =>
+    //      inventory_id: Number
     //  handles =>
     //      getPouches
     //
     // claimBooster
+    //  data provides =>
+    //      inventory_id: Number
     //  handles =>
     //      getBoosters
     //      activeBoosts
     //
     // expireBooster
+    //  data provides =>
+    //      inventory_id: Number
     //  handles =>
     //      activeBoosts
     //
     // applicationProcessed
+    //  data provides =>
+    //      reference_id: String
     //  handles =>
     //      firstApplication
 
     handle() {
-        console.log(this.data);
         switch (this.type) {
             case 'updateXP':
                 this.XPLoadBalancer().catch(err => new this.client.methods.log(this.client).error(err));
@@ -106,6 +115,9 @@ class ah extends helpers {
             case 'updateMC':
                 this.MCLoadBalancer().catch(err => new this.client.methods.log(this.client).error(err));
                 break;
+            case 'claimCrate':
+                this.CrateLoadBalancer().catch(err => new this.client.methods.log(this.client).error(err));
+                break;
             default:
                 new this.client.methods.log(this.client).error(`While handling achievementHandler: could not find this.type correct string`);
                 break;
@@ -115,6 +127,11 @@ class ah extends helpers {
     //
     //      LOAD BALANCERS
     //
+
+    async CrateLoadBalancer() {
+        if (!this.data.inventory_id) return new this.client.methods.log(this.client).error(`Error on CrateLoadBalancer achievementHandler => Cannot find "inventory_id" under data{}`);
+        await new crate(this.client, this.user, this.type, this.data).handleGetCrates().catch(err => new this.client.methods.log(this.client).error(err));
+    }
 
     async MCLoadBalancer() {
         await new mc(this.client, this.user, this.type).handleGetMessageCount().catch(err => new this.client.methods.log(this.client).error(err));
@@ -237,6 +254,22 @@ module.exports = class a extends ah {
         super(client, user, type, data);
     }
 };
+
+class crate extends ah {
+    constructor(client, user, type, data = {}) {
+        super(client, user, type, data);
+        this.client = client;
+        this.user = user;
+        this.type = type;
+        this.data = data;
+    }
+
+    handleGetCrates() {
+        return new Promise((resolve, reject) => {
+
+        });
+    }
+}
 
 class mc extends ah {
     constructor(client, user, type) {
