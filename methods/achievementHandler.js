@@ -1,3 +1,4 @@
+// @ts-check
 class helpers {
     constructor() {};
 
@@ -265,8 +266,54 @@ class crate extends ah {
     }
 
     handleGetCrates() {
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
+            const crates = await this.dbGetCrates().catch(err => reject(err));
+            await this.checkGetCrates(crates).catch(err => reject(err));
+            return resolve();
+        });
+    }
 
+    resolveIDToCrateType(id) {
+        return new Promise((resolve, reject) => {
+            const invitem = this.client.storage.inventoryItems.find(x => x.id == id);
+            if (!invitem) return reject(`Inventory item of ID ${id} could not be found in achievementHandler resolveIDToCrateType`);
+            const type = invitem.reward[0].type;
+            if (!type) return reject(`Type of inventory ID ${id} could not be found in achievementHandler resolveIDToCrateType`);
+            return resolve(type);
+        });
+    }
+
+    dbGetCrates() {
+        return new Promise((resolve, reject) => {
+            this.client.models.achievementsLogs.findOne({
+                "user_id": this.user.id
+            }, async (err, db) => {
+                if (err) return reject(err);
+                const type = await this.resolveIDToCrateType(this.data.inventory_id);
+                let amount = db.achievements.find(x => x.type == 'getCrates').data.find(x => x.type == this.data.inventory_id == null ? "null" : (type == 'XP' ? "XP" : (type == 'COIN' ? "COIN" : null))).amount
+                amount = parseInt(amount) + 1;
+                db.save((err) => {
+                    if (err) return reject(err);
+                    else return resolve(amount);
+                })
+            });
+        });
+    }
+
+    checkGetCrates(crates) {
+        return new Promise(async (resolve, reject) => {
+            let obj = this.client.storage.achievements.find(x => x.type == 'getCrates').data;
+            if (!obj) return reject(`Object getCrates cannot be found in achievements storage!`);
+            for (const o of obj) {
+                for (const count in o) {
+                    if (crates >= o[count].amount) {
+                        let completed = await this.checkAchievementCompleted(this.client, this.user, o[count].name);
+                        if (completed == true) continue;
+                        this.handleNewAchievement('getCrates', o[count].name);
+                    } else continue;
+                }
+            }
+            return resolve();
         });
     }
 }
@@ -288,7 +335,7 @@ class mc extends ah {
     }
 
     checkGetMessageCount(count) {
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             let obj = this.client.storage.achievements.find(x => x.type == 'getMessageCount').data;
             if (!obj) return reject(`Object getMessageCount cannot be found in achievements storage!`);
             for (const n in obj) {
@@ -317,7 +364,7 @@ class mc extends ah {
         return new Promise((resolve, reject) => {
             this.client.models.achievementsLogs.findOne({
                 "user_id": this.user.id
-            }, (err, db) => {
+            }, async (err, db) => {
                 if (err) return reject(err);
                 const count = await this.getUserMessageCount().catch(err => reject(err));
                 if (count > db.achievements.find(x => x.type == 'getMessageCount').amount) {
@@ -456,7 +503,7 @@ class coins extends ah {
 
     handleGetCoins() {
         return new Promise(async (resolve, reject) => {
-            const coins = await this.dbGetXP().catch(err => reject(err));
+            const coins = await this.dbGetCoins().catch(err => reject(err));
             await this.checkGetCoins(coins).catch(err => reject(err));
             return resolve();
         });

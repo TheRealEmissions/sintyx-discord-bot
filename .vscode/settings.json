@@ -13,4 +13,5 @@
     "editor.renderWhitespace": "boundary",
     "files.insertFinalNewline": true,
     "files.trimTrailingWhitespace": true,
+    "javascript.validate.enable": true
 }
