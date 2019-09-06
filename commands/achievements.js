@@ -105,24 +105,35 @@ module.exports = class ach {
                         tasks.push(achievement.description);
                     }
                 }
-                let embed = {
-                    embed: {
-                        color: message.guild.me.displayHexColor,
-                        title: `Unlocked Achievements for **${message.author.tag}**:`,
-                        description: `To view more information about an achievement, type \`-ach <achievement>\`.`,
-                        fields: [{
-                            name: 'Achievement:',
-                            value: achs.map(a => `${a}`).join(`\n`),
-                            inline: true
-                        }, {
-                            name: 'Task:',
-                            value: tasks.map(t => `${t}`).join(`\n`),
-                            inline: true
-                        }, {
-                            name: 'Completed on:',
-                            value: timestamps.map(t => `${this.replaceDay(new Date(t).getUTCDay())} ${new Date(t).getUTCDate()} ${this.replaceMonth(new Date(t).getUTCMonth())} ${new Date(t).getUTCFullYear()} at ${this.replaceTime(new Date(t).getUTCHours())}:${this.replaceTime(new Date(t).getUTCMinutes())}`).join(`\n`),
-                            inline: true
-                        }]
+                let embed;
+                if (achs.length < 1) {
+                    embed = {
+                        embed: {
+                            color: message.guild.me.displayHexColor,
+                            title: `Unlocked Achievements for **${message.author.tag}**:`,
+                            description: `You currently have no unlocked achievements.`
+                        }
+                    }
+                } else {
+                    embed = {
+                        embed: {
+                            color: message.guild.me.displayHexColor,
+                            title: `Unlocked Achievements for **${message.author.tag}**:`,
+                            description: `To view more information about an achievement, type \`-ach <achievement>\`.`,
+                            fields: [{
+                                name: 'Achievement:',
+                                value: achs.map(a => `${a}`).join(`\n`),
+                                inline: true
+                            }, {
+                                name: 'Task:',
+                                value: tasks.map(t => `${t}`).join(`\n`),
+                                inline: true
+                            }, {
+                                name: 'Completed on:',
+                                value: timestamps.map(t => `${this.replaceDay(new Date(t).getUTCDay())} ${new Date(t).getUTCDate()} ${this.replaceMonth(new Date(t).getUTCMonth())} ${new Date(t).getUTCFullYear()} at ${this.replaceTime(new Date(t).getUTCHours())}:${this.replaceTime(new Date(t).getUTCMinutes())}`).join(`\n`),
+                                inline: true
+                            }]
+                        }
                     }
                 }
                 return resolve(embed);
