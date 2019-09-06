@@ -31,7 +31,7 @@ module.exports = class setslogan {
         let filter = ["http://", "https://", ".com", ".org", ".net", ".us", ".edu", ".info", ".in", ".it", ".biz", ".co", ".one", ".name", ".uk", ".gov", ".mil", ".is", ".eu", ".de", ".pro", ".xyz", ".example", ".fr", ".aero", ".mx", ".mobi", ".au", ".io", ".ca", ".arpa", ".ru", ".es", ".tel", ".jobs", ".jp", ".asia", ".museum", ".tv", ".nl", ".ly", ".cn", ".top", ".int", ".ch", ".se", ".ws", ".eg", ".wiki", ".br", ".th", ".tk", ".cc", ".site", "www.", "porn", ".app", ".online", ".space", ".house", ".store", ".tech", ".club", "hypixel", "mineplex", "fragglecraft", "cosmicprisons", "cosmicprison", ".gg", ".blog", ".bz", ".ly", ".club", ".rewards", ".me", "arkhamnetwork", "hypxl", ".win", "hypixl", "hypxel", "hipixel", "nigger", "nigga", ".link", ".pw"];
         let check = await this.checkFilter(slogan, filter, message, client);
         if (check == false) return;
-        slogan = slogan.filter(`\n`, '');
+        slogan = slogan.replace(`\n`, '');
         client.models.userProfiles.findOne({
             "user_id": message.author.id
         }, (err, db) => {
