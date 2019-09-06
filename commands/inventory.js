@@ -786,8 +786,11 @@ module.exports = class inventory {
                                     positive: true,
                                     coins: rewards.find(x => x.id == reaction.emoji.name).reward
                                 } : null)).handle()
-                                new client.methods.achievementHandler(client, message.author, "getCrates", {
+                                new client.methods.achievementHandler(client, message.author, "claimCrate", {
                                     inventory_id: id
+                                }).handle();
+                                new client.methods.achievementHandler(client, message.author, "claimCrate", {
+                                    inventory_id: null
                                 }).handle();
                             }
                         });
