@@ -130,7 +130,7 @@ class ah extends helpers {
     //
 
     async CrateLoadBalancer() {
-        if (!this.data.inventory_id) return new this.client.methods.log(this.client).error(`Error on CrateLoadBalancer achievementHandler => Cannot find "inventory_id" under data{}`);
+        if (typeof this.data.inventory_id == "undefined") return new this.client.methods.log(this.client).error(`Error on CrateLoadBalancer achievementHandler => Cannot find "inventory_id" under data{}`);
         await new crate(this.client, this.user, this.type, this.data).handleGetCrates().catch(err => new this.client.methods.log(this.client).error(err));
     }
 
@@ -144,8 +144,8 @@ class ah extends helpers {
     }
 
     async CoinLoadBalancer() {
-        if (!this.data.positive) return new this.client.methods.log(this.client).error(`Error on CoinLoadBalancer achievementHandler => Cannot find "positive" under data{}`);
-        if (!this.data.coins) return new this.client.methods.log(this.client).error(`Error on CoinLoadBalancer achievementHandler => Cannot find "coins" under data{}`);
+        if (typeof this.data.positive == "undefined") return new this.client.methods.log(this.client).error(`Error on CoinLoadBalancer achievementHandler => Cannot find "positive" under data{}`);
+        if (typeof this.data.coins == "undefined") return new this.client.methods.log(this.client).error(`Error on CoinLoadBalancer achievementHandler => Cannot find "coins" under data{}`);
         if (this.data.positive == true) {
             await new coins(this.client, this.user, this.type, this.data).handleGetCoins().catch(err => new this.client.methods.log(this.client).error(err));
         }
@@ -154,8 +154,8 @@ class ah extends helpers {
     }
 
     async XPLoadBalancer() {
-        if (!this.data.positive) return new this.client.methods.log(this.client).error(`Error on XPLoadBalancer achievementHandler => Cannot find "positive" under data{}`);
-        if (!this.data.xp) return new this.client.methods.log(this.client).error(`Error on XPLoadBalancer achievementHandler => Cannot find "xp" under data{}`);
+        if (typeof this.data.positive == "undefined") return new this.client.methods.log(this.client).error(`Error on XPLoadBalancer achievementHandler => Cannot find "positive" under data{}`);
+        if (typeof this.data.xp == "undefined") return new this.client.methods.log(this.client).error(`Error on XPLoadBalancer achievementHandler => Cannot find "xp" under data{}`);
         if (this.data.positive == true) {
             await new xp(this.client, this.user, this.type, this.data).handleGetXP().catch(err => new this.client.methods.log(this.client).error(err));
         }
