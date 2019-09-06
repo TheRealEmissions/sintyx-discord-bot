@@ -40,7 +40,12 @@ module.exports = class test {
                 console.log(db);
             })*/
 
-            message.channel.send(new client.modules.Discord.MessageEmbed());
+            message.delete();
+            message.channel.send(new client.modules.Discord.MessageEmbed()
+                .setColor(message.guild.me.displayHexColor)
+                .setTitle(`**The Suggestion Channel:**`)
+                .setDescription(`Welcome to the Suggestion Channel! Here you can upvote or downvote suggestions based on your opinion and even post your own suggestions!\n> To post your own suggestion, please type your suggestion below - it will automagically be translated into an embedded format!`)
+            );
 
         } else {
             return;
