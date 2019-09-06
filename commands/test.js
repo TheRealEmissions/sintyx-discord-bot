@@ -34,11 +34,13 @@ module.exports = class test {
                 await msg.react(ec['black_heart']);
             });*/
 
-            client.models.userProfiles.findOne({
+            /*client.models.userProfiles.findOne({
                 "user_id": message.author.id
             }, (err, db) => {
                 console.log(db);
-            })
+            })*/
+
+            message.channel.send(new client.modules.Discord.MessageEmbed());
 
         } else {
             return;
