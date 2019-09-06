@@ -17,7 +17,7 @@ module.exports = class support {
             });
             message.channel.send(`${client.storage.emojiCharacters['timer']} Creating your support ticket... please wait.`).then(startMsg => {
                 message.guild.channels.create(`support-${message.author.username}-${randomString}`).then(async (channel) => {
-                    let category = message.guild.channels.find(c => c.name == "Support Tickets" && c.type == "category");
+                    let category = message.guild.channels.find(c => c.name == "📩 Support Tickets" && c.type == "category");
                     if (!category) {
                         startMsg.edit(` `).then(() => startMsg.edit(new client.methods.errorEmbed().process(`Support Ticket`, `S001`, message.guild.member(client.user).displayHexColor)));
                         channel.delete();

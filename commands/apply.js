@@ -70,7 +70,7 @@ module.exports = class apply extends questions {
     }
 
     async run(client, message, args) {
-        let category = message.guild.channels.find(x => x.name == "Applications"),
+        let category = message.guild.channels.find(x => x.name == "📝Applications"),
             reference = client.modules.random_string({
                 length: 10,
                 type: 'base64'
