@@ -28,7 +28,7 @@ class helpers {
 }
 
 class ah extends helpers {
-    constructor(client, user, type, data = {}) {
+    constructor(client, user, type, data) {
         super();
         this.client = client;
         this.user = user;
@@ -257,7 +257,7 @@ module.exports = class a extends ah {
 };
 
 class crate extends ah {
-    constructor(client, user, type, data = {}) {
+    constructor(client, user, type, data) {
         super(client, user, type, data);
         this.client = client;
         this.user = user;
@@ -441,7 +441,7 @@ class level extends ah {
 }
 
 class coins extends ah {
-    constructor(client, user, type, data = {}) {
+    constructor(client, user, type, data) {
         super(client, user, type, data);
         this.client = client;
         this.user = user;
