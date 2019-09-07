@@ -30,42 +30,21 @@ class checkdb {
             },
             'getCrates': {
                 type: 'getCrates',
-                data: [{
-                    type: 'null',
-                    amount: 0
-                }, {
-                    type: 'XP',
-                    amount: 0
-                }, {
-                    type: 'COIN',
-                    amount: 0
-                }]
+                null_amount: 0,
+                xp_amount: 0,
+                coin_amount: 0
             },
             'getPouches': {
                 type: 'getPouches',
-                data: [{
-                    type: 'null',
-                    amount: 0
-                }, {
-                    type: 'XP',
-                    amount: 0
-                }, {
-                    type: 'COIN',
-                    amount: 0
-                }]
+                null_amount: 0,
+                xp_amount: 0,
+                coin_amount: 0
             },
             'getBoosters': {
                 type: 'getBoosters',
-                data: [{
-                    type: 'null',
-                    amount: 0
-                }, {
-                    type: 'XP',
-                    amount: 0
-                }, {
-                    type: 'COIN',
-                    amount: 0
-                }]
+                null_amount: 0,
+                xp_amount: 0,
+                coin_amount: 0
             },
             'getCoins': {
                 type: 'getCoins',
@@ -77,16 +56,9 @@ class checkdb {
             },
             'activeBoosts': {
                 type: 'activeBoosts',
-                data: [{
-                    type: 'null',
-                    amount: 0
-                }, {
-                    type: 'XP',
-                    amount: 0
-                }, {
-                    type: 'COIN',
-                    amount: 0
-                }]
+                null_amount: 0,
+                xp_amount: 0,
+                coin_amount: 0
             },
             'getMessageCount': {
                 type: 'getMessageCount',
@@ -94,22 +66,10 @@ class checkdb {
             },
             'reachLeaderboard': {
                 type: 'reachLeaderboard',
-                data: [{
-                    type: 'XP',
-                    hoist: 0
-                }, {
-                    type: 'COIN',
-                    hoist: 0
-                }, {
-                    type: 'AVGXP',
-                    hoist: 0
-                }, {
-                    type: 'MC',
-                    hoist: 0
-                }, {
-                    type: 'null',
-                    max_hoist: 0
-                }]
+                xp_hoist: 0,
+                coin_hoist: 0,
+                avgxp_hoist: 0,
+                best_hoist: 0
             },
             'firstApplication': {
                 type: 'firstApplication',
@@ -528,7 +488,7 @@ class handledb extends dbfunctions {
                             coins: coins.coin
                         }).handle();
                     }
-                    // add message count
+                    new client.methods.achievementHandler(client, message.author, 'updateMC').handle();
                 }
             });
         });

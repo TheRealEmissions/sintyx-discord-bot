@@ -11,4 +11,8 @@ module.exports = mongoose.model(`achievements`, new mongoose.Schema({
         required: false,
         default: []
     }
+}, {
+    skipVersioning: {
+        achievements: true
+    }
 }))

@@ -785,12 +785,9 @@ module.exports = class inventory {
                                 } : (type == 'COIN' ? {
                                     positive: true,
                                     coins: rewards.find(x => x.id == reaction.emoji.name).reward
-                                } : null)).handle()
+                                } : null)).handle();
                                 new client.methods.achievementHandler(client, message.author, "claimCrate", {
                                     inventory_id: id
-                                }).handle();
-                                new client.methods.achievementHandler(client, message.author, "claimCrate", {
-                                    inventory_id: null
                                 }).handle();
                             }
                         });

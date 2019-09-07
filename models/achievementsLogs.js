@@ -11,4 +11,8 @@ module.exports = mongoose.model(`achievementsLogs`, new mongoose.Schema({
         required: false,
         default: []
     }
-}))
+}, {
+    skipVersioning: {
+        achievements: true
+    }
+}));

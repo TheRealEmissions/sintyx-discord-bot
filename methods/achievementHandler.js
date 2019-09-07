@@ -144,6 +144,7 @@ class ah extends helpers {
     }
 
     async CoinLoadBalancer() {
+        console.log(this.data.positive);
         if (typeof this.data.positive == "undefined") return new this.client.methods.log(this.client).error(`Error on CoinLoadBalancer achievementHandler => Cannot find "positive" under data{}`);
         if (typeof this.data.coins == "undefined") return new this.client.methods.log(this.client).error(`Error on CoinLoadBalancer achievementHandler => Cannot find "coins" under data{}`);
         if (this.data.positive == true) {
@@ -290,26 +291,50 @@ class crate extends ah {
             }, async (err, db) => {
                 if (err) return reject(err);
                 const type = await this.resolveIDToCrateType(this.data.inventory_id);
-                let amount = db.achievements.find(x => x.type == 'getCrates').data.find(x => x.type == this.data.inventory_id == null ? "null" : (type == 'XP' ? "XP" : (type == 'COIN' ? "COIN" : null))).amount
-                amount = parseInt(amount) + 1;
-                db.save((err) => {
-                    if (err) return reject(err);
-                    else return resolve(amount);
-                })
+                try {
+                    db.achievements.find(x => x.type == "getCrates").null_amount += 1;
+                    if (type == 'XP') {
+                        db.achievements.find(x => x.type == "getCrates").xp_amount += 1;
+                    }
+                    if (type == 'COIN') {
+                        db.achievements.find(x => x.type == "getCrates").coin_amount += 1;
+                    }
+                    await db.markModified("achievements");
+                    await db.save((err) => {
+                        if (err) return reject(err);
+                        else return resolve({
+                            null_amount: {
+                                type: 'null',
+                                amount: db.achievements.find(x => x.type == "getCrates").null_amount,
+                            },
+                            xp_amount: {
+                                type: 'XP',
+                                amount: db.achievements.find(x => x.type == "getCrates").xp_amount,
+                            },
+                            coin_amount: {
+                                type: 'COIN',
+                                amount: db.achievements.find(x => x.type == "getCrates").coin_amount
+                            }
+                        });
+                    });
+                } catch (err) {
+                    return reject(err);
+                }
             });
         });
     }
 
-    checkGetCrates(crates) {
+    checkGetCrates(dbobj) {
         return new Promise(async (resolve, reject) => {
             let obj = this.client.storage.achievements.find(x => x.type == 'getCrates').data;
             if (!obj) return reject(`Object getCrates cannot be found in achievements storage!`);
-            for (const o of obj) {
-                for (const count in o) {
-                    if (crates >= o[count].amount) {
-                        let completed = await this.checkAchievementCompleted(this.client, this.user, o[count].name);
+            for (const ach of obj) {
+                for (const am of dbobj) {
+                    if (ach.type !== am.type) continue;
+                    if (am.amount >= ach.amount) {
+                        let completed = await this.checkAchievementCompleted(this.client, this.user, ach.name);
                         if (completed == true) continue;
-                        this.handleNewAchievement('getCrates', o[count].name);
+                        this.handleNewAchievement('getCrates', ach.name);
                     } else continue;
                 }
             }
@@ -367,8 +392,10 @@ class mc extends ah {
             }, async (err, db) => {
                 if (err) return reject(err);
                 const count = await this.getUserMessageCount().catch(err => reject(err));
-                if (count > db.achievements.find(x => x.type == 'getMessageCount').amount) {
+                console.log(count > db.achievements.find(x => x.type == 'getMessageCount').amount);
+                if (parseInt(count) > parseInt(db.achievements.find(x => x.type == 'getMessageCount').amount)) {
                     db.achievements.find(x => x.type == 'getMessageCount').amount = count;
+                    db.markModified("achievements");
                     db.save((err) => {
                         if (err) return reject(err);
                         else return resolve(count);
@@ -415,6 +442,7 @@ class level extends ah {
                 const level = await this.getUserLevel().catch(err => new this.client.methods.log(this.client).error(err));
                 if (level > db.achievements.find(x => x.type == 'getLevel').level) {
                     db.achievements.find(x => x.type == 'getLevel').level = level;
+                    db.markModified("achievements");
                     db.save((err) => {
                         if (err) return reject(err);
                         else return resolve(level);
@@ -475,13 +503,12 @@ class coins extends ah {
             }, async (err, db) => {
                 if (err) return reject(err);
                 const coins = await this.getUserCoins();
-                if (coins > db.achievements.find(x => x.type == 'haveCoins').max) {
-                    db.achievements.find(x => x.type == 'haveCoins').max = coins;
-                    db.save((err) => {
-                        if (err) return reject(err);
-                        else return resolve(coins);
-                    });
-                } else return resolve(db.achievements.find(x => x.type == 'haveCoins').max);
+                db.achievements.find(x => x.type == 'haveCoins').max = coins;
+                db.markModified("achievements");
+                db.save((err) => {
+                    if (err) return reject(err);
+                    else return resolve(coins);
+                });
             });
         });
     }
@@ -637,15 +664,15 @@ class leaderboard extends ah {
                 "user_id": this.user.id
             }, (err, db) => {
                 if (err) return reject(err);
-                db.achievements.find(x => x.type == 'reachLeaderboard').data.find(x => x.type == 'XP').hoist = xpIndex;
-                db.achievements.find(x => x.type == 'reachLeaderboard').data.find(x => x.type == 'COIN').hoist = coinIndex;
-                db.achievements.find(x => x.type == 'reachLeaderboard').data.find(x => x.type == 'AVGXP').hoist = AvgXPIndex;
-                db.achievements.find(x => x.type == 'reachLeaderboard').data.find(x => x.type == 'MC').hoist = MCIndex;
-                db.achievements.find(x => x.type == 'reachLeaderboard').data.find(x => x.type == 'null').max_hoist = max_hoist;
+                db.achievements.find(x => x.type == 'reachLeaderboard').xp_hoist = xpIndex;
+                db.achievements.find(x => x.type == 'reachLeaderboard').coin_hoist = coinIndex;
+                db.achievements.find(x => x.type == 'reachLeaderboard').avgxp_hoist = AvgXPIndex;
+                db.achievements.find(x => x.type == 'reachLeaderboard').mc_hoist = MCIndex;
+                db.achievements.find(x => x.type == 'reachLeaderboard').best_hoist = max_hoist;
                 db.markModified("achievements");
                 db.save((err) => {
                     if (err) return reject(err);
-                    else return resolve(db.achievements.find(x => x.type == 'reachLeaderboard').data.find(x => x.type == 'null').max_hoist);
+                    else return resolve(db.achievements.find(x => x.type == 'reachLeaderboard').best_hoist);
                 });
             });
         });
