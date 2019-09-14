@@ -579,10 +579,15 @@ module.exports = class inventory {
             db.save((err) => {
                 if (err) return new client.methods.log(client).error(err);
                 else {
+                    new client.methods.achievementHandler(client, message.author, 'claimBooster', {
+                        inventory_id: id
+                    }).handle();
                     setTimeout(() => {
                         this.removeBooster(client, message, id, type, uniqueID);
+                        new client.methods.achievementHandler(client, message.author, 'expireBooster', {
+                            inventory_id: id
+                        }).handle();
                     }, this.items.find(x => x.id == id).reward[0].time)
-                    // add achievementHandler
                 }
             });
         });

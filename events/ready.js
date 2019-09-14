@@ -70,4 +70,20 @@ module.exports = (client) => {
             });
         }
     });
+    client.models.achievementsLogs.find({}, (err, docs) => {
+        if (err) return new client.methods.log(client).error(err);
+        for (const doc of docs) {
+            client.models.achievementsLogs.findOne({
+                "user_id": doc.user_id
+            }, (err, db) => {
+                if (err) return new client.methods.log(client).error(err);
+                db.achievements.find(x => x.type == "activeBoosts").null_amount = 0;
+                db.achievements.find(x => x.type == "activeBoosts").xp_amount = 0;
+                db.achievements.find(x => x.type == "activeBoosts").coin_amount = 0;
+                db.save((err) => {
+                    if (err) return new client.methods.log(client).error(err);
+                });
+            });
+        }
+    });
 }

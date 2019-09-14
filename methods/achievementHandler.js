@@ -121,6 +121,13 @@ class ah extends helpers {
                 break;
             case 'claimPouch':
                 this.PouchLoadBalancer().catch(err => new this.client.methods.log(this.client).error(err));
+                break;
+            case 'claimBooster':
+                this.BoosterLoadBalancer().catch(err => new this.client.methods.log(this.client).error(err));
+                break;
+            case 'expireBooster':
+                this.BoosterLoadBalancer().catch(err => new this.client.methods.log(this.client).error(err));
+                break;
             default:
                 new this.client.methods.log(this.client).error(`While handling achievementHandler: could not find this.type correct string`);
                 break;
@@ -130,6 +137,17 @@ class ah extends helpers {
     //
     //      LOAD BALANCERS
     //
+
+    async BoosterLoadBalancer() {
+        if (typeof this.data.inventory_id == "undefined") return new this.client.methods.log(this.client).error(`Error on BoosterLoadBalancer achievementHandler => Cannot find "inventory_id" under data{}`);
+        if (this.type == 'claimBooster') {
+            await new boost(this.client, this.user, this.type, this.data).handleGetBoosters().catch(err => new this.client.methods.log(this.client).error(err));
+            await new boost(this.client, this.user, this.type, this.data).handleActiveBoosts(true).catch(err => new this.client.methods.log(this.client).error(err));
+        }
+        if (this.type == 'expireBooster') {
+            await new boost(this.client, this.user, this.type, this.data).handleActiveBoosts(false).catch(err => new this.client.methods.log(this.client).error(err));
+        }
+    }
 
     async PouchLoadBalancer() {
         if (typeof this.data.inventory_id == "undefined") return new this.client.methods.log(this.client).error(`Error on PouchLoadBalancer achievementHandler => Cannot find "inventory_id" under data{}`);
@@ -151,7 +169,6 @@ class ah extends helpers {
     }
 
     async CoinLoadBalancer() {
-        console.log(this.data.positive);
         if (typeof this.data.positive == "undefined") return new this.client.methods.log(this.client).error(`Error on CoinLoadBalancer achievementHandler => Cannot find "positive" under data{}`);
         if (typeof this.data.coins == "undefined") return new this.client.methods.log(this.client).error(`Error on CoinLoadBalancer achievementHandler => Cannot find "coins" under data{}`);
         if (this.data.positive == true) {
@@ -263,6 +280,162 @@ module.exports = class a extends ah {
         super(client, user, type, data);
     }
 };
+
+class boost extends ah {
+    constructor(client, user, type, data) {
+        super(client, user, type, data);
+        this.client = client;
+        this.user = user;
+        this.type = type;
+        this.data = data;
+    }
+
+    resolveIDToBoosterType(id) {
+        return new Promise((resolve, reject) => {
+            const invitem = this.client.storage.inventoryItems.find(x => x.id == id);
+            if (!invitem) return reject(`Inventory item of ID ${id} could not be found in achievementHandler resolveIDToBoosterType`);
+            const type = invitem.reward[0].type;
+            if (!type) return reject(`Type of inventory ID ${id} could not be found in achievementHandler resolveIDToBoosterType`);
+            return resolve(type);
+        });
+    }
+
+    handleGetBoosters() {
+        return new Promise(async (resolve, reject) => {
+            const boosters = await this.dbGetBoosters().catch(err => reject(err));
+            await this.checkGetBoosters(boosters).catch(err => reject(err));
+            return resolve();
+        });
+    }
+
+    dbGetBoosters() {
+        return new Promise((resolve, reject) => {
+            this.client.methods.achievementsLogs.findOne({
+                "user_id": this.user.id
+            }, async (err, db) => {
+                if (err) return reject(err);
+                const type = await this.resolveIDToBoosterType(this.data.inventory_id);
+                try {
+                    db.achievements.find(x => x.type == "getBoosters").null_amount += 1;
+                    if (type == 'XP') {
+                        db.achievements.find(x => x.type == "getBoosters").xp_amount += 1;
+                    }
+                    if (type == 'COIN') {
+                        db.achievements.find(x => x.type == "getBoosters").coin_amount += 1;
+                    }
+                    await db.markModified("achievements");
+                    await db.save((err) => {
+                        if (err) return reject(err);
+                        else return resolve([{
+                            type: 'null',
+                            amount: db.achievements.find(x => x.type == "getBoosters").null_amount
+                        }, {
+                            type: 'XP',
+                            amount: db.achievements.find(x => x.type == "getBoosters").xp_amount
+                        }, {
+                            type: 'COIN',
+                            amount: db.achievements.find(x => x.type == "getBoosters").coin_amount
+                        }]);
+                    });
+                } catch (err) {
+                    return reject(err);
+                }
+            });
+        });
+    }
+
+    checkGetBoosters(dbobj) {
+        return new Promise(async (resolve, reject) => {
+            let obj = this.client.storage.achievements.find(x => x.type == "getBoosters").data;
+            if (!obj) return reject(`Object getBoosters cannot be found in achievements storage!`);
+            for (const ach of obj) {
+                for (const am of dbobj) {
+                    if (ach.type !== am.type) continue;
+                    if (am.amount >= ach.amount) {
+                        let completed = await this.checkAchievementCompleted(this.client, this.user, ach.name);
+                        if (completed == true) continue;
+                        this.handleNewAchievement('getBoosters', ach.name);
+                    } else continue;
+                }
+            }
+            return resolve();
+        });
+    }
+
+    handleActiveBoosts(boolean) {
+        return new Promise(async (resolve, reject) => {
+            const boosters = await this.dbActiveBoosts(boolean).catch(err => reject(err));
+            await this.checkActiveBoosts(boosters).catch(err => reject(err));
+            return resolve();
+        });
+    }
+
+    dbActiveBoosts(boolean) {
+        return new Promise((resolve, reject) => {
+            this.client.methods.achievementsLogs.findOne({
+                "user_id": this.user.id
+            }, async (err, db) => {
+                if (err) return reject(err);
+                const type = await this.resolveIDToBoosterType(this.data.inventory_id);
+                try {
+                    if (boolean == true) {
+                        db.achievements.find(x => x.type == "activeBoosts").null_amount += 1;
+                    } else if (boolean == false) {
+                        db.achievements.find(x => x.type == "activeBoosts").null_amount -= 1;
+                    }
+                    if (type == 'XP') {
+                        if (boolean == true) {
+                            db.achievements.find(x => x.type == "activeBoosts").xp_amount += 1;
+                        } else if (boolean == false) {
+                            db.achievements.find(x => x.type == "activeBoosts").xp_amount -= 1;
+                        }
+                    }
+                    if (type == 'COIN') {
+                        if (boolean == true) {
+                            db.achievements.find(x => x.type == "activeBoosts").coin_amount += 1;
+                        } else if (boolean == false) {
+                            db.achievements.find(x => x.type == "activeBoosts").coin_amount -= 1;
+                        }
+                    }
+                    await db.markModified("achievements");
+                    await db.save((err) => {
+                        if (err) return reject(err);
+                        else return resolve([{
+                            type: 'null',
+                            amount: db.achievements.find(x => x.type == "activeBoosts").null_amount
+                        }, {
+                            type: 'XP',
+                            amount: db.achievements.find(x => x.type == "activeBoosts").xp_amount
+                        }, {
+                            type: 'COIN',
+                            amount: db.achievements.find(x => x.type == "activeBoosts").coin_amount
+                        }]);
+                    });
+                } catch (err) {
+                    return reject(err);
+                }
+            });
+        });
+    }
+
+    checkActiveBoosts(dbobj) {
+        return new Promise(async (resolve, reject) => {
+            let obj = this.client.storage.achievements.find(x => x.type == "activeBoosts").data;
+            if (!obj) return reject(`Object activeBoosts cannot be found in achievements storage!`);
+            for (const ach of obj) {
+                for (const am of dbobj) {
+                    if (ach.type !== am.type) continue;
+                    if (am.amount >= ach.amount) {
+                        let completed = await this.checkAchievementCompleted(this.client, this.user, ach.name);
+                        if (completed == true) continue;
+                        this.handleNewAchievement('activeBoosts', ach.name);
+                    } else continue;
+                }
+            }
+            return resolve();
+        });
+    }
+}
 
 class pouch extends ah {
     constructor(client, user, type, data) {
