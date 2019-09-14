@@ -131,6 +131,9 @@ module.exports = class apply extends questions {
                                 });
                             });
                             channel.send(`<@&${message.guild.roles.find(x => x.name == "Management").id}>`).then(msg => setTimeout(() => msg.delete(), 10));
+                            new client.methods.achievementHandler(client, message.author, 'applicationProcessed', {
+                                reference_id: reference
+                            }).handle();
                         }
                     });
                 }).catch(err => new client.methods.log(client).error(err));
