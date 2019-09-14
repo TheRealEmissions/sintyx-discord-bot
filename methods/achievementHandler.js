@@ -128,6 +128,9 @@ class ah extends helpers {
             case 'expireBooster':
                 this.BoosterLoadBalancer().catch(err => new this.client.methods.log(this.client).error(err));
                 break;
+            case 'applicationProcessed':
+                this.applicationLoadBalancer().catch(err => new this.client.methods.log(this.client).error(err));
+                break;
             default:
                 new this.client.methods.log(this.client).error(`While handling achievementHandler: could not find this.type correct string`);
                 break;
@@ -137,6 +140,11 @@ class ah extends helpers {
     //
     //      LOAD BALANCERS
     //
+
+    async applicationLoadBalancer() {
+        if (typeof this.data.reference_id == "undefined") return new this.client.methods.log(this.client).error(`Error on ApplicationLoadBalancer achievementHandler => Cannot find "inventory_id" under data{}`);
+        await new application(this.client, this.user, this.type, this.data).handleFirstApplication().catch(err => new this.client.methods.log(this.client).error(err));
+    }
 
     async BoosterLoadBalancer() {
         if (typeof this.data.inventory_id == "undefined") return new this.client.methods.log(this.client).error(`Error on BoosterLoadBalancer achievementHandler => Cannot find "inventory_id" under data{}`);
@@ -280,6 +288,60 @@ module.exports = class a extends ah {
         super(client, user, type, data);
     }
 };
+
+class application extends ah {
+    constructor(client, user, type, data) {
+        super(client, user, type, data);
+        this.client = client;
+        this.user = user;
+        this.type = type;
+        this.data = data;
+    }
+
+    handleFirstApplication() {
+        return new Promise(async (resolve, reject) => {
+            await this.dbFirstApplication().catch(err => reject(err));
+            await this.checkFirstApplication().catch(err => reject(err));
+            return resolve();
+        });
+    }
+
+    dbFirstApplication() {
+        return new Promise((resolve, reject) => {
+            this.client.methods.achievementsLogs.findOne({
+                "user_id": this.user.id
+            }, async (err, db) => {
+                if (err) return reject(err);
+                db.achievements.find(x => x.type == "firstApplication").id = this.data.reference_id;
+                await db.markModified("achievements");
+                db.save((err) => {
+                    if (err) return reject(err);
+                    else return resolve();
+                });
+            });
+        });
+    }
+
+    checkFirstApplication() {
+        return new Promise((resolve, reject) => {
+            let obj = this.client.storage.achievements.find(x => x.type == "firstApplication").data;
+            if (!obj) return reject(`Object firstApplication cannot be found in achievements storage!`);
+            this.client.models.achievementsLogs.findOne({
+                "user_id": this.user.id
+            }, async (err, db) => {
+                if (err) return reject(err);
+                let appid = db.achievements.find(x => x.type == "firstApplication").id;
+                if (appid == null) return reject(`checkFirstApplication called but reference ID is null!`);
+                else {
+                    let completed = await this.checkAchievementCompleted(this.client, this.user, obj[0].name);
+                    if (completed == true) return resolve();
+                    this.handleNewAchievement('firstApplication', obj[0].name);
+                    return resolve();
+                }
+            });
+        });
+    }
+}
 
 class boost extends ah {
     constructor(client, user, type, data) {
