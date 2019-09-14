@@ -8,34 +8,74 @@ module.exports = class app {
     }
 
     replaceMonth(term) {
-        let o = {
-            0: "Jan.",
-            1: "Feb.",
-            2: "Mar.",
-            3: "Apr.",
-            4: "May",
-            5: "Jun.",
-            6: "Jul.",
-            7: "Aug.",
-            8: "Sep.",
-            9: "Oct.",
-            10: "Nov.",
-            11: "Dec."
+        let res;
+        switch (term) {
+            case 0:
+                res = "Jan.";
+                break;
+            case 1:
+                res = "Feb.";
+                break;
+            case 2:
+                res = "Mar.";
+                break;
+            case 3:
+                res = "Apr.";
+                break;
+            case 4:
+                res = "May";
+                break;
+            case 5:
+                res = "Jun.";
+                break;
+            case 6:
+                res = "Jul.";
+                break;
+            case 7:
+                res = "Aug.";
+                break;
+            case 8:
+                res = "Sep.";
+                break;
+            case 9:
+                res = "Oct.";
+                break;
+            case 10:
+                res = "Nov.";
+                break;
+            case 11:
+                res = "Dec.";
+                break;
         }
-        return o[term];
+        return res;
     }
 
     replaceDay(term) {
-        let o = {
-            0: "Sunday",
-            1: "Monday",
-            2: "Tuesday",
-            3: "Wednesday",
-            4: "Thursday",
-            5: "Friday",
-            6: "Saturday"
+        let res;
+        switch (term) {
+            case 0:
+            res = "Sunday";
+            break;
+            case 1:
+            res = "Monday";
+            break;
+            case 2:
+            res = "Tuesday";
+            break;
+            case 3:
+            res = "Wednesday";
+            break;
+            case 4:
+            res = "Thursday";
+            break;
+            case 5:
+            res = "Friday";
+            break;
+            case 6:
+            res = "Saturday";
+            break;
         }
-        return o[term];
+        return res;
     }
 
     replaceTime(term) {
