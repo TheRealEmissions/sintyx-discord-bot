@@ -261,7 +261,7 @@ module.exports = [{
 }, {
     type: 'getCrates',
     data: [{
-        name: 'What\'s in the mystery box?',
+        name: 'What' + `'` + 's in the mystery box?',
         description: 'Open your first crate.',
         type: 'null',
         amount: 1,
@@ -271,11 +271,38 @@ module.exports = [{
             coins: null,
             inventoryID: null
         }
+    }, {
+        name: 'Are levels important?',
+        description: 'Open 5 XP Crates.',
+        type: 'XP',
+        amount: 5,
+        reward: {
+            message: 'Another XP Crate!',
+            xp: null,
+            coins: 0,
+            inventoryID: [{
+                id: 10,
+                amount: 1
+            }]
+        }
+    }, {
+        name: 'Levels are important',
+        description: 'Open 20 XP Crates.',
+        type: 'XP',
+        amount: 20,
+        reward: {
+            message: '500 XP',
+            xp: 500,
+            coins: null,
+            inventoryID: null
+        }
+    }, {
+        name: ''
     }]
 }, {
     type: 'getPouches',
     data: [{
-        name: 'Cheatin\' XP',
+        name: 'Cheatin' + "'" + ' XP',
         description: 'Open 10 XP Pouches',
         type: 'XP',
         amount: 10,
@@ -325,7 +352,7 @@ module.exports = [{
 }, {
     type: 'haveCoins',
     data: [{
-        name: 'Why don\'t you spend your coins?',
+        name: 'Why don' + "'" + 't you spend your coins?',
         description: 'Have 10,000 coins in your balance',
         amount: 10000,
         reward: {

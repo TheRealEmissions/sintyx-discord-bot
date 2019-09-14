@@ -245,7 +245,6 @@ class ah extends helpers {
     HNANotify(data) {
         let embed = new this.client.modules.Discord.MessageEmbed()
             .setTitle(`:tada: **Achievement Unlocked** :tada:`)
-            .setColor(this.user.guild.me.displayHexColor)
             .setDescription(`** **\nUnlocked: [${data.name}](https://sintyx.com/ "${data.description}")\n** **${data.reward.message !== null ? `\nReward:\n${data.reward.message}\n** **` : ''}`)
             .setTimestamp()
         this.user.send(embed);
@@ -302,20 +301,19 @@ class crate extends ah {
                     await db.markModified("achievements");
                     await db.save((err) => {
                         if (err) return reject(err);
-                        else return resolve({
-                            null_amount: {
+                        else return resolve([{
                                 type: 'null',
                                 amount: db.achievements.find(x => x.type == "getCrates").null_amount,
                             },
-                            xp_amount: {
+                            {
                                 type: 'XP',
                                 amount: db.achievements.find(x => x.type == "getCrates").xp_amount,
                             },
-                            coin_amount: {
+                            {
                                 type: 'COIN',
                                 amount: db.achievements.find(x => x.type == "getCrates").coin_amount
                             }
-                        });
+                        ]);
                     });
                 } catch (err) {
                     return reject(err);
