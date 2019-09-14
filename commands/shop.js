@@ -83,7 +83,9 @@ module.exports = class shop {
                     }
                 }
                 const msg = await message.channel.send(embed);
-                let collector = new client.modules.Discord.MessageCollector(message.channel, m => m.author.id == message.author.id, {});
+                let collector = new client.modules.Discord.MessageCollector(message.channel, m => m.author.id == message.author.id, {
+                    max: 1
+                });
                 collector.on('collect', itemno => {
                     client.models.shopData.findOne({
                         "item_id": itemno

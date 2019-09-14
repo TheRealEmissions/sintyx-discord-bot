@@ -296,8 +296,6 @@ module.exports = [{
             coins: null,
             inventoryID: null
         }
-    }, {
-        name: ''
     }]
 }, {
     type: 'getPouches',

@@ -54,26 +54,26 @@ module.exports = class app {
         let res;
         switch (term) {
             case 0:
-            res = "Sunday";
-            break;
+                res = "Sunday";
+                break;
             case 1:
-            res = "Monday";
-            break;
+                res = "Monday";
+                break;
             case 2:
-            res = "Tuesday";
-            break;
+                res = "Tuesday";
+                break;
             case 3:
-            res = "Wednesday";
-            break;
+                res = "Wednesday";
+                break;
             case 4:
-            res = "Thursday";
-            break;
+                res = "Thursday";
+                break;
             case 5:
-            res = "Friday";
-            break;
+                res = "Friday";
+                break;
             case 6:
-            res = "Saturday";
-            break;
+                res = "Saturday";
+                break;
         }
         return res;
     }
@@ -90,7 +90,7 @@ module.exports = class app {
                 "user_id": message.author.id
             }, (err, docs) => {
                 if (err) return new client.methods.log(client).error(err);
-                if (!docs[0].application_log) return message.channel.send(new client.modules.Discord.MessageEmbed()
+                if (docs[0].application_log.length < 1) return message.channel.send(new client.modules.Discord.MessageEmbed()
                     .setColor(message.guild.me.displayHexColor)
                     .setDescription(`You haven't opened any applications before.`)
                 );

@@ -76,16 +76,10 @@ module.exports = class apply extends questions {
                 type: 'base64'
             });
         if (!category) return;
-        let startDate = parseInt((new Date().getTime()));
         message.channel.send(`${client.storage.emojiCharacters['timer']} Creating your application channel... please wait.`).then(async startMsg => {
             const channel = await this.handleAppCreation(message, reference, category);
             const beginningMsg = await this.startMessage(client, channel, message.author);
-            let endDate = parseInt((new Date().getTime()) - startDate);
-            startMsg.edit(` `).then(() => startMsg.edit(new client.modules.Discord.MessageEmbed()
-                .setColor(message.guild.member(client.user).displayHexColor)
-                .setDescription(`:white_check_mark: Created your application channel... ${channel}`)
-                .setFooter(`Processed in ${endDate}ms`)
-            ));
+            startMsg.edit(`:white_check_mark: Created your application: ${channel}`);
             let collector = new client.modules.Discord.ReactionCollector(beginningMsg, (reaction, user) => reaction.emoji.name == '✅' && user.id == message.author.id, {});
             collector.on('collect', reaction => {
                 collector.stop();
@@ -114,9 +108,8 @@ module.exports = class apply extends questions {
                                 .setDescription(`Thank you for completing the application! It has been submitted to Management for review. If you would like to let us know anything else, please type below. Here are your answers to the questions:`)
                                 .setFooter(reference)
                             );
-                            let str = client.modules.Discord.splitMessage(responses.map(r => `**${client.storage.appQs[r.id]}**\n${r.content}\n ** **`).join(`\n`), 2000);
-                            for (const s of str) {
-                                channel.send(s);
+                            for (const r of responses) {
+                                channel.send(new client.modules.Discord.MessageEmbed().setTitle(client.storage.appQs[r.id]).setDescription(r.content));
                             }
                             client.models.userProfiles.findOne({
                                 "user_id": message.author.id
@@ -174,9 +167,9 @@ module.exports = class apply extends questions {
             c.send(new client.modules.Discord.MessageEmbed()
                 .setColor(c.guild.member(client.user).displayHexColor)
                 .setTitle(`**Hey ${u.username}!** Welcome to your application.`)
-                .setDescription(`This application may take a lot of time. These are the questions you will be asked:
-                    >>> ${questionArray.map(q => `- ${q}`).join(`\n`)}`)
-                .setFooter(`To begin your application, select ✅`)
+                .setDescription(`** **\nThis application may take a lot of time. These are the questions you will be asked:\n** **
+                    >>> ${questionArray.map(q => `• ${q}`).join(`\n`)}`)
+                .setFooter(`Begin your application with ✅`)
             ).then(msg => {
                 msg.react(`✅`);
                 return resolve(msg);

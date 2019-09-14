@@ -277,7 +277,6 @@ class ah extends helpers {
     HNANotify(data) {
         let embed = new this.client.modules.Discord.MessageEmbed()
             .setTitle(`:tada: **Achievement Unlocked** :tada:`)
-            .setColor(this.user.guild.member(this.client).displayHexColor)
             .setDescription(`** **\nUnlocked: [${data.name}](https://sintyx.com/ "${data.description}")\n** **${data.reward.message !== null ? `\nReward:\n${data.reward.message}\n** **` : ''}`)
             .setTimestamp()
         this.user.send(embed);
@@ -308,7 +307,7 @@ class application extends ah {
 
     dbFirstApplication() {
         return new Promise((resolve, reject) => {
-            this.client.methods.achievementsLogs.findOne({
+            this.client.models.achievementsLogs.findOne({
                 "user_id": this.user.id
             }, async (err, db) => {
                 if (err) return reject(err);
