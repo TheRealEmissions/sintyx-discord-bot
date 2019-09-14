@@ -77,11 +77,13 @@ module.exports = (client) => {
                 "user_id": doc.user_id
             }, (err, db) => {
                 if (err) return new client.methods.log(client).error(err);
+                if (typeof db.achievements.find(x => x.type == "activeBoosts") == "undefined") return;
                 db.achievements.find(x => x.type == "activeBoosts").null_amount = 0;
                 db.achievements.find(x => x.type == "activeBoosts").xp_amount = 0;
                 db.achievements.find(x => x.type == "activeBoosts").coin_amount = 0;
                 db.save((err) => {
                     if (err) return new client.methods.log(client).error(err);
+                    console.log(`saved`);
                 });
             });
         }
