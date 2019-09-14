@@ -119,6 +119,8 @@ class ah extends helpers {
             case 'claimCrate':
                 this.CrateLoadBalancer().catch(err => new this.client.methods.log(this.client).error(err));
                 break;
+            case 'claimPouch':
+                this.PouchLoadBalancer().catch(err => new this.client.methods.log(this.client).error(err));
             default:
                 new this.client.methods.log(this.client).error(`While handling achievementHandler: could not find this.type correct string`);
                 break;
@@ -128,6 +130,11 @@ class ah extends helpers {
     //
     //      LOAD BALANCERS
     //
+
+    async PouchLoadBalancer() {
+        if (typeof this.data.inventory_id == "undefined") return new this.client.methods.log(this.client).error(`Error on PouchLoadBalancer achievementHandler => Cannot find "inventory_id" under data{}`);
+        await new pouch(this.client, this.user, this.type, this.data).handleGetPouches().catch(err => new this.client.methods.log(this.client).error(err));
+    }
 
     async CrateLoadBalancer() {
         if (typeof this.data.inventory_id == "undefined") return new this.client.methods.log(this.client).error(`Error on CrateLoadBalancer achievementHandler => Cannot find "inventory_id" under data{}`);
@@ -245,6 +252,7 @@ class ah extends helpers {
     HNANotify(data) {
         let embed = new this.client.modules.Discord.MessageEmbed()
             .setTitle(`:tada: **Achievement Unlocked** :tada:`)
+            .setColor(this.user.guild.member(this.client).displayHexColor)
             .setDescription(`** **\nUnlocked: [${data.name}](https://sintyx.com/ "${data.description}")\n** **${data.reward.message !== null ? `\nReward:\n${data.reward.message}\n** **` : ''}`)
             .setTimestamp()
         this.user.send(embed);
@@ -255,6 +263,88 @@ module.exports = class a extends ah {
         super(client, user, type, data);
     }
 };
+
+class pouch extends ah {
+    constructor(client, user, type, data) {
+        super(client, user, type, data);
+        this.client = client;
+        this.user = user;
+        this.type = type;
+        this.data = data;
+    }
+
+    handleGetPouches() {
+        return new Promise(async (resolve, reject) => {
+            const pouches = await this.dbGetPouches().catch(err => reject(err));
+            await this.checkGetPouches(pouches).catch(err => reject(err));
+            return resolve();
+        });
+    }
+
+    resolveIDToPouchType(id) {
+        return new Promise((resolve, reject) => {
+            const invitem = this.client.storage.inventoryItems.find(x => x.id == id);
+            if (!invitem) return reject(`Inventory item of ID ${id} could not be found in achievementHandler resolveIDToPouchType`);
+            const type = invitem.reward[0].type;
+            if (!type) return reject(`Type of inventory ID ${id} could not be found in achievementHandler resolveIDToPouchType`);
+            return resolve(type);
+        });
+    }
+
+    dbGetPouches() {
+        return new Promise((resolve, reject) => {
+            this.client.methods.achievementsLogs.findOne({
+                "user_id": this.user.id
+            }, async (err, db) => {
+                if (err) return reject(err);
+                const type = await this.resolveIDToPouchType(this.data.inventory_id);
+                try {
+                    db.achievements.find(x => x.type == "getPouches").null_amount += 1;
+                    if (type == 'XP') {
+                        db.achievements.find(x => x.type == "getPouches").xp_amount += 1;
+                    }
+                    if (type == 'COIN') {
+                        db.achievements.find(x => x.type == "getPouches").coin_amount += 1;
+                    }
+                    await db.markModified("achievements");
+                    await db.save((err) => {
+                        if (err) return reject(err);
+                        else return resolve([{
+                            type: 'null',
+                            amount: db.achievements.find(x => x.type == "getPouches").null_amount
+                        }, {
+                            type: 'XP',
+                            amount: db.achievements.find(x => x.type == "getPouches").xp_amount
+                        }, {
+                            type: 'COIN',
+                            amount: db.achievements.find(x => x.type == "getPouches").coin_amount
+                        }]);
+                    });
+                } catch (err) {
+                    return reject(err);
+                }
+            });
+        });
+    }
+
+    checkGetPouches(dbobj) {
+        return new Promise(async (resolve, reject) => {
+            let obj = this.client.storage.achievements.find(x => x.type == 'getPouches').data;
+            if (!obj) return reject(`Object getPouches cannot be found in achievements storage!`);
+            for (const ach of obj) {
+                for (const am of dbobj) {
+                    if (ach.type !== am.type) continue;
+                    if (am.amount >= ach.amount) {
+                        let completed = await this.checkAchievementCompleted(this.client, this.user, ach.name);
+                        if (completed == true) continue;
+                        this.handleNewAchievement('getPouches', ach.name);
+                    } else continue;
+                }
+            }
+            return resolve();
+        });
+    }
+}
 
 class crate extends ah {
     constructor(client, user, type, data) {

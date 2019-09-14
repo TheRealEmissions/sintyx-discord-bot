@@ -714,6 +714,9 @@ module.exports = class inventory {
                             positive: true,
                             coins: this.items.find(x => x.id == id).reward[0].amount
                         } : null)).handle()
+                        new client.methods.achievementHandler(client, message.author, 'claimPouch', {
+                            inventory_id: id
+                        }).handle();
                     }
                 });
             });
