@@ -564,6 +564,13 @@ class handledb extends dbfunctions {
             if (client.functions.percentChance(35)) {
                 coin = client.functions.genNumberBetween(1, 10);
             }
+            if (coin == 0) {
+                return resolve({
+                    coin: coin,
+                    boost: 0,
+                    boostperc: 0
+                });
+            }
             client.models.guildSettings.findOne({
                 "guild_id": this.message.guild.id
             }, (err, db) => {
