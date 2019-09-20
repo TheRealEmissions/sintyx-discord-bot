@@ -15,8 +15,8 @@ module.exports = class boosts {
             let embed = new client.modules.Discord.MessageEmbed()
                 .setColor(message.guild.me.displayHexColor)
                 .setTitle(`Currently active boosts:`)
-                .addField(`XP:`, db.xp_booster.length > 0 ? db.xp_booster.map(x => `${x.percent}% - <@${message.guild.members.get(x.user_id).id}>`) : 'No XP boosts currently active!', true)
-                .addField(`Coin:`, db.coin_booster.length > 0 ? db.coin_booster.map(x => `${x.percent}% - <@${message.guild.members.get(x.user_id).id}>`) : 'No Coin boosts currently active!', true)
+                .addField(`XP:`, db.xp_booster.length > 0 ? db.xp_booster.map(x => `${x.percent}% - <@${message.guild.members.get(x.user_id).id}>`) : ':x:', true)
+                .addField(`Coin:`, db.coin_booster.length > 0 ? db.coin_booster.map(x => `${x.percent}% - <@${message.guild.members.get(x.user_id).id}>`) : ':x:', true)
             message.channel.send(embed);
         });
     }
