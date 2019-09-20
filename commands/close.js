@@ -90,7 +90,9 @@ module.exports = class close {
                 user.send(new client.modules.Discord.MessageEmbed()
                     .setColor(message.guild.me.displayHexColor)
                     .setTitle(`Your Support Ticket was closed!`)
-                    .setDescription(`Reference ID: ${db.reference_id}`)
+                    .addField(`Reference ID:`, db.reference_id, true)
+                    .addField(`Closed by:`, `<@${message.guild.members.find(x => x.id == db.closure_id).id}>`, true)
+                    .addField(`Reason for closure:`, `\`\`\`${db.closure_reason}\`\`\``, true)
                 );
                 client.modules.fs.appendFileSync(`./commands/${db.channel_id}.json`, JSON.stringify(db.logs));
                 user.send({
@@ -114,10 +116,10 @@ module.exports = class close {
     }
 
     async run(client, message, args) {
-        if (message.channel.parent.name == "Support Tickets") {
+        if (message.channel.parent.name == "📩 Support Tickets") {
             this.supportTicket(client, message, args);
         }
-        if (message.channel.parent.name == "Applications") {
+        if (message.channel.parent.name == "📝Applications") {
             this.app(client, message, args);
         }
     }
