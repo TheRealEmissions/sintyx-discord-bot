@@ -18,5 +18,8 @@ module.exports = {
     },
     "logChannel": {
         id: '610976356288823316'
+    },
+    "supplyDropChannel": {
+        id: '564101344756236349'
     }
 }

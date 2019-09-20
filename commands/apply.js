@@ -88,7 +88,7 @@ module.exports = class apply extends questions {
                     channel.updateOverwrite(message.author, {
                         VIEW_CHANNEL: true,
                         READ_MESSAGE_HISTORY: true,
-                        SEND_MESSAGES: true,
+                        SEND_MESSAGES: false,
                         SEND_TTS_MESSAGES: false,
                         EMBED_LINKS: false,
                         ATTACH_FILES: false,
@@ -105,7 +105,7 @@ module.exports = class apply extends questions {
                         else {
                             channel.send(new client.modules.Discord.MessageEmbed()
                                 .setColor(message.guild.member(client.user).displayHexColor)
-                                .setDescription(`Thank you for completing the application! It has been submitted to Management for review. If you would like to let us know anything else, please type below. Here are your answers to the questions:`)
+                                .setDescription(`Thank you for completing the application! It has been submitted to Management for review. Here are your answers to the questions:`)
                                 .setFooter(reference)
                             );
                             for (const r of responses) {
