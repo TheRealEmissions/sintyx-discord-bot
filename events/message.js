@@ -521,7 +521,7 @@ class handledb extends dbfunctions {
                     for (const no of db.xp_booster) {
                         boost += no.percent;
                     }
-                    let boostamount = parseFloat((xp * (boost / 100)).toFixed(2));
+                    let boostamount = (parseFloat((xp * (boost / 100)).toFixed(2))).toFixed(2);
                     return resolve({
                         xp: xp + boostamount,
                         boost: boostamount,
@@ -579,7 +579,7 @@ class handledb extends dbfunctions {
                     for (const no of db.coin_booster) {
                         boost += no.percent;
                     }
-                    let boostamount = parseFloat((coin * (boost / 100)).toFixed(2));
+                    let boostamount = (parseFloat((coin * (boost / 100)).toFixed(2))).toFixed(2);
                     if (boostamount == 0) return resolve(false);
                     return resolve({
                         coin: coin + boostamount,
