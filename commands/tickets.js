@@ -132,7 +132,7 @@ module.exports = class tickets {
                         "reference_id": args[2]
                     }, (err, db) => {
                         if (err) return new client.methods.log(client).error(err);
-                        if (!db) return message.channel.send(`The reference ID you have provided does not match a support ticket. a`);
+                        if (!db) return message.channel.send(`The reference ID you have provided does not match a support ticket.`);
                         let embed;
                         client.modules.fs.appendFileSync(`./commands/${db.channel_id}.json`, JSON.stringify(db.logs));
                         if (db.closure_id == null) {
@@ -148,8 +148,8 @@ module.exports = class tickets {
                             .addField(`Reason for opening:`, "```" + db.channel_reason + "```", true)
                             .addField(`Closed by:`, `<@${message.guild.members.find(x => x.id == db.closure_id).id}>`, true)
                             .addField(`Closure reason:`, "```" + db.closure_reason + "```", true)
-                        message.channel.send(embed);
-                        message.channel.send({
+                        message.author.send(embed);
+                        message.author.send({
                             files: [`./commands/${db.channel_id}.json`]
                         }).then(() => {
                             client.modules.fs.unlink(`./commands/${db.channel_id}.json`, (err) => new client.methods.log(client).error(err));
@@ -162,7 +162,7 @@ module.exports = class tickets {
                         "reference_id": args[1]
                     }, (err, db) => {
                         if (err) return new client.methods.log(client, message.guild).error(err);
-                        if (!db) return message.channel.send(`The reference ID you have provided does not match a support ticket. b`);
+                        if (!db) return message.channel.send(`The reference ID you have provided does not match a support ticket.`);
                         if ((message.member.roles.find(x => x.name == "Management")) || (db.user_id == message.author.id)) {
                             let embed;
                             client.modules.fs.appendFileSync(`./commands/${db.channel_id}.json`, JSON.stringify(db.logs));
@@ -179,8 +179,8 @@ module.exports = class tickets {
                                 .addField(`Reason for opening:`, "```" + db.channel_reason + "```", true)
                                 .addField(`Closed by:`, `<@${message.guild.members.find(x => x.id == db.closure_id).id}>`, true)
                                 .addField(`Closure reason:`, "```" + db.closure_reason + "```", true)
-                            message.channel.send(embed);
-                            message.channel.send({
+                            message.author.send(embed);
+                            message.author.send({
                                 files: [`./commands/${db.channel_id}.json`]
                             }).then(() => {
                                 client.modules.fs.unlink(`./commands/${db.channel_id}.json`, (err) => new client.methods.log(client, message.guild).error(err))

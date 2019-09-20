@@ -83,8 +83,15 @@ module.exports = class shop {
                     }
                 }
                 const msg = await message.channel.send(embed);
+                msg.react(`❌`);
                 let collector = new client.modules.Discord.MessageCollector(message.channel, m => m.author.id == message.author.id, {
                     max: 1
+                });
+                let c = new client.modules.Discord.ReactionCollector(msg, (reaction, user) => reaction.emoji.name == '❌' && user.id == message.author.id, {});
+                c.on('collect', reaction => {
+                    collector.stop();
+                    c.stop();
+                    msg.delete();
                 });
                 collector.on('collect', itemno => {
                     client.models.shopData.findOne({

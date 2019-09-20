@@ -616,7 +616,7 @@ module.exports = async (client, message) => {
                 .init()
                 .catch(err => new client.methods.log(client).error(err));
         }
-        if (message.channel.parent.name == "Support Tickets") {
+        if (message.channel.parent.name == "📩 Support Tickets") {
             new ticket(client, message)
                 .init()
                 .catch(err => new client.methods.log(client).error(err));
