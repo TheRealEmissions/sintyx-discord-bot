@@ -4,5 +4,6 @@ module.exports = {
     startLeaderboardUpdates: require(`./methods/startLeaderboardUpdates`),
     startReactionCache: require(`./methods/startReactionCache`),
     startTrelloCollector: require(`./methods/startTrelloCollector`),
-    achievementHandler: require(`./methods/achievementHandler`)
+    achievementHandler: require(`./methods/achievementHandler`),
+    supplyDropHandler: require(`./methods/supplyDropHandler`)
 }

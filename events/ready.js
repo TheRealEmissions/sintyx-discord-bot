@@ -53,6 +53,14 @@ module.exports = (client) => {
     }
     update();
     client.setInterval(update, 30000);
+
+    function supplyDrop() {
+        const time = client.functions.genNumberBetween(1800000, 5400000);
+        setTimeout(() => {
+            new client.methods.supplyDropHandler(client).init();
+        }, time);
+    }
+    supplyDrop();
     new client.methods.startReactionCache(client);
     new client.methods.startLeaderboardUpdates(client);
     client.models.guildSettings.find({}, (err, docs) => {
