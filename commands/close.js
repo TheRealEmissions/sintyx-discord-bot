@@ -82,6 +82,23 @@ module.exports = class close {
         this.editCloseMessage(msg, reason, 'Support Ticket');
         setTimeout(() => {
             message.channel.delete();
+            client.models.supportTickets.findOne({
+                "channel_id": message.channel.id
+            }, async (err, db) => {
+                if (err) return new client.methods.log(client, message.guild).error(err);
+                let user = await client.users.fetch(db.user_id);
+                user.send(new client.modules.Discord.MessageEmbed()
+                    .setColor(message.guild.me.displayHexColor)
+                    .setTitle(`Your Support Ticket was closed!`)
+                    .setDescription(`Reference ID: ${db.reference_id}`)
+                );
+                client.modules.fs.appendFileSync(`./commands/${db.channel_id}.json`, JSON.stringify(db.logs));
+                user.send({
+                    files: [`./commands/${db.channel_id}.json`]
+                }).then(() => {
+                    client.modules.fs.unlink(`./commands/${db.channel_id}.json`, (err) => new client.methods.log(client).error(err));
+                })
+            });
         }, 10000);
     }
 
