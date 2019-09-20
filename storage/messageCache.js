@@ -17,9 +17,12 @@ module.exports = {
         msg_id: "619641548786892802"
     },
     "logChannel": {
-        id: '610976356288823316'
+        id: '610976356288823316',
+        message_log_id: '619648675567763473',
+        punishment_id: '619648706886500373',
+        member_log_id: '619648816697704459'
     },
     "supplyDropChannel": {
         id: '564101344756236349'
-    }
+    },
 }
