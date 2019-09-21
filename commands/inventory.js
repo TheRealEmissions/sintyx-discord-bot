@@ -576,12 +576,19 @@ module.exports = class inventory {
                     inventory_id: id
                 });
             }
-            db.save((err) => {
+            db.save(async (err) => {
                 if (err) return new client.methods.log(client).error(err);
                 else {
                     new client.methods.achievementHandler(client, message.author, 'claimBooster', {
                         inventory_id: id
                     }).handle();
+                    const channel = await client.channels.fetch(client.storage.messageCache['supplyDropChannel'].id);
+                    channel.send(new client.modules.Discord.MessageEmbed()
+                        .setColor(message.guild.me.displayHexColor)
+                        .setDescription(`${message.author} activated a ${this.items.find(x => x.id == id).reward[0].percent}% ${this.items.find(x => x.id == id).reward[0].type == 'XP' ? 'XP' : (this.items.find(x => x.id == id).reward[0].type == 'COIN' ? 'Coin' : null)} Booster!\n*View the current active boosts with \`-boosts\`*`)
+                        .setTimestamp()
+                        .setThumbnail(message.author.avatarURL())
+                    )
                     setTimeout(() => {
                         this.removeBooster(client, message, id, type, uniqueID);
                         new client.methods.achievementHandler(client, message.author, 'expireBooster', {
