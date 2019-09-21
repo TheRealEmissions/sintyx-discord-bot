@@ -523,7 +523,7 @@ class handledb extends dbfunctions {
                     }
                     let boostamount = (xp * (boost / 100));
                     return resolve({
-                        xp: parseFloat(xp + boostamount).toFixed(2),
+                        xp: Number(parseFloat(xp + boostamount).toFixed(2)),
                         boost: boostamount,
                         boostperc: boost
                     });
@@ -582,7 +582,7 @@ class handledb extends dbfunctions {
                     let boostamount = (coin * (boost / 100));
                     if (boostamount == 0) return resolve(false);
                     return resolve({
-                        coin: parseFloat(coin + boostamount).toFixed(2),
+                        coin: Number(parseFloat(coin + boostamount).toPrecision(2)),
                         boost: boostamount,
                         boostperc: boost
                     });
