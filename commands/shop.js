@@ -290,6 +290,7 @@ module.exports = class shop {
                 ).then(msg => {
                     let collector = new client.modules.Discord.MessageCollector(message.channel, m => m.author.id == message.author.id, {});
                     collector.on('collect', item => {
+                        collector.stop();
                         item.delete();
                         msg.delete();
                         item.content = parseInt(item.content);
