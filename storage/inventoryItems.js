@@ -385,7 +385,7 @@ module.exports = [{
     type: 4,
     reward: [{
         type: 'XP',
-        percent: 5,
+        percent: 2.5,
         time: 900000
     }]
 }, {
@@ -589,5 +589,115 @@ module.exports = [{
         type: 'COIN',
         percent: 15,
         time: 900000
+    }]
+}, {
+    id: 56,
+    name: 'XP Booster - +2.5% (30 min)',
+    desc: 'When claimed, the whole guild will receive +2.5% XP per message',
+    usable: true,
+    type: 4,
+    reward: [{
+        type: 'XP',
+        percent: 2.5,
+        time: 1800000
+    }]
+}, {
+    id: 57,
+    name: 'XP Booster - +5% (30 min)',
+    desc: 'When claimed, the whole guild will receive +5% XP per message',
+    usable: true,
+    type: 4,
+    reward: [{
+        type: 'XP',
+        percent: 5,
+        time: 1800000
+    }]
+}, {
+    id: 58,
+    name: 'XP Booster - +7.5% (30 min)',
+    desc: 'When claimed, the whole guild will receive +7.5% XP per message',
+    usable: true,
+    type: 4,
+    reward: [{
+        type: 'XP',
+        percent: 7.5,
+        time: 1800000
+    }]
+}, {
+    id: 59,
+    name: 'XP Booster - +10% (30 min)',
+    desc: 'When claimed, the whole guild will receive +10% XP per message',
+    usable: true,
+    type: 4,
+    reward: [{
+        type: 'XP',
+        percent: 10,
+        time: 1800000
+    }]
+}, {
+    id: 60,
+    name: 'Coin Booster - +2.5% (30 min)',
+    desc: 'When claimed, the whole guild will receive +2.5% coins when given from a message',
+    usable: true,
+    type: 4,
+    reward: [{
+        type: 'COIN',
+        percent: 2.5,
+        time: 1800000
+    }]
+}, {
+    id: 61,
+    name: 'Coin Booster - +5% (30 min)',
+    desc: 'When claimed, the whole guild will receive +5% coins when given from a message',
+    usable: true,
+    type: 4,
+    reward: [{
+        type: 'COIN',
+        percent: 5,
+        time: 1800000
+    }]
+}, {
+    id: 62,
+    name: 'Coin Booster - +7.5% (30 min)',
+    desc: 'When claimed, the whole guild will receive +7.5% coins when given from a message',
+    usable: true,
+    type: 4,
+    reward: [{
+        type: 'COIN',
+        percent: 7.5,
+        time: 1800000
+    }]
+}, {
+    id: 63,
+    name: 'Coin Booster - +10% (30 min)',
+    desc: 'When claimed, the whole guild will receive +10% coins when given from a message',
+    usable: true,
+    type: 4,
+    reward: [{
+        type: 'COIN',
+        percent: 10,
+        time: 1800000
+    }]
+}, {
+    id: 64,
+    name: 'XP Booster - +15% (30 min)',
+    desc: 'When claimed, the whole guild will receive +15% per message',
+    usable: true,
+    type: 4,
+    reward: [{
+        type: 'XP',
+        percent: 15,
+        time: 1800000
+    }]
+}, {
+    id: 65,
+    name: 'Coin Booster - +15% (30 min)',
+    desc: 'When claimed, the whole guild will receive +15% per message',
+    usable: true,
+    type: 4,
+    reward: [{
+        type: 'COIN',
+        percent: 15,
+        time: 1800000
     }]
 }]
