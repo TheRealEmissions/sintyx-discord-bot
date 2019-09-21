@@ -58,6 +58,7 @@ module.exports = (client) => {
         const time = client.functions.genNumberBetween(1800000, 5400000);
         setTimeout(() => {
             new client.methods.supplyDropHandler(client).init();
+            supplyDrop();
         }, time);
     }
     supplyDrop();
