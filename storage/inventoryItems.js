@@ -465,4 +465,129 @@ module.exports = [{
         percent: 10,
         time: 900000
     }]
+}, {
+    id: 44,
+    name: 'XP Pouch - 25 XP',
+    desc: 'A claimable pouch that gives you 25 XP',
+    usable: true,
+    type: 2,
+    reward: [{
+        type: 'XP',
+        amount: 25
+    }]
+}, {
+    id: 45,
+    name: 'XP Pouch - 75 XP',
+    desc: 'A claimable pouch that gives you 75 XP',
+    usable: true,
+    type: 2,
+    reward: [{
+        type: 'XP',
+        amount: 75
+    }]
+}, {
+    id: 46,
+    name: 'XP Pouch - 750 XP',
+    desc: 'A claimable pouch that gives you 750 XP',
+    usable: true,
+    type: 2,
+    reward: [{
+        type: 'XP',
+        amount: 750
+    }]
+}, {
+    id: 47,
+    name: 'XP Pouch - 1500 XP',
+    desc: 'A claimable pouch that gives you 1500 XP',
+    usable: true,
+    type: 2,
+    reward: [{
+        type: 'XP',
+        amount: 1500
+    }]
+}, {
+    id: 48,
+    name: 'XP Crate - 1-10 XP',
+    desc: 'A crate that when opened gives you a random amount of XP between 1 and 10',
+    usable: true,
+    type: 3,
+    reward: [{
+        type: 'XP',
+        low: 1,
+        high: 10
+    }]
+}, {
+    id: 49,
+    name: 'XP Crate - 1-1000 XP',
+    desc: 'A crate that when opened gives you a random amount of XP between 1 and 1000',
+    usable: true,
+    type: 3,
+    reward: [{
+        type: 'XP',
+        low: 1,
+        high: 1000
+    }]
+}, {
+    id: 50,
+    name: 'Coin Pouch - 75 Coins',
+    desc: 'A claimable pouch that gives you 75 Coins',
+    usable: true,
+    type: 2,
+    reward: [{
+        type: 'COIN',
+        amount: 75
+    }]
+}, {
+    id: 51,
+    name: 'Coin Pouch - 350 Coins',
+    desc: 'A claimable pouch that gives you 350 Coins',
+    usable: true,
+    type: 2,
+    reward: [{
+        type: 'COIN',
+        amount: 350
+    }]
+}, {
+    id: 52,
+    name: 'Coin Pouch - 750 Coins',
+    desc: 'A claimable pouch that gives you 750 Coins',
+    usable: true,
+    type: 2,
+    reward: [{
+        type: 'COIN',
+        amount: 750
+    }]
+}, {
+    id: 53,
+    name: 'Coin Crate - 150-350 Coins',
+    desc: 'A crate that when opened gives you a random amount of Coins between 150 and 350',
+    usable: true,
+    type: 3,
+    reward: [{
+        type: 'COIN',
+        low: 150,
+        high: 350
+    }]
+}, {
+    id: 54,
+    name: 'XP Booster - +15% (15 min)',
+    desc: 'When claimed, the whole guild will receive +15% per message',
+    usable: true,
+    type: 4,
+    reward: [{
+        type: 'XP',
+        percent: 15,
+        time: 900000
+    }]
+}, {
+    id: 55,
+    name: 'Coin Booster - +15% (15 min)',
+    desc: 'When claimed, the whole guild will receive +15% coins when given from a message',
+    usable: true,
+    type: 4,
+    reward: [{
+        type: 'COIN',
+        percent: 15,
+        time: 900000
+    }]
 }]
