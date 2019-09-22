@@ -93,6 +93,7 @@ module.exports = class supply {
                 embed.embed.description = `** ** \n**Claimed by ${user}**\n** ** \n\`Inventory Item\`\n[${item.name}](https://sintyx.com/ "${item.desc}")`
                 msg.edit(embed);
                 this.handleClaim('ID', user, item);
+                new this.client.methods.achievementHandler(this.client, user, 'claimSupplyDrop').handle();
                 return resolve();
             });
         });
