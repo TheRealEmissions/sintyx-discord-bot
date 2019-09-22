@@ -1,5 +1,6 @@
 let suggestionCooldown = new Set();
 let xpCooldown = new Set();
+let dbset = new Set();
 
 class checkdb {
     constructor() {}
@@ -13,7 +14,8 @@ class checkdb {
                 this.guildSettings(client, message).catch(err => new client.methods.log(client).error(err)),
                 this.achievements(client, message).catch(err => new client.methods.log(client).error(err)),
                 this.achievementsLogs(client, message).catch(err => new client.methods.log(client).error(err)),
-            ])
+            ]);
+            dbset.add(message.author.id);
             return resolve();
         });
     }
@@ -600,7 +602,9 @@ module.exports = async (client, message) => {
     if (message.channel.type !== "text") return;
     if (message.author.id == client.user.id) return;
     if (message.author.bot) return;
-    await new checkdb(client, message).dbInit(client, message);
+    if (!dbset.has(message.author.id)) {
+        await new checkdb().dbInit(client, message);
+    }
     if (message.content.toString().startsWith(client.commandHandler.prefix[0])) {
         if (message.channel.name == "suggestions") return message.delete();
         let args = message.content.split(" ");
