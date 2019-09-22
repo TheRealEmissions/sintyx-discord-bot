@@ -118,6 +118,11 @@ module.exports = class supply {
                 embed.embed.description = `** ** \n**Claimed by ${user}**\n** ** \n\`XP\`\n[${amount}](https://sintyx.com/)`
                 msg.edit(embed);
                 this.handleClaim('XP', user, amount);
+                new this.client.methods.achievementHandler(this.client, user, 'claimSupplyDrop').handle();
+                new this.client.methods.achievementHandler(this.client, user, 'updateXP', {
+                    positive: true,
+                    amount: amount
+                }).handle();
                 return resolve();
             });
         });
@@ -142,6 +147,11 @@ module.exports = class supply {
                 embed.embed.description = `** ** \n**Claimed by ${user}**\n** ** \n\`Coins\`\n[${amount}](https://sintyx.com/)`
                 msg.edit(embed);
                 this.handleClaim('COIN', user, amount);
+                new this.client.methods.achievementHandler(this.client, user, 'claimSupplyDrop').handle()
+                new this.client.methods.achievementHandler(this.client, user, 'updateCoins', {
+                    positive: true,
+                    amount: amount
+                }).handle();
                 return resolve();
             });
         });
