@@ -18,6 +18,7 @@ module.exports = class punishments {
         Warn
 
         */
+        let startDate = new Date().getTime();
         if (!args[1]) {
             client.models.userProfiles.findOne({
                 "user_id": message.author.id
@@ -138,5 +139,6 @@ module.exports = class punishments {
                 }
             }
         }
+        new client.methods.log(client).debugStats(this.name, message.author, new Date().getTime() - startDate);
     }
 }

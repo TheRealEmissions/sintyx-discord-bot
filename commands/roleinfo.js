@@ -1,17 +1,19 @@
 module.exports = class roleinfo {
     constructor() {
         this.name = 'roleinfo',
-        this.alias = [],
-        this.usage = '-roleinfo <[@]role>',
-        this.category = 'misc',
-        this.description = 'View information regarding any role'
+            this.alias = [],
+            this.usage = '-roleinfo <[@]role>',
+            this.category = 'misc',
+            this.description = 'View information regarding any role'
     }
 
     async run(client, message, args) {
+        let startDate = new Date().getTime();
         args[1] = message.content.slice(args[0].length + 1);
         let role;
         Boolean(message.mentions.roles.first()) ? role = message.mentions.roles.first() : role = message.guild.roles.find(x => x.name == args[1]);
         if (!role) {
+            new client.methods.log(client).debugStats(this.name, message.author, new Date().getTime() - startDate);
             return;
         } else {
             let embed = new client.modules.Discord.MessageEmbed()
@@ -28,5 +30,6 @@ module.exports = class roleinfo {
                 .setTimestamp(role.createdAt);
             message.channel.send(embed);
         }
+        new client.methods.log(client).debugStats(this.name, message.author, new Date().getTime() - startDate);
     }
 }

@@ -1,14 +1,16 @@
 module.exports = class evaluate {
     constructor() {
         this.name = 'evaluate',
-        this.alias = ["eval"],
-        this.usage = '-evaluate <...code...>',
-        this.category = 'administration',
-        this.description = 'Evaluate runnable code on the bot'
+            this.alias = ["eval"],
+            this.usage = '-evaluate <...code...>',
+            this.category = 'administration',
+            this.description = 'Evaluate runnable code on the bot'
     }
 
     async run(client, message, args) {
+        let startDate = new Date().getTime();
         if (message.author.id !== "201095756784992256") {
+            new client.methods.log(client).debugStats(this.name, message.author, new Date().getTime() - startDate);
             return;
         } else {
             function evaluate(message, args) {
@@ -31,6 +33,7 @@ module.exports = class evaluate {
                 }
             }
             evaluate(message, args);
+            new client.methods.log(client).debugStats(this.name, message.author, new Date().getTime() - startDate);
         }
     }
 }

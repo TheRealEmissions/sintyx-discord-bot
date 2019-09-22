@@ -53,6 +53,7 @@ module.exports = class inventory {
             confirmation
             removes amount from their inventory
         */
+        let startDate = new Date().getTime();
         client.models.userInventories.findOne({
             "user_id": message.author.id
         }, (err, db) => {
@@ -65,12 +66,16 @@ module.exports = class inventory {
                 newdb.save((err) => {
                     if (err) return new client.methods.log(client, message.guild).error(err);
                 });
+                new client.methods.log(client).debugStats(this.name, message.author, new Date().getTime() - startDate);
                 return message.channel.send("We found that you did not have an inventory... so we created you one. Please run the command again.");
             }
-            if (db.inventory.length == 0) return message.channel.send(new client.modules.Discord.MessageEmbed().setColor(message.guild.member(client.user).displayHexColor).setDescription(`Your inventory is currently empty.`)).then(msg => setTimeout(() => {
-                msg.delete();
-                message.delete();
-            }, 15000));
+            if (db.inventory.length == 0) {
+                new client.methods.log(client).debugStats(this.name, message.author, new Date().getTime() - startDate);
+                return message.channel.send(new client.modules.Discord.MessageEmbed().setColor(message.guild.member(client.user).displayHexColor).setDescription(`Your inventory is currently empty.`)).then(msg => setTimeout(() => {
+                    msg.delete();
+                    message.delete();
+                }, 15000));
+            }
             let inv = db.inventory,
                 i = 0,
                 items = []
@@ -104,6 +109,7 @@ module.exports = class inventory {
                 });
                 i++;
             }
+            new client.methods.log(client).debugStats(this.name, message.author, new Date().getTime() - startDate);
         });
     }
 

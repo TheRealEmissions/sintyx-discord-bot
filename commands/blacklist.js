@@ -8,6 +8,7 @@ module.exports = class blacklist {
     }
 
     async run(client, message, args) {
+        let startDate = new Date().getTime();
         if (message.member.roles.find(x => x.name == "Management")) {
             let random_string = require(`crypto-random-string`);
             let id = random_string({
@@ -155,5 +156,6 @@ module.exports = class blacklist {
                 })
             });
         }
+        new client.methods.log(client).debugStats(this.name, message.author, new Date().getTime() - startDate);
     }
 }

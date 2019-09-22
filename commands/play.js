@@ -1,10 +1,10 @@
 module.exports = class play {
     constructor() {
         this.name = 'play',
-        this.alias = [],
-        this.usage = '-play <song>',
-        this.category = 'music',
-        this.description = 'Queue a song to play'
+            this.alias = [],
+            this.usage = '-play <song>',
+            this.category = 'music',
+            this.description = 'Queue a song to play'
     }
 
     play(client, guild, song) {
@@ -68,7 +68,8 @@ module.exports = class play {
         let query = message.content.slice(args[0].length + 1),
             url = args[1] ? args[1].replace(/<(.+)>/g, '$1') : '',
             queue = client.music.queue.get(message.guild.id),
-            voiceChannel = message.member.voice.channel;
+            voiceChannel = message.member.voice.channel,
+            startDate = new Date().getTime();
         if (!voiceChannel) return message.channel.send(`You must be in a voice channel to play music!`);
         if (!voiceChannel.permissionsFor(client.user).has('CONNECT')) return message.channel.send(`I cannot connect to the voice channel you are currently in!`);
         if (!voiceChannel.permissionsFor(client.user).has('SPEAK')) return message.channel.send(`I cannot play music because I cannot speak in your voice channel!`);
@@ -82,6 +83,7 @@ module.exports = class play {
             let embed = new client.modules.Discord.MessageEmbed()
                 .setColor(message.guild.member(client.user).displayHexColor)
                 .setDescription(`${client.storage.emojiCharacters['white_check_mark']} Added the playlist **${playlist.title}** to the queue!`)
+            new client.methods.log(client).debugStats(this.name, message.author, new Date().getTime() - startDate);
             return message.channel.send(embed);
         } else {
             try {
@@ -112,6 +114,7 @@ module.exports = class play {
                     return message.channel.send(`${client.storage.emojiCharacters['x']} Unfortunately, I could not obtain any search results.`);
                 }
             }
+            new client.methods.log(client).debugStats(this.name, message.author, new Date().getTime() - startDate);
             return this.handleVideo(client, video, message, voiceChannel);
         }
     }

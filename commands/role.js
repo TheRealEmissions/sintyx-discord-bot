@@ -8,6 +8,7 @@ module.exports = class role {
     }
 
     async run(client, message, args) {
+        let startDate = new Date().getTime();
         if (message.member.roles.find(x => x.name == "Management")) {
             if (args[1].toLowerCase() == "add") {
                 if (!args[2]) return;
@@ -209,5 +210,6 @@ module.exports = class role {
                 }
             }
         }
+        new client.methods.log(client).debugStats(this.name, message.author, new Date().getTime() - startDate);
     }
 }

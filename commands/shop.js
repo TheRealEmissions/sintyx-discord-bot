@@ -319,6 +319,7 @@ module.exports = class shop {
     }
 
     async run(client, message, args) {
+        let startDate = new Date().getTime();
         if (!args[1]) {
             this.openShop(client, message).catch(err => new client.methods.log(client).error(err));
         }
@@ -337,5 +338,6 @@ module.exports = class shop {
                 this.handleDeleting(client, message);
             }
         }
+        new client.methods.log(client).debugStats(this.name, message.author, new Date().getTime() - startDate);
     }
 }

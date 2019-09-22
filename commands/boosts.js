@@ -8,6 +8,7 @@ module.exports = class boosts {
     }
 
     async run(client, message, args) {
+        let startDate = new Date().getTime();
         client.models.guildSettings.findOne({
             "guild_id": message.guild.id
         }, (err, db) => {
@@ -18,6 +19,7 @@ module.exports = class boosts {
                 .addField(`XP:`, db.xp_booster.length > 0 ? db.xp_booster.map(x => `${x.percent}% - <@${message.guild.members.get(x.user_id).id}>`) : ':x:', true)
                 .addField(`Coin:`, db.coin_booster.length > 0 ? db.coin_booster.map(x => `${x.percent}% - <@${message.guild.members.get(x.user_id).id}>`) : ':x:', true)
             message.channel.send(embed);
+            new client.methods.log(client).debugStats(this.name, message.author, new Date().getTime() - startDate);
         });
     }
 }

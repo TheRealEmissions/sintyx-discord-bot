@@ -1,4 +1,5 @@
 module.exports = async (client, message) => {
+    let startDate = new Date().getTime();
     if (message.guild.id == '564101344756236347') {
         if (message.channel.type !== "text") return;
         if (message.author.id == client.user.id) return;
@@ -12,4 +13,5 @@ module.exports = async (client, message) => {
             .setTimestamp()
         channel.send(embed);
     }
+    new client.methods.log(client).debugStats(`messageDelete`, message.author, new Date().getTime() - startDate);
 }

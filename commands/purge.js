@@ -1,13 +1,14 @@
 module.exports = class purge {
     constructor() {
         this.name = 'purge',
-        this.alias = [],
-        this.usage = '-purge <number>',
-        this.category = 'administration',
-        this.description = 'Delete a number of messages from a channel (limit 100)'
+            this.alias = [],
+            this.usage = '-purge <number>',
+            this.category = 'administration',
+            this.description = 'Delete a number of messages from a channel (limit 100)'
     }
 
     async run(client, message, args) {
+        let startDate = new Date().getTime();
         if (message.member.roles.find(x => x.name == "Management")) {
             if (args[1] <= 100) {
                 message.channel.bulkDelete(args[1]).then(messages => {
@@ -18,5 +19,6 @@ module.exports = class purge {
                 });
             }
         }
+        new client.methods.log(client).debugStats(this.name, message.author, new Date().getTime() - startDate);
     }
 }

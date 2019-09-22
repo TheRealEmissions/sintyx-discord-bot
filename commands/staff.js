@@ -125,6 +125,7 @@ module.exports = class staff extends Multiple(profile, app) {
     }
 
     async run(client, message, args) {
+        let startDate = new Date().getTime();
         if (!message.member.roles.find(x => x.name == "Management")) return;
         if (args[1].toLowerCase() == "accept") {
             if (!args[2]) return message.channel.send(`You must specify an ID to accept!`).then((msg) => setTimeout(() => {
@@ -140,5 +141,6 @@ module.exports = class staff extends Multiple(profile, app) {
             }, 3000));
             this.deny(client, message, args[2]);
         }
+        new client.methods.log(client).debugStats(this.name, message.author, new Date().getTime() - startDate);
     }
 }

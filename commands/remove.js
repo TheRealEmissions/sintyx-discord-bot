@@ -8,6 +8,7 @@ module.exports = class remove {
     }
 
     async run(client, message, args) {
+        let startDate = new Date().getTime();
         client.models.supportTickets.findOne({
             "channel_id": message.channel.id
         }, (err, db) => {
@@ -49,5 +50,6 @@ module.exports = class remove {
                 }, 5000);
             });
         })
+        new client.methods.log(client).debugStats(this.name, message.author, new Date().getTime() - startDate);
     }
 }

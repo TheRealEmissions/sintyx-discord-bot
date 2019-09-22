@@ -39,6 +39,7 @@ module.exports = class suggestionreject {
     }
 
     async run(client, message, args) {
+        let startDate = new Date().getTime();
         if (!message.member.roles.get(message.guild.roles.find(x => x.name == "Management").id)) return;
         if (!args[1]) return;
         client.models.suggestionsData.findOne({
@@ -60,5 +61,6 @@ module.exports = class suggestionreject {
                 });
             });
         });
+        new client.methods.log(client).debugStats(this.name, message.author, new Date().getTime() - startDate);
     }
 }

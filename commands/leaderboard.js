@@ -8,6 +8,7 @@ module.exports = class leaderboard {
     }
 
     async run(client, message, args) {
+        let startDate = new Date().getTime();
         let embed = new client.modules.Discord.MessageEmbed()
             .setColor(message.guild.member(client.user).displayHexColor)
             .addField(`XP Leaderboard`, client.storage.emojiCharacters[1], true)
@@ -150,6 +151,7 @@ module.exports = class leaderboard {
                             fields: []
                         }
                     }
+
                     function leaderboardFunc() {
                         return new Promise(async (resolve, reject) => {
                             await client.models.userProfiles.find({}).sort(`-message_count`).exec((err, result) => {
@@ -175,6 +177,7 @@ module.exports = class leaderboard {
                         });
                         i++
                     }
+
                     function end() {
                         msg.edit(embed2);
                     }
@@ -185,6 +188,7 @@ module.exports = class leaderboard {
                     msg.delete();
                 }
             });
+            new client.methods.log(client).debugStats(this.name, message.author, new Date().getTime() - startDate);
         });
     }
 }

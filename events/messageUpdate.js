@@ -1,4 +1,5 @@
 module.exports = async (client, oldMessage, newMessage) => {
+    let startDate = new Date().getTime();
     if (newMessage.channel.type !== "text") return;
     if (newMessage.author.id == client.user.id) return;
     if (newMessage.author.bot) return;
@@ -31,4 +32,5 @@ module.exports = async (client, oldMessage, newMessage) => {
             .addField(`New Message:`, `[${newMessage.content}](${newMessage.url})`, false)
         channel.send(embed);
     }
+    new client.methods.log(client).debugStats(`messageUpdate`, newMessage.author, new Date().getTime() - startDate);
 }

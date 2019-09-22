@@ -24,6 +24,7 @@ module.exports = class setslogan {
     }
 
     async run(client, message, args) {
+        let startDate = new Date().getTime();
         message.delete();
         if (!args[1]) return;
         let slogan = client.modules.Discord.escapeMarkdown(message.content.slice(args[0].length + 1));
@@ -44,5 +45,6 @@ module.exports = class setslogan {
                 }
             });
         });
+        new client.methods.log(client).debugStats(this.name, message.author, new Date().getTime() - startDate);
     }
 }

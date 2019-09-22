@@ -8,6 +8,7 @@ module.exports = class tickets {
     }
 
     async run(client, message, args) {
+        let startDate = new Date().getTime();
         if (!args[1]) {
             client.models.userProfiles.find({
                 "user_id": message.author.id
@@ -190,5 +191,6 @@ module.exports = class tickets {
                 }
             }
         }
+        new client.methods.log(client).debugStats(this.name, message.author, new Date().getTime() - startDate);
     }
 }

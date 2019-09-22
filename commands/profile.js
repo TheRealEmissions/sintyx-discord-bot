@@ -8,6 +8,7 @@ module.exports = class profile {
     }
 
     async run(client, message, args) {
+        let startDate = new Date().getTime();
         let user = Boolean(!args[1]) ? message.author : (Boolean(message.mentions.users.first()) ? message.mentions.users.first() : message.guild.members.find(x => x.id == args[1].toString()));
         client.models.userProfiles.findOne({
             "user_id": user.id
@@ -87,6 +88,7 @@ module.exports = class profile {
                     })
                 });
             })
+            new client.methods.log(client).debugStats(this.name, message.author, new Date().getTime() - startDate);
         })
     }
 }

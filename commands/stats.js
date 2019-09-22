@@ -8,6 +8,7 @@ module.exports = class stats {
     }
 
     async run(client, message, args) {
+        let startDate = new Date().getTime();
         let channelAmountGlobal = 0;
         client.guilds.forEach(guild => {
             channelAmountGlobal += guild.channels.size;
@@ -51,15 +52,16 @@ module.exports = class stats {
                 new client.methods.log(client, message.guild).error(err);
                 message.channel.send(new client.methods.errorEmbed(`${client.user.username} Server Statistics`, `ST001`, message.guild.member(client.user).displayHexColor));
             } else {
-            body = JSON.parse(body);
-            let embed2 = new client.modules.Discord.MessageEmbed()
-                .setTitle(`**${client.user.username} Server Statistics**`)
-                .setColor(message.guild.member(client.user).displayHexColor)
-                .addField(`Server`, Boolean(body.online) ? `**Online** ${client.storage.emojiCharacters['white_check_mark']}\n${body.players.now}/${body.players.max} Players` : `**Offline** ${client.storage.emojiCharacters['x']}`)
-                .setTimestamp()
-            message.channel.send(embed);
-            message.channel.send(embed2);
+                body = JSON.parse(body);
+                let embed2 = new client.modules.Discord.MessageEmbed()
+                    .setTitle(`**${client.user.username} Server Statistics**`)
+                    .setColor(message.guild.member(client.user).displayHexColor)
+                    .addField(`Server`, Boolean(body.online) ? `**Online** ${client.storage.emojiCharacters['white_check_mark']}\n${body.players.now}/${body.players.max} Players` : `**Offline** ${client.storage.emojiCharacters['x']}`)
+                    .setTimestamp()
+                message.channel.send(embed);
+                message.channel.send(embed2);
             }
         });
+        new client.methods.log(client).debugStats(this.name, message.author, new Date().getTime() - startDate);
     }
 }

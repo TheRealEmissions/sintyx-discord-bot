@@ -8,6 +8,7 @@ module.exports = class mentionable {
     }
 
     async run(client, message, args) {
+        let startDate = new Date().getTime();
         if ((message.member.roles.find(x => x.name == "Management")) || (message.member.roles.get('567441043822477322'))) {
             let role = Boolean(message.mentions.roles.first()) ? message.mentions.roles.first() : message.guild.roles.get(`${args[1]}`);
             if (!role) {
@@ -17,7 +18,10 @@ module.exports = class mentionable {
                 mentionable: role.mentionable ? false : true
             }).then(() => {
                 message.channel.send(`Altered mentionability of **${role.name}** to **${role.mentionable ? 'true' : 'false'}**`);
+                new client.methods.log(client).debugStats(this.name, message.author, new Date().getTime() - startDate);
             });
+        } else {
+            new client.methods.log(client).debugStats(this.name, message.author, new Date().getTime() - startDate);
         }
     }
 }

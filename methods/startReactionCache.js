@@ -202,6 +202,7 @@ class trelloCollector {
 module.exports = class src extends Multiple(usernameColour, trelloCollector) {
     constructor(client) {
         super();
+        new client.methods.log(client).debug(`Method ran: startReactionCache.js`);
         this.processRoleCollector(client);
         this.trelloInit(client);
     }

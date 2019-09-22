@@ -1,18 +1,21 @@
 module.exports = class add {
     constructor() {
         this.name = 'add',
-        this.alias = [],
-        this.usage = '-add <@user> [reason]',
-        this.category = 'tickets',
-        this.description = 'Add a user to a Support Ticket'
+            this.alias = [],
+            this.usage = '-add <@user> [reason]',
+            this.category = 'tickets',
+            this.description = 'Add a user to a Support Ticket'
     }
 
     async run(client, message, args) {
+        let startDate = new Date().getTime();
         client.models.supportTickets.findOne({
             "channel_id": message.channel.id
         }, (err, db) => {
             if (err) return new client.methods.log(client, message.guild).error(err);
             if (!db) {
+                let endDate = new Date().getTime();
+                new client.methods.log(client).debugStats(this.name, message.author, endDate - startDate);
                 return message.channel.send(`:x: You can only add users to Support Tickets!`).then(msg => {
                     setTimeout(() => {
                         msg.delete();
@@ -20,14 +23,22 @@ module.exports = class add {
                     }, 5000);
                 });
             }
-            if (!args[1]) return;
+            if (!args[1]) {
+                let endDate = new Date().getTime();
+                new client.methods.log(client).debugStats(this.name, message.author, endDate - startDate);
+                return;
+            };
             let user = message.mentions.users.first() ? message.mentions.users.first() : message.guild.members.get(`${args[1]}`);
-            if (!user) return message.channel.send(`:x: The user you have attempted to add to this ticket does not exist in this guild.`).then(msg => {
-                setTimeout(() => {
-                    msg.delete();
-                    message.delete();
-                }, 5000);
-            });
+            if (!user) {
+                let endDate = new Date().getTime();
+                new client.methods.log(client).debugStats(this.name, message.author, endDate - startDate);
+                return message.channel.send(`:x: The user you have attempted to add to this ticket does not exist in this guild.`).then(msg => {
+                    setTimeout(() => {
+                        msg.delete();
+                        message.delete();
+                    }, 5000);
+                });
+            }
             message.channel.updateOverwrites(user, {
                 VIEW_CHANNEL: true,
                 SEND_MESSAGES: true,
@@ -41,6 +52,7 @@ module.exports = class add {
                 .addField(`Reason:`, "```" + args[2] ? message.content.slice(args[0].length + args[1].length + 2) : 'No reason provided' + "```")
                 .setThumbnail(user.avatarURL())
             );
+            new client.methods.log(client).debugStats(this.name, message.author, new Date().getTime() - startDate);
         });
     }
 }

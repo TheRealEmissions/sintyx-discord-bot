@@ -1,5 +1,6 @@
 module.exports = class trello {
     constructor(client, stage, card_id) {
+        new client.methods.log(client).debug(`Method ran: startTrelloCollector.js`);
         this.log = require(`../methods`).log;
         this.init(client, stage, card_id);
     }

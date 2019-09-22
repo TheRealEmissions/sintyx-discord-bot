@@ -1,4 +1,5 @@
 module.exports = (client) => {
+    let startDate = new Date().getTime();
     console.log(`[LOG] Bot successfully initialized:`);
     console.log(`- Username: ${client.user.username}`);
     console.log(`- Discriminator: ${client.user.discriminator}`);
@@ -97,4 +98,5 @@ module.exports = (client) => {
             });
         }
     });
+    new client.methods.log(client).debugStats(`ready`, client.user, new Date().getTime() - startDate);
 }

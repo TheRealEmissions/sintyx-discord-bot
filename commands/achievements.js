@@ -179,6 +179,7 @@ module.exports = class ach {
     }
 
     async run(client, message, args) {
+        let startDate = new Date().getTime();
         message.channel.send(new client.modules.Discord.MessageEmbed()
             .setColor(message.guild.me.displayHexColor)
             .addField(`:one: Unlocked Achievements`, `** **`)
@@ -204,5 +205,7 @@ module.exports = class ach {
                 }
             });
         });
+        let endDate = new Date().getTime();
+        new client.methods.log(client).debugStats(this.name, message.author, endDate - startDate);
     }
 }

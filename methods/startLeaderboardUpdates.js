@@ -1,5 +1,6 @@
 module.exports = class slu {
     constructor(client) {
+        new client.methods.log(client).debug(`Method ran: startLeaderboardUpdates.js`);
         this.log = require(`../methods`).log;
         this.init(client);
     }

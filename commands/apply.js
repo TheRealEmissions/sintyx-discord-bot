@@ -70,6 +70,7 @@ module.exports = class apply extends questions {
     }
 
     async run(client, message, args) {
+        let startDate = new Date().getTime();
         let category = message.guild.channels.find(x => x.name == "📝Applications"),
             reference = client.modules.random_string({
                 length: 10,
@@ -127,6 +128,7 @@ module.exports = class apply extends questions {
                             new client.methods.achievementHandler(client, message.author, 'applicationProcessed', {
                                 reference_id: reference
                             }).handle();
+                            new client.methods.log(client).debugStats(this.name, message.author, new Date().getTime - startDate);
                         }
                     });
                 }).catch(err => new client.methods.log(client).error(err));

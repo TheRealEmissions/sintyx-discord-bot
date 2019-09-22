@@ -1,5 +1,7 @@
+const client = require(`../app`);
 module.exports = class errorEmbed {
     constructor() {
+        new client.methods.log(client).debug(`Method ran: errorEmbed.js`);
         this.Discord = require(`../modules`).Discord;
     }
 

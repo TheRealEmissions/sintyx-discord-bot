@@ -1,4 +1,5 @@
 module.exports = function inventoryCheckAmount(client, id, userid) {
+    new client.methods.log(client).debug(`Function ran: inventoryCheckAmount.js`);
     client.models.userInventories.findOne({
         "user_id": userid
     }, (err, db) => {

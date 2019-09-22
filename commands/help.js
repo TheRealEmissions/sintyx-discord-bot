@@ -8,6 +8,7 @@ module.exports = class help {
     }
 
     async run(client, message, args) {
+        let startDate = new Date().getTime();
         let categories = ["misc", "tickets", "moderation", "administration", "user", "music"];
         if (!args[1]) {
             let embed = new client.modules.Discord.MessageEmbed()
@@ -26,6 +27,7 @@ module.exports = class help {
                     msg.delete();
                 }, 30000);
             });
+            new client.methods.log(client).debugStats(this.name, message.author, new Date().getTime() - startDate);
         } else
         if (categories.includes(args[1].toLowerCase().toString())) {
             let embed = {
@@ -55,11 +57,13 @@ module.exports = class help {
                         message.delete();
                         msg.delete();
                     }, 30000);
+                    new client.methods.log(client).debugStats(this.name, message.author, new Date().getTime() - startDate);
                 });
             });
         } else
         if (args[1].toString() == "info") {
             if (!args[2]) {
+                new client.methods.log(client).debugStats(this.name, message.author, new Date().getTime() - startDate);
                 return;
             }
             let info = client.storage.helpInfo[`${args[2].toString()}`];
@@ -74,6 +78,7 @@ module.exports = class help {
                         msg.delete();
                     }, 30000);
                 });
+                new client.methods.log(client).debugStats(this.name, message.author, new Date().getTime() - startDate);
             } else {
                 let embed = new client.modules.Discord.MessageEmbed()
                     .setTitle(`**Help Menu** - Info: ${args[2].toString()}`)
@@ -82,6 +87,7 @@ module.exports = class help {
                     .addField(`Example use:`, client.storage.helpInfo[`${args[2].toString()}`].exampleUse)
                     .addField(`Aliases:`, client.storage.helpInfo[`${args[2].toString()}`].aliases)
                 message.channel.send(embed);
+                new client.methods.log(client).debugStats(this.name, message.author, new Date().getTime() - startDate);
             }
         }
     }

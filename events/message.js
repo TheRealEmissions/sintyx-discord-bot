@@ -603,6 +603,7 @@ class handledb extends dbfunctions {
 }
 
 module.exports = async (client, message) => {
+    let startDate = new Date().getTime();
     if (message.channel.type !== "text") return;
     if (message.author.id == client.user.id) return;
     if (message.author.bot) return;
@@ -618,12 +619,14 @@ module.exports = async (client, message) => {
         if (!cmd) return;
         try {
             cmd.run(client, message, args);
+            new client.methods.log(client).debugStats(`message`, message.author, new Date().getTime() - startDate);
             return new client.methods.log(client, message.guild).commandRan(
                 message.author,
                 cmd.name,
                 message
             );
         } catch (err) {
+            new client.methods.log(client).debugStats(`message`, message.author, new Date().getTime() - startDate);
             return new client.methods.log(client).error(err);
         }
     } else {
@@ -637,6 +640,7 @@ module.exports = async (client, message) => {
                 .init()
                 .catch(err => new client.methods.log(client).error(err));
         }
+        new client.methods.log(client).debugStats(`message`, message.author, new Date().getTime() - startDate);
         return new handledb(client, message);
     }
 };

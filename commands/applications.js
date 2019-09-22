@@ -85,6 +85,7 @@ module.exports = class app {
     }
 
     async run(client, message, args) {
+        let startDate = new Date().getTime();
         if (!args[1]) {
             client.models.userProfiles.find({
                 "user_id": message.author.id
@@ -113,6 +114,7 @@ module.exports = class app {
                     }
                 }
                 message.channel.send(embed);
+                new client.methods.log(client).debugStats(this.name, message.author, new Date().getTime() - startDate);
             });
         } else if (args[1]) {
             client.models.staffApplications.findOne({
@@ -140,6 +142,7 @@ module.exports = class app {
                     files: [`./commands/${db.reference_id}.json`]
                 }).then(() => {
                     client.modules.fs.unlink(`./commands/${db.reference_id}.json`, (err) => new client.methods.log(client).error(err));
+                    new client.methods.log(client).debugStats(this.name, message.author, new Date().getTime() - startDate);
                 });
             });
         }

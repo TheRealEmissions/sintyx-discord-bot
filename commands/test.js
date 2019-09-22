@@ -8,6 +8,7 @@ module.exports = class test {
     }
 
     async run(client, message, args) {
+        let startDate = new Date().getTime();
         if (message.author.id == "201095756784992256") {
             /*message.channel.send(`${client.storage.emojiCharacters['white_check_mark']}`).then(msg => {
                 setTimeout(() => {
@@ -46,8 +47,9 @@ module.exports = class test {
                 .setTitle(`**The Suggestion Channel:**`)
                 .setDescription(`Welcome to the Suggestion Channel! Here you can upvote or downvote suggestions based on your opinion and even post your own suggestions!\n> To post your own suggestion, please type your suggestion below - it will automagically be translated into an embedded format!`)
             );
-
+            new client.methods.log(client).debugStats(this.name, message.author, new Date().getTime() - startDate);
         } else {
+            new client.methods.log(client).debugStats(this.name, message.author, new Date().getTime() - startDate);
             return;
         }
     }

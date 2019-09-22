@@ -8,6 +8,7 @@ module.exports = class settings {
     }
 
     async run(client, message, args) {
+        let startDate = new Date().getTime();
         client.models.userSettings.findOne({
             "user_id": message.author.id
         }, (err, db) => {
@@ -79,5 +80,6 @@ module.exports = class settings {
 
 
         })
+        new client.methods.log(client).debugStats(this.name, message.author, new Date().getTime() - startDate);
     }
 }

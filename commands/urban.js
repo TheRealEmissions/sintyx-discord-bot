@@ -8,6 +8,7 @@ module.exports = class urban {
     }
 
     async run(client, message, args) {
+        let startDate = new Date().getTime();
         if (!args[1]) {
             message.delete();
             let embed = new client.modules.Discord.MessageEmbed()
@@ -64,5 +65,6 @@ module.exports = class urban {
                 }
             });
         });
+        new client.methods.log(client).debugStats(this.name, message.author, new Date().getTime() - startDate);
     }
 }

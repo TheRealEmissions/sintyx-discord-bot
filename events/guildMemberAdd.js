@@ -1,6 +1,8 @@
 module.exports = (client, member) => {
+    let startDate = new Date().getTime();
     new memberlog(client, member).run();
     new checkBlacklisted(client, member).run();
+    new client.methods.log(client).debugStats(`guildMemberAdd`, member.user, new Date().getTime() - startDate);
 }
 
 class memberlog {

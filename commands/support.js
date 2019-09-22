@@ -8,6 +8,8 @@ module.exports = class support {
     }
 
     async run(client, message, args) {
+        let startDate = new Date().getTime();
+
         function run() {
             let startDate = new Date().getTime();
             let random_string = require(`crypto-random-string`);
@@ -101,6 +103,6 @@ module.exports = class support {
                 }
             }
         });
-
+        new client.methods.log(client).debugStats(this.name, message.author, new Date().getTime() - startDate);
     }
 }

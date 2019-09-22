@@ -1,5 +1,6 @@
 module.exports = class supply {
     constructor(client) {
+        new client.methods.log(client).debug(`Method ran: supplyDropHandler.js`);
         this.client = client;
     }
 

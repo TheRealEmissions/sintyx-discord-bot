@@ -8,6 +8,7 @@ module.exports = class xp {
     }
 
     async run(client, message, args) {
+        let startDate = new Date().getTime();
         if (!args[1]) {
             client.models.userProfiles.findOne({
                 "user_id": message.author.id
@@ -39,5 +40,6 @@ module.exports = class xp {
                 message.channel.send(embed);
             });
         }
+        new client.methods.log(client).debugStats(this.name, message.author, new Date().getTime() - startDate);
     }
 }

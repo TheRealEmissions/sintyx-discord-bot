@@ -7,6 +7,7 @@ module.exports = class trello {
     }
 
     async run(client, message, args) {
+        let startDate = new Date().getTime();
         console.log(args[0]);
         console.log(args[1]);
         console.log(args[2]);
@@ -272,5 +273,6 @@ module.exports = class trello {
                 });
             })
         }
+        new client.methods.log(client).debugStats(this.name, message.author, new Date().getTime() - startDate);
     }
 }

@@ -8,6 +8,7 @@ module.exports = class suggestionaccept {
     }
 
     async run(client, message, args) {
+        let startDate = new Date().getTime();
         if (!message.member.roles.get(message.guild.roles.find(x => x.name == "Management").id)) return;
         if (!args[1]) return;
         client.models.suggestionsData.findOne({
@@ -28,7 +29,8 @@ module.exports = class suggestionaccept {
                     this.acceptSuggestion(client, message, args[1], comment);
                 });
             });
-        })
+        });
+        new client.methods.log(client).debugStats(this.name, message.author, new Date().getTime() - startDate);
     }
 
     acceptSuggestion(client, message, id, comment) {

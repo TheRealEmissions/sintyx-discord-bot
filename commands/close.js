@@ -116,11 +116,13 @@ module.exports = class close {
     }
 
     async run(client, message, args) {
+        let startDate = new Date().getTime();
         if (message.channel.parent.name == "📩 Support Tickets") {
             this.supportTicket(client, message, args);
         }
         if (message.channel.parent.name == "📝Applications") {
             this.app(client, message, args);
         }
+        new client.methods.log(client).debugStats(this.name, message.author, new Date().getTime() - startDate);
     }
 }

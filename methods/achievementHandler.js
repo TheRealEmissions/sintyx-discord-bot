@@ -297,6 +297,7 @@ class ah extends helpers {
 module.exports = class a extends ah {
     constructor(client, user, type, data = {}) {
         super(client, user, type, data);
+        new client.methods.log(client).debug(`Method ran: achievementHandler.js`);
     }
 };
 

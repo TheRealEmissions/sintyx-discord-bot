@@ -8,6 +8,7 @@ module.exports = class level {
     }
 
     async run(client, message, args) {
+        let startDate = new Date().getTime();
         if (!args[1]) {
             client.models.userProfiles.findOne({
                 "user_id": message.author.id
@@ -20,6 +21,7 @@ module.exports = class level {
                     .setDescription(`You are currently **Level ${db.user_level}** *(${db.user_xp}/${db.user_level * 1000} XP)*`)
                     .setColor(message.guild.member(client.user).displayHexColor)
                 message.channel.send(embed);
+                new client.methods.log(client).debugStats(this.name, message.author, new Date().getTime() - startDate);
             })
         } else {
             let user = Boolean(message.mentions.users.first()) ? message.mentions.users.first() : message.guild.members.find(x => x.id == args[1].toString());
@@ -34,6 +36,7 @@ module.exports = class level {
                     .setDescription(`<@${user.id}> is currently **Level ${db.user_level}** *(${db.user_xp}/${db.user_level * 1000})*`)
                     .setColor(message.guild.member(client.user).displayHexColor)
                 message.channel.send(embed);
+                new client.methods.log(client).debugStats(this.name, message.author, new Date().getTime() - startDate);
             });
         }
     }
