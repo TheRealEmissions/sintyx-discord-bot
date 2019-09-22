@@ -101,6 +101,11 @@ class ah extends helpers {
     //      reference_id: String
     //  handles =>
     //      firstApplication
+    //
+    // claimSupplyDrop
+    //  data provides => null
+    //  handles =>
+    //      getSupplyDrops
 
     handle() {
         switch (this.type) {
@@ -131,6 +136,9 @@ class ah extends helpers {
             case 'applicationProcessed':
                 this.applicationLoadBalancer().catch(err => new this.client.methods.log(this.client).error(err));
                 break;
+            case 'claimSupplyDrop':
+                this.supplyDropLoadBalancer().catch(err => new this.client.methods.log(this.client).error(err));
+                break;
             default:
                 new this.client.methods.log(this.client).error(`While handling achievementHandler: could not find this.type correct string`);
                 break;
@@ -140,6 +148,10 @@ class ah extends helpers {
     //
     //      LOAD BALANCERS
     //
+
+    async supplyDropLoadBalancer() {
+        await new supplyDrop(this.client, this.user, this.type).handleGetSupplyDrops().catch(err => new this.client.methods.log(this.client).error(err));
+    }
 
     async applicationLoadBalancer() {
         if (typeof this.data.reference_id == "undefined") return new this.client.methods.log(this.client).error(`Error on ApplicationLoadBalancer achievementHandler => Cannot find "inventory_id" under data{}`);
@@ -287,6 +299,55 @@ module.exports = class a extends ah {
         super(client, user, type, data);
     }
 };
+
+class supplyDrop extends ah {
+    constructor(client, user, type) {
+        super(client, user, type);
+        this.client = client;
+        this.user = user;
+        this.type = type;
+    }
+
+    handleGetSupplyDrops() {
+        return new Promise(async (resolve, reject) => {
+            const amount = await this.dbGetSupplyDrops().catch(err => reject(err));
+            await this.checkGetSupplyDrops(amount).catch(err => reject(err));
+            return resolve();
+        });
+    }
+
+    dbGetSupplyDrops() {
+        return new Promise((resolve, reject) => {
+            this.client.models.achievementsLogs.findOne({
+                "user_id": this.user.id
+            }, async (err, db) => {
+                if (err) return reject(err);
+                if (!db.achievements.find(x => x.type == "getSupplyDrops")) return reject(`No database entry for getSupplyDrops could be found for ${this.user.id} while running dbGetSupplyDrops() in achievementHandler!`);
+                db.achievements.find(x => x.type == "getSupplyDrops").amount += 1;
+                await db.markModified("achievements");
+                db.save((err) => {
+                    if (err) return reject(err);
+                    else return resolve();
+                });
+            });
+        });
+    }
+
+    checkGetSupplyDrops(amount) {
+        return new Promise(async (resolve, reject) => {
+            let obj = this.client.storage.achievements.find(x => x.type == "getSupplyDrops").data;
+            if (!obj) return reject(`Object getSupplyDrops cannot be found in achievements storage!`);
+            for (const ach of obj) {
+                if (amount >= ach.amount) {
+                    let completed = await this.checkAchievementCompleted(this.client, this.user, ach.name);
+                    if (completed == true) continue;
+                    this.handleNewAchievement('getSupplyDrops', ach.name);
+                } else continue;
+            }
+            return resolve();
+        });
+    }
+}
 
 class application extends ah {
     constructor(client, user, type, data) {

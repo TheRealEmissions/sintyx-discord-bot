@@ -66,6 +66,10 @@ class checkdb {
                 type: 'getMessageCount',
                 amount: 0
             },
+            'getSupplyDrops': {
+                type: 'getSupplyDrops',
+                amount: 0
+            },
             'reachLeaderboard': {
                 type: 'reachLeaderboard',
                 xp_hoist: 0,
@@ -603,6 +607,7 @@ module.exports = async (client, message) => {
     if (message.author.id == client.user.id) return;
     if (message.author.bot) return;
     if (!dbset.has(message.author.id)) {
+        console.log(`checking database`);
         await new checkdb().dbInit(client, message);
     }
     if (message.content.toString().startsWith(client.commandHandler.prefix[0])) {
