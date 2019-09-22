@@ -13,6 +13,7 @@ activeBoosts - have a certain amount of boosts active at once [+ type]
 getMessageCount - reach a certain amount of messages sent
 reachLeaderboard - reach a certain hoist on the leaderboard (+ type)
 firstApplication - apply for staff
+getSupplyDrops - open a certain amount of supply drops
 
 
 STRUCTURE OF ACHIEVEMENTS:
@@ -69,6 +70,9 @@ hoist: NUMBER
 
 == firstApplication
 null
+
+== getSupplyDrops
+amount: NUMBER
 
 */
 module.exports = [{
@@ -419,6 +423,18 @@ module.exports = [{
         reward: {
             message: null,
             xp: null,
+            coins: null,
+            inventoryID: null
+        }
+    }]
+}, {
+    type: 'getSupplyDrops',
+    data: [{
+        name: 'Incoming Package!',
+        description: 'Claim your first Supply Drop',
+        reward: {
+            message: '1000 XP',
+            xp: 1000,
             coins: null,
             inventoryID: null
         }
