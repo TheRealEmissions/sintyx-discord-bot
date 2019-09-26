@@ -180,7 +180,7 @@ module.exports = class supply {
         return new Promise((resolve, reject) => {
             let types = ['XP', 'COIN', 'ID'];
             const no = this.client.functions.genNumberBetween(1, 3);
-            let type = types[no];
+            let type = types[no + 1];
             if (!type) return reject(`Type could not be found on generateType in supplyDropHandler.js`)
             switch (type) {
                 case 'XP':
@@ -204,10 +204,10 @@ module.exports = class supply {
             } else {
                 let amount;
                 if (type == 'XP') {
-                    amount = this.client.functions.genNumberBetween(1, 1000);
+                    amount = this.client.functions.genNumberBetween(1, 500);
                 }
                 if (type == 'COIN') {
-                    amount = this.client.functions.genNumberBetween(1, 400);
+                    amount = this.client.functions.genNumberBetween(1, 200);
                 }
                 return resolve(amount);
             }
