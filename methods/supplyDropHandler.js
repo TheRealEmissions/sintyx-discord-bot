@@ -185,7 +185,7 @@ module.exports = class supply {
     generateDrop(type) {
         return new Promise((resolve, reject) => {
             if (type == 'ID') {
-                let itemID = this.client.storage.inventoryItems[this.client.functions.genNumberBetween(1, this.client.storage.inventoryItems.length)];
+                let itemID = this.client.storage.inventoryItems[this.client.functions.genNumberBetween(1, this.client.storage.inventoryItems.length) - 1];
                 return resolve(itemID);
             } else {
                 let amount;
