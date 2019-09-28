@@ -55,20 +55,6 @@ module.exports = class supply {
                     }
                     db.save((err) => {
                         if (err) return reject(err);
-                        else {
-                            if (type == 'XP') {
-                                new this.client.methods.achievementHandler(this.client, user, 'updateXP', {
-                                    positive: true,
-                                    xp: drop
-                                }).handle();
-                            }
-                            if (type == 'COIN') {
-                                new this.client.methods.achievementHandler(this.client, user, 'updateCoins', {
-                                    positive: true,
-                                    coins: drop
-                                }).handle();
-                            }
-                        }
                     });
                 });
             }
@@ -180,7 +166,7 @@ module.exports = class supply {
         return new Promise((resolve, reject) => {
             let types = ['XP', 'COIN', 'ID'];
             const no = this.client.functions.genNumberBetween(1, 3);
-            let type = types[no];
+            let type = types[no - 1];
             if (!type) return reject(`Type could not be found on generateType in supplyDropHandler.js`)
             switch (type) {
                 case 'XP':
@@ -204,10 +190,10 @@ module.exports = class supply {
             } else {
                 let amount;
                 if (type == 'XP') {
-                    amount = this.client.functions.genNumberBetween(1, 1000);
+                    amount = this.client.functions.genNumberBetween(1, 500);
                 }
                 if (type == 'COIN') {
-                    amount = this.client.functions.genNumberBetween(1, 400);
+                    amount = this.client.functions.genNumberBetween(1, 250);
                 }
                 return resolve(amount);
             }
@@ -225,33 +211,17 @@ module.exports = class supply {
             }
             channel.send(embed).then(msg => {
                 setTimeout(() => {
-                    embed.embed.description = `Get ready to claim in **9 seconds**!`;
-                    msg.edit(embed);
-                }, 1000);
-                setTimeout(() => {
                     embed.embed.description = `Get ready to claim in **8 seconds**!`;
                     msg.edit(embed);
                 }, 2000);
-                setTimeout(() => {
-                    embed.embed.description = `Get ready to claim in **7 seconds**!`;
-                    msg.edit(embed);
-                }, 3000);
                 setTimeout(() => {
                     embed.embed.description = `Get ready to claim in **6 seconds**!`;
                     msg.edit(embed);
                 }, 4000);
                 setTimeout(() => {
-                    embed.embed.description = `Get ready to claim in **5 seconds**!`;
-                    msg.edit(embed);
-                }, 5000);
-                setTimeout(() => {
                     embed.embed.description = `Get ready to claim in **4 seconds**!`;
                     msg.edit(embed);
                 }, 6000);
-                setTimeout(() => {
-                    embed.embed.description = `Get ready to claim in **3 seconds**!`;
-                    msg.edit(embed);
-                }, 7000);
                 setTimeout(() => {
                     embed.embed.description = `Get ready to claim in **2 seconds**!`;
                     msg.edit(embed);

@@ -776,7 +776,6 @@ class mc extends ah {
             }, async (err, db) => {
                 if (err) return reject(err);
                 const count = await this.getUserMessageCount().catch(err => reject(err));
-                console.log(count > db.achievements.find(x => x.type == 'getMessageCount').amount);
                 if (parseInt(count) > parseInt(db.achievements.find(x => x.type == 'getMessageCount').amount)) {
                     db.achievements.find(x => x.type == 'getMessageCount').amount = count;
                     db.markModified("achievements");

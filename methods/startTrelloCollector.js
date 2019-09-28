@@ -70,7 +70,7 @@ module.exports = class trello {
                             if (err) return reject(err);
                             message.react(client.storage.emojiCharacters['white_check_mark']);
                             return this.stageThree(client, card_id);
-                        })
+                        });
                     });
                 });
             });
